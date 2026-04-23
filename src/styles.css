@@ -57,8 +57,8 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-serif: "Fraunces", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Lato", system-ui, -apple-system, sans-serif;
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
   --font-display: "Bebas Neue", Impact, sans-serif;
 }
 
@@ -154,8 +154,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "ss02", "cv11";
-    font-optical-sizing: auto;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -166,9 +165,8 @@
   h4,
   .font-serif {
     font-family: var(--font-serif);
-    font-optical-sizing: auto;
-    font-variation-settings: "opsz" 144, "SOFT" 50;
-    letter-spacing: -0.02em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
   .font-display {
     font-family: var(--font-display);
