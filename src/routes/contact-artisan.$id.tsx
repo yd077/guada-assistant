@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import type { Artisan } from "@/data/artisans";
 import { useState } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -7,7 +8,7 @@ import { getArtisanById } from "@/data/artisans";
 import { Send, MapPin, Star } from "lucide-react";
 
 export const Route = createFileRoute("/contact-artisan/$id")({
-  loader: ({ params }) => {
+  loader: ({ params }): { artisan: Artisan } => {
     const artisan = getArtisanById(params.id);
     if (!artisan) throw notFound();
     return { artisan };

@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import type { Artisan } from "@/data/artisans";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Reveal } from "@/components/site/Reveal";
@@ -14,7 +15,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/artisan/$id")({
-  loader: ({ params }) => {
+  loader: ({ params }): { artisan: Artisan } => {
     const artisan = getArtisanById(params.id);
     if (!artisan) throw notFound();
     return { artisan };
