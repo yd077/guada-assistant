@@ -69,18 +69,27 @@ function HomePage() {
       <Header transparent />
 
       {/* HERO */}
-      <section className="relative flex min-h-[100svh] items-center justify-center pt-24 text-white">
+      <section className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden pt-32 pb-20 text-white">
         <HeroSlideshow />
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          <span className="inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-[0.2em] backdrop-blur">
+        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
+          <span
+            className="inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.22em] text-white shadow-lg backdrop-blur-md"
+            style={{ animationDelay: "0.1s" }}
+          >
             <Sparkles className="h-3.5 w-3.5 text-accent" /> Artisans vérifiés · 100% Guadeloupe
           </span>
-          <h1 className="mt-6 animate-fade-in-up font-serif text-5xl font-medium leading-[1.05] text-balance md:text-7xl lg:text-8xl">
+          <h1
+            className="mt-6 animate-fade-in-up font-serif text-5xl font-medium leading-[1.02] text-balance text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.45)] md:text-7xl lg:text-[5.75rem]"
+            style={{ animationDelay: "0.2s" }}
+          >
             L'excellence du chantier
             <br />
             <span className="italic text-accent">en Guadeloupe</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl animate-fade-in-up text-lg text-white/80">
+          <p
+            className="mx-auto mt-6 max-w-2xl animate-fade-in-up text-lg leading-relaxed text-white/90 drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)] md:text-xl"
+            style={{ animationDelay: "0.35s" }}
+          >
             La plateforme qui réunit les artisans BTP les plus exigeants de l'archipel.
             Trouvez la main d'œuvre qu'il vous faut, du devis à la livraison.
           </p>
@@ -89,7 +98,8 @@ function HomePage() {
           <form
             action="/recherche"
             method="get"
-            className="mx-auto mt-10 flex max-w-3xl flex-col gap-2 rounded-2xl bg-white/95 p-2 shadow-elegant backdrop-blur md:flex-row"
+            className="mx-auto mt-10 flex max-w-3xl animate-fade-in-up flex-col gap-2 rounded-2xl border border-white/40 bg-white/95 p-2 shadow-elegant backdrop-blur-xl md:flex-row"
+            style={{ animationDelay: "0.5s" }}
           >
             <div className="flex flex-1 items-center gap-2 border-b border-border md:border-b-0 md:border-r">
               <Search className="ml-3 h-5 w-5 text-emerald" />
@@ -131,16 +141,28 @@ function HomePage() {
             </button>
           </form>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/70">
+          <div
+            className="mt-8 flex animate-fade-in-up flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/85 drop-shadow"
+            style={{ animationDelay: "0.65s" }}
+          >
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-accent" /> Décennale vérifiée
             </span>
+            <span className="hidden h-3 w-px bg-white/30 sm:block" />
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-accent" /> RGE & Qualibat
             </span>
+            <span className="hidden h-3 w-px bg-white/30 sm:block" />
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-accent" /> Devis gratuit sous 48h
             </span>
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div className="absolute bottom-24 left-1/2 z-10 hidden -translate-x-1/2 animate-fade-in-up md:block" style={{ animationDelay: "0.9s" }}>
+          <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/40 p-1.5">
+            <span className="block h-2 w-1 animate-bounce rounded-full bg-white/80" />
           </div>
         </div>
       </section>

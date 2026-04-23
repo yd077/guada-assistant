@@ -205,10 +205,12 @@
 /* Animations */
 @keyframes ken-burns {
   0% {
-    transform: scale(1) translate(0, 0);
+    transform: scale(1.05) translate(0, 0);
+    transform-origin: center center;
   }
   100% {
-    transform: scale(1.15) translate(-2%, -1%);
+    transform: scale(1.25) translate(-3%, -2%);
+    transform-origin: center center;
   }
 }
 @keyframes fade-in-up {
@@ -230,7 +232,7 @@
   }
 }
 .animate-ken-burns {
-  animation: ken-burns 12s ease-in-out infinite alternate;
+  animation: ken-burns 9s ease-out forwards;
 }
 .animate-fade-in-up {
   animation: fade-in-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
