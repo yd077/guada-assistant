@@ -47,7 +47,7 @@ export const Route = createFileRoute("/contact-artisan/$id")({
 });
 
 function ContactArtisanPage() {
-  const { artisan } = Route.useLoaderData();
+  const { artisan } = Route.useLoaderData() as { artisan: Artisan };
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
