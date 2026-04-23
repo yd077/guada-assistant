@@ -141,16 +141,28 @@ function HomePage() {
             </button>
           </form>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/70">
+          <div
+            className="mt-8 flex animate-fade-in-up flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/85 drop-shadow"
+            style={{ animationDelay: "0.65s" }}
+          >
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-accent" /> Décennale vérifiée
             </span>
+            <span className="hidden h-3 w-px bg-white/30 sm:block" />
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-accent" /> RGE & Qualibat
             </span>
+            <span className="hidden h-3 w-px bg-white/30 sm:block" />
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-accent" /> Devis gratuit sous 48h
             </span>
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div className="absolute bottom-24 left-1/2 z-10 hidden -translate-x-1/2 animate-fade-in-up md:block" style={{ animationDelay: "0.9s" }}>
+          <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/40 p-1.5">
+            <span className="block h-2 w-1 animate-bounce rounded-full bg-white/80" />
           </div>
         </div>
       </section>
