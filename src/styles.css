@@ -154,15 +154,21 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
+    font-feature-settings: "ss01", "ss02", "cv11";
+    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   h1,
   h2,
   h3,
+  h4,
   .font-serif {
     font-family: var(--font-serif);
-    letter-spacing: -0.01em;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    letter-spacing: -0.02em;
   }
   .font-display {
     font-family: var(--font-display);
