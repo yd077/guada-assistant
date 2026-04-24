@@ -23,6 +23,30 @@ export const Route = createFileRoute("/artisan/$id")({
   head: ({ loaderData }) => {
     const a = loaderData?.artisan;
     if (!a) return { meta: [{ title: "Artisan introuvable — BTP Guada" }] };
+    const ld: Record<string, unknown> = {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: a.name,
+      description: a.bio,
+      image: a.cover,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: a.location,
+        addressRegion: "Guadeloupe",
+        addressCountry: "FR",
+      },
+      areaServed: { "@type": "AdministrativeArea", name: a.location },
+      priceRange: "€€",
+    };
+    if (a.reviewsCount > 0) {
+      ld.aggregateRating = {
+        "@type": "AggregateRating",
+        ratingValue: a.rating.toFixed(1),
+        reviewCount: a.reviewsCount,
+        bestRating: 5,
+        worstRating: 1,
+      };
+    }
     return {
       meta: [
         { title: `${a.name} — ${a.specialty} à ${a.location} · BTP Guada` },
@@ -31,6 +55,9 @@ export const Route = createFileRoute("/artisan/$id")({
         { property: "og:description", content: a.bio },
         { property: "og:image", content: a.cover },
         { name: "twitter:image", content: a.cover },
+      ],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(ld) },
       ],
     };
   },
