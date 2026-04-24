@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import { CheckCircle2, ChevronRight } from "lucide-react";
+import { CheckCircle2, ChevronRight, Mail } from "lucide-react";
 
 export const Route = createFileRoute("/succes")({
   head: () => ({
@@ -29,9 +29,19 @@ function SuccessPage() {
             Demande <span className="italic text-emerald">envoyée</span>
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Merci ! Votre projet a bien été transmis aux artisans qualifiés. Vous recevrez les
-            premières réponses sous 48h par email.
+            Merci ! Votre projet a bien été transmis. Les artisans qualifiés vous
+            répondront sous 48h par email.
           </p>
+          <div className="mt-6 inline-flex items-start gap-3 rounded-2xl border border-emerald/30 bg-emerald/5 p-4 text-left">
+            <Mail className="mt-0.5 h-5 w-5 flex-none text-emerald" />
+            <div className="text-sm">
+              <p className="font-semibold">Vérifiez votre boîte mail</p>
+              <p className="mt-0.5 text-muted-foreground">
+                Un email de confirmation vient de vous être envoyé. Cliquez sur le lien à
+                l'intérieur pour valider votre demande et la rendre visible.
+              </p>
+            </div>
+          </div>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link
               to="/"

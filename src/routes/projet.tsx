@@ -125,6 +125,13 @@ function ProjectPage() {
       // pas bloquant
     }
 
+    // Token de vérification email (lien magique)
+    const email_verification_token =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID().replace(/-/g, "") +
+          Math.random().toString(36).slice(2, 10)
+        : Math.random().toString(36).slice(2) + Date.now().toString(36);
+
     const basePayload = {
       client_id: user?.id ?? null,
       client_type: data.client_type || "particulier",
@@ -139,6 +146,9 @@ function ProjectPage() {
       contact_name: data.name,
       contact_email: data.email,
       contact_phone: data.phone,
+      email_verified: false,
+      email_verification_token,
+      email_verification_sent_at: new Date().toISOString(),
     };
 
     let { error } = await supabase
@@ -148,6 +158,19 @@ function ProjectPage() {
     // Fallback si colonnes geo absentes
     if (error && /project_lat|project_lng/.test(error.message)) {
       const r = await supabase.from("projects").insert(basePayload);
+      error = r.error;
+    }
+
+    // Fallback si colonnes email_verified absentes (migration non encore appliquée)
+    if (
+      error &&
+      /email_verified|email_verification/.test(error.message)
+    ) {
+      const noEmail = { ...basePayload };
+      delete (noEmail as Record<string, unknown>).email_verified;
+      delete (noEmail as Record<string, unknown>).email_verification_token;
+      delete (noEmail as Record<string, unknown>).email_verification_sent_at;
+      const r = await supabase.from("projects").insert(noEmail);
       error = r.error;
     }
 

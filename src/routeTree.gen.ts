@@ -25,6 +25,7 @@ import { Route as CguRouteImport } from './routes/cgu'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VerifierEmailTokenRouteImport } from './routes/verifier-email.$token'
 import { Route as ContactArtisanIdRouteImport } from './routes/contact-artisan.$id'
 import { Route as ArtisanMetierRouteImport } from './routes/artisan.$metier'
 import { Route as ArtisanIdRouteImport } from './routes/artisan.$id'
@@ -110,6 +111,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VerifierEmailTokenRoute = VerifierEmailTokenRouteImport.update({
+  id: '/verifier-email/$token',
+  path: '/verifier-email/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactArtisanIdRoute = ContactArtisanIdRouteImport.update({
   id: '/contact-artisan/$id',
   path: '/contact-artisan/$id',
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/verifier-email/$token': typeof VerifierEmailTokenRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
 }
 export interface FileRoutesByTo {
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/verifier-email/$token': typeof VerifierEmailTokenRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
 }
 export interface FileRoutesById {
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/verifier-email/$token': typeof VerifierEmailTokenRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
 }
 export interface FileRouteTypes {
@@ -220,6 +229,7 @@ export interface FileRouteTypes {
     | '/artisan/$id'
     | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/verifier-email/$token'
     | '/artisan/$metier/$commune'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/artisan/$id'
     | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/verifier-email/$token'
     | '/artisan/$metier/$commune'
   id:
     | '__root__'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/artisan/$id'
     | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/verifier-email/$token'
     | '/artisan/$metier/$commune'
   fileRoutesById: FileRoutesById
 }
@@ -287,6 +299,7 @@ export interface RootRouteChildren {
   ArtisanIdRoute: typeof ArtisanIdRoute
   ArtisanMetierRoute: typeof ArtisanMetierRouteWithChildren
   ContactArtisanIdRoute: typeof ContactArtisanIdRoute
+  VerifierEmailTokenRoute: typeof VerifierEmailTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -403,6 +416,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/verifier-email/$token': {
+      id: '/verifier-email/$token'
+      path: '/verifier-email/$token'
+      fullPath: '/verifier-email/$token'
+      preLoaderRoute: typeof VerifierEmailTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact-artisan/$id': {
       id: '/contact-artisan/$id'
       path: '/contact-artisan/$id'
@@ -466,6 +486,7 @@ const rootRouteChildren: RootRouteChildren = {
   ArtisanIdRoute: ArtisanIdRoute,
   ArtisanMetierRoute: ArtisanMetierRouteWithChildren,
   ContactArtisanIdRoute: ContactArtisanIdRoute,
+  VerifierEmailTokenRoute: VerifierEmailTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
