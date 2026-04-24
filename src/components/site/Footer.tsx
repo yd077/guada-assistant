@@ -64,6 +64,21 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/abonnements" className="hover:text-white">
+                  Abonnements
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact-pro" className="hover:text-white">
+                  Compte Agences/Syndics
+                </Link>
+              </li>
+              <li>
+                <Link to="/sos" className="hover:text-white">
+                  SOS Urgence 24/7
+                </Link>
+              </li>
+              <li>
                 <Link to="/cgu" className="hover:text-white">
                   Charte qualité
                 </Link>

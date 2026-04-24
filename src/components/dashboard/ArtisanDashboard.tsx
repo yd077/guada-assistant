@@ -6,6 +6,8 @@ import { SPECIALTIES, COMMUNES } from "@/data/artisans";
 import { ArtisanZoneEditor } from "./ArtisanZoneEditor";
 import { ArtisanWalletPanel } from "./ArtisanWalletPanel";
 import { ArtisanDocumentsPanel } from "./ArtisanDocumentsPanel";
+import { ArtisanOnboardingChecklist } from "./ArtisanOnboardingChecklist";
+import { fetchSubscription } from "@/services/subscriptions";
 import {
   Loader2,
   Save,
@@ -62,6 +64,7 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
   const [portfolio, setPortfolio] = useState<PortfolioRow[]>([]);
   const [quotes, setQuotes] = useState<QuoteRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasPaidTier, setHasPaidTier] = useState(false);
 
   const refresh = async () => {
     const { data: a } = await supabase
@@ -72,7 +75,7 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
 
     if (a) {
       setArtisan(a as ArtisanRow);
-      const [{ data: p }, { data: q }] = await Promise.all([
+      const [{ data: p }, { data: q }, sub] = await Promise.all([
         supabase
           .from("portfolio_items")
           .select("id, image_url, title")
@@ -85,9 +88,11 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
           )
           .eq("artisan_id", a.id)
           .order("created_at", { ascending: false }),
+        fetchSubscription(a.id),
       ]);
       setPortfolio((p ?? []) as PortfolioRow[]);
       setQuotes((q ?? []) as QuoteRow[]);
+      setHasPaidTier(sub?.tier === "premium" || sub?.tier === "elite");
     } else {
       setArtisan(null);
     }
@@ -111,8 +116,24 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
     return <CreateArtisanProfile userId={userId} onCreated={refresh} />;
   }
 
+  const hasProfile = Boolean(
+    artisan.name && artisan.specialty && artisan.location && artisan.bio,
+  );
+  const hasZone = artisan.base_lat != null && artisan.base_lng != null;
+  const hasDocs = Boolean(artisan.kbis_url && artisan.insurance_url);
+  const isVerified = artisan.verification_status === "verified";
+
   return (
     <div className="space-y-12">
+      <Reveal>
+        <ArtisanOnboardingChecklist
+          hasProfile={hasProfile}
+          hasZone={hasZone}
+          hasDocs={hasDocs}
+          isVerified={isVerified}
+          hasTierChoice={hasPaidTier}
+        />
+      </Reveal>
       <ProfileEditor artisan={artisan} onSaved={refresh} />
       <ArtisanDocumentsPanel
         artisanId={artisan.id}
