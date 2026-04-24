@@ -93,7 +93,7 @@ function MetierPage() {
             </p>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {artisans.map((a) => (
+              {(artisans as import("@/data/artisans").Artisan[]).map((a) => (
                 <ArtisanCard key={a.id} artisan={a} />
               ))}
             </div>
