@@ -79,6 +79,8 @@ export const Route = createFileRoute("/artisan/$id")({
 
 function ArtisanPage() {
   const { artisan } = Route.useLoaderData() as { artisan: Artisan };
+  const { isAuthenticated } = useAuth();
+  const [reviewOpen, setReviewOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
