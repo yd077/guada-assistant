@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TarifsRouteImport } from './routes/tarifs'
+import { Route as SuccesPaiementRouteImport } from './routes/succes-paiement'
 import { Route as SuccesRouteImport } from './routes/succes'
 import { Route as SosRouteImport } from './routes/sos'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -27,6 +28,7 @@ import { Route as CguRouteImport } from './routes/cgu'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AbonnementsRouteImport } from './routes/abonnements'
+import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifierEmailTokenRouteImport } from './routes/verifier-email.$token'
 import { Route as SosMetierRouteImport } from './routes/sos.$metier'
@@ -36,10 +38,16 @@ import { Route as ArtisanMetierRouteImport } from './routes/artisan.$metier'
 import { Route as ArtisanIdRouteImport } from './routes/artisan.$id'
 import { Route as SosMetierCommuneRouteImport } from './routes/sos.$metier.$commune'
 import { Route as ArtisanMetierCommuneRouteImport } from './routes/artisan.$metier.$commune'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api.public.stripe-webhook'
 
 const TarifsRoute = TarifsRouteImport.update({
   id: '/tarifs',
   path: '/tarifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccesPaiementRoute = SuccesPaiementRouteImport.update({
+  id: '/succes-paiement',
+  path: '/succes-paiement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuccesRoute = SuccesRouteImport.update({
@@ -127,6 +135,11 @@ const AbonnementsRoute = AbonnementsRouteImport.update({
   path: '/abonnements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -172,9 +185,15 @@ const ArtisanMetierCommuneRoute = ArtisanMetierCommuneRouteImport.update({
   path: '/$commune',
   getParentRoute: () => ArtisanMetierRoute,
 } as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
@@ -192,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
+  '/succes-paiement': typeof SuccesPaiementRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
@@ -199,11 +219,13 @@ export interface FileRoutesByFullPath {
   '/metiers/$metier': typeof MetiersMetierRoute
   '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
   '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
@@ -221,6 +243,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
+  '/succes-paiement': typeof SuccesPaiementRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
@@ -228,12 +251,14 @@ export interface FileRoutesByTo {
   '/metiers/$metier': typeof MetiersMetierRoute
   '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
   '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
@@ -251,6 +276,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
+  '/succes-paiement': typeof SuccesPaiementRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
@@ -258,6 +284,7 @@ export interface FileRoutesById {
   '/metiers/$metier': typeof MetiersMetierRoute
   '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
   '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
@@ -265,6 +292,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/a-propos'
     | '/abonnements'
     | '/admin'
     | '/auth'
@@ -282,6 +310,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sos'
     | '/succes'
+    | '/succes-paiement'
     | '/tarifs'
     | '/artisan/$id'
     | '/artisan/$metier'
@@ -289,11 +318,13 @@ export interface FileRouteTypes {
     | '/metiers/$metier'
     | '/sos/$metier'
     | '/verifier-email/$token'
+    | '/api/public/stripe-webhook'
     | '/artisan/$metier/$commune'
     | '/sos/$metier/$commune'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/a-propos'
     | '/abonnements'
     | '/admin'
     | '/auth'
@@ -311,6 +342,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sos'
     | '/succes'
+    | '/succes-paiement'
     | '/tarifs'
     | '/artisan/$id'
     | '/artisan/$metier'
@@ -318,11 +350,13 @@ export interface FileRouteTypes {
     | '/metiers/$metier'
     | '/sos/$metier'
     | '/verifier-email/$token'
+    | '/api/public/stripe-webhook'
     | '/artisan/$metier/$commune'
     | '/sos/$metier/$commune'
   id:
     | '__root__'
     | '/'
+    | '/a-propos'
     | '/abonnements'
     | '/admin'
     | '/auth'
@@ -340,6 +374,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sos'
     | '/succes'
+    | '/succes-paiement'
     | '/tarifs'
     | '/artisan/$id'
     | '/artisan/$metier'
@@ -347,12 +382,14 @@ export interface FileRouteTypes {
     | '/metiers/$metier'
     | '/sos/$metier'
     | '/verifier-email/$token'
+    | '/api/public/stripe-webhook'
     | '/artisan/$metier/$commune'
     | '/sos/$metier/$commune'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AProposRoute: typeof AProposRoute
   AbonnementsRoute: typeof AbonnementsRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
@@ -370,11 +407,13 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SosRoute: typeof SosRouteWithChildren
   SuccesRoute: typeof SuccesRoute
+  SuccesPaiementRoute: typeof SuccesPaiementRoute
   TarifsRoute: typeof TarifsRoute
   ArtisanIdRoute: typeof ArtisanIdRoute
   ArtisanMetierRoute: typeof ArtisanMetierRouteWithChildren
   ContactArtisanIdRoute: typeof ContactArtisanIdRoute
   VerifierEmailTokenRoute: typeof VerifierEmailTokenRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -384,6 +423,13 @@ declare module '@tanstack/react-router' {
       path: '/tarifs'
       fullPath: '/tarifs'
       preLoaderRoute: typeof TarifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/succes-paiement': {
+      id: '/succes-paiement'
+      path: '/succes-paiement'
+      fullPath: '/succes-paiement'
+      preLoaderRoute: typeof SuccesPaiementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/succes': {
@@ -505,6 +551,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AbonnementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -568,6 +621,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtisanMetierCommuneRouteImport
       parentRoute: typeof ArtisanMetierRoute
     }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -618,6 +678,7 @@ const ArtisanMetierRouteWithChildren = ArtisanMetierRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AProposRoute: AProposRoute,
   AbonnementsRoute: AbonnementsRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
@@ -635,12 +696,23 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SosRoute: SosRouteWithChildren,
   SuccesRoute: SuccesRoute,
+  SuccesPaiementRoute: SuccesPaiementRoute,
   TarifsRoute: TarifsRoute,
   ArtisanIdRoute: ArtisanIdRoute,
   ArtisanMetierRoute: ArtisanMetierRouteWithChildren,
   ContactArtisanIdRoute: ContactArtisanIdRoute,
   VerifierEmailTokenRoute: VerifierEmailTokenRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

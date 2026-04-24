@@ -22,6 +22,7 @@ import {
   Users,
 } from "lucide-react";
 import { LeadDisputeModal } from "./LeadDisputeModal";
+import { RechargeWalletModal } from "./RechargeWalletModal";
 import { Reveal } from "@/components/site/Reveal";
 import {
   fetchWallet,
@@ -67,6 +68,7 @@ export function ArtisanWalletPanel({
   const [tab, setTab] = useState<Tab>("leads");
   const [unlockingId, setUnlockingId] = useState<string | null>(null);
   const [tier, setTier] = useState<SubscriptionTier>("free");
+  const [rechargeOpen, setRechargeOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     const [w, l, u, h, sub] = await Promise.all([
@@ -205,17 +207,24 @@ export function ArtisanWalletPanel({
           </div>
           <div className="flex flex-col items-end gap-2">
             <button
-              disabled
-              title="Bientôt disponible (paiement Stripe)"
-              className="inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-muted px-4 py-2 text-sm font-medium text-muted-foreground"
+              onClick={() => setRechargeOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-emerald px-4 py-2 text-sm font-semibold text-emerald-foreground shadow-glow transition hover:scale-[1.03]"
             >
               <Zap className="h-4 w-4" /> Recharger
             </button>
             <span className="text-[11px] text-muted-foreground">
-              Recharge en ligne bientôt activée
+              Paiement sécurisé Stripe
             </span>
           </div>
         </div>
+
+        <RechargeWalletModal
+          open={rechargeOpen}
+          onClose={() => {
+            setRechargeOpen(false);
+            refresh();
+          }}
+        />
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-2 border-b border-border">
