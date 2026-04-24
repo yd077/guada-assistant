@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -63,6 +63,15 @@ const TRADES = [
 function HomePage() {
   const [specialty, setSpecialty] = useState("");
   const [location, setLocation] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const search: Record<string, string> = {};
+    if (specialty) search.specialty = specialty;
+    if (location) search.location = location;
+    navigate({ to: "/recherche", search: search as never });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -104,8 +113,7 @@ function HomePage() {
 
           {/* Search */}
           <form
-            action="/recherche"
-            method="get"
+            onSubmit={handleSearch}
             className="mx-auto mt-10 flex max-w-3xl animate-fade-in-up flex-col gap-2 rounded-2xl border border-white/40 bg-white/95 p-2 shadow-elegant backdrop-blur-xl md:flex-row"
             style={{ animationDelay: "0.5s" }}
           >
@@ -341,9 +349,12 @@ function HomePage() {
                 Rejoignez le réseau d'excellence BTP Guada et accédez à des chantiers qualifiés
                 partout en Guadeloupe.
               </p>
-              <button className="mt-8 inline-flex items-center gap-2 rounded-full border border-emerald px-6 py-3 text-sm font-medium text-emerald transition group-hover:bg-emerald group-hover:text-emerald-foreground group-hover:gap-3">
+              <Link
+                to="/auth"
+                className="mt-8 inline-flex items-center gap-2 rounded-full border border-emerald px-6 py-3 text-sm font-medium text-emerald transition group-hover:bg-emerald group-hover:text-emerald-foreground group-hover:gap-3"
+              >
                 Devenir partenaire <ChevronRight className="h-4 w-4" />
-              </button>
+              </Link>
             </div>
           </Reveal>
         </div>
