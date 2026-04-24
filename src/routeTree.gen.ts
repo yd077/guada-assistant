@@ -15,6 +15,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RechercheRouteImport } from './routes/recherche'
 import { Route as ProjetRouteImport } from './routes/projet'
+import { Route as MetiersRouteImport } from './routes/metiers'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -25,7 +26,9 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactArtisanIdRouteImport } from './routes/contact-artisan.$id'
+import { Route as ArtisanMetierRouteImport } from './routes/artisan.$metier'
 import { Route as ArtisanIdRouteImport } from './routes/artisan.$id'
+import { Route as ArtisanMetierCommuneRouteImport } from './routes/artisan.$metier.$commune'
 
 const TarifsRoute = TarifsRouteImport.update({
   id: '/tarifs',
@@ -55,6 +58,11 @@ const RechercheRoute = RechercheRouteImport.update({
 const ProjetRoute = ProjetRouteImport.update({
   id: '/projet',
   path: '/projet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetiersRoute = MetiersRouteImport.update({
+  id: '/metiers',
+  path: '/metiers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
@@ -107,10 +115,20 @@ const ContactArtisanIdRoute = ContactArtisanIdRouteImport.update({
   path: '/contact-artisan/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArtisanMetierRoute = ArtisanMetierRouteImport.update({
+  id: '/artisan/$metier',
+  path: '/artisan/$metier',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArtisanIdRoute = ArtisanIdRouteImport.update({
   id: '/artisan/$id',
   path: '/artisan/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ArtisanMetierCommuneRoute = ArtisanMetierCommuneRouteImport.update({
+  id: '/$commune',
+  path: '/$commune',
+  getParentRoute: () => ArtisanMetierRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -123,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/metiers': typeof MetiersRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -130,7 +149,9 @@ export interface FileRoutesByFullPath {
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
+  '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -142,6 +163,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/metiers': typeof MetiersRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -149,7 +171,9 @@ export interface FileRoutesByTo {
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
+  '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -162,6 +186,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/metiers': typeof MetiersRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -169,7 +194,9 @@ export interface FileRoutesById {
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
+  '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -183,6 +210,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/mentions-legales'
+    | '/metiers'
     | '/projet'
     | '/recherche'
     | '/robots.txt'
@@ -190,7 +218,9 @@ export interface FileRouteTypes {
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
+    | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/artisan/$metier/$commune'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -202,6 +232,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/mentions-legales'
+    | '/metiers'
     | '/projet'
     | '/recherche'
     | '/robots.txt'
@@ -209,7 +240,9 @@ export interface FileRouteTypes {
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
+    | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/artisan/$metier/$commune'
   id:
     | '__root__'
     | '/'
@@ -221,6 +254,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/mentions-legales'
+    | '/metiers'
     | '/projet'
     | '/recherche'
     | '/robots.txt'
@@ -228,7 +262,9 @@ export interface FileRouteTypes {
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
+    | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/artisan/$metier/$commune'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -241,6 +277,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
+  MetiersRoute: typeof MetiersRoute
   ProjetRoute: typeof ProjetRoute
   RechercheRoute: typeof RechercheRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -248,6 +285,7 @@ export interface RootRouteChildren {
   SuccesRoute: typeof SuccesRoute
   TarifsRoute: typeof TarifsRoute
   ArtisanIdRoute: typeof ArtisanIdRoute
+  ArtisanMetierRoute: typeof ArtisanMetierRouteWithChildren
   ContactArtisanIdRoute: typeof ContactArtisanIdRoute
 }
 
@@ -293,6 +331,13 @@ declare module '@tanstack/react-router' {
       path: '/projet'
       fullPath: '/projet'
       preLoaderRoute: typeof ProjetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metiers': {
+      id: '/metiers'
+      path: '/metiers'
+      fullPath: '/metiers'
+      preLoaderRoute: typeof MetiersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mentions-legales': {
@@ -365,6 +410,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactArtisanIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/artisan/$metier': {
+      id: '/artisan/$metier'
+      path: '/artisan/$metier'
+      fullPath: '/artisan/$metier'
+      preLoaderRoute: typeof ArtisanMetierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/artisan/$id': {
       id: '/artisan/$id'
       path: '/artisan/$id'
@@ -372,8 +424,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtisanIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/artisan/$metier/$commune': {
+      id: '/artisan/$metier/$commune'
+      path: '/$commune'
+      fullPath: '/artisan/$metier/$commune'
+      preLoaderRoute: typeof ArtisanMetierCommuneRouteImport
+      parentRoute: typeof ArtisanMetierRoute
+    }
   }
 }
+
+interface ArtisanMetierRouteChildren {
+  ArtisanMetierCommuneRoute: typeof ArtisanMetierCommuneRoute
+}
+
+const ArtisanMetierRouteChildren: ArtisanMetierRouteChildren = {
+  ArtisanMetierCommuneRoute: ArtisanMetierCommuneRoute,
+}
+
+const ArtisanMetierRouteWithChildren = ArtisanMetierRoute._addFileChildren(
+  ArtisanMetierRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -385,6 +456,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
+  MetiersRoute: MetiersRoute,
   ProjetRoute: ProjetRoute,
   RechercheRoute: RechercheRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
@@ -392,17 +464,9 @@ const rootRouteChildren: RootRouteChildren = {
   SuccesRoute: SuccesRoute,
   TarifsRoute: TarifsRoute,
   ArtisanIdRoute: ArtisanIdRoute,
+  ArtisanMetierRoute: ArtisanMetierRouteWithChildren,
   ContactArtisanIdRoute: ContactArtisanIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
