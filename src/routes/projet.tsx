@@ -244,9 +244,10 @@ function ProjectPage() {
             ) : (
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground shadow-glow transition hover:scale-105"
+                disabled={submitting}
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground shadow-glow transition hover:scale-105 disabled:opacity-60"
               >
-                Envoyer mon projet <CheckCircle2 className="h-4 w-4" />
+                {submitting ? "Envoi…" : "Envoyer mon projet"} <CheckCircle2 className="h-4 w-4" />
               </button>
             )}
           </div>
