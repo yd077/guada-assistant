@@ -83,7 +83,7 @@ export function AdminPricingRulesPanel() {
       {/* Création */}
       <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
         <p className="mb-3 text-sm font-semibold">Ajouter une règle</p>
-        <div className="grid gap-2 md:grid-cols-7">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-7">
           <input
             placeholder="Métier (ou vide)"
             value={draft.specialty ?? ""}
@@ -175,8 +175,8 @@ export function AdminPricingRulesPanel() {
           <Loader2 className="h-5 w-5 animate-spin text-emerald" />
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-border">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-2xl border border-border">
+          <table className="w-full min-w-[720px] text-sm">
             <thead className="bg-muted/50 text-xs uppercase tracking-wider text-muted-foreground">
               <tr>
                 <th className="px-3 py-2 text-left">Métier</th>
