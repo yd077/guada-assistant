@@ -66,9 +66,10 @@ export function ArtisanWalletPanel({
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("leads");
   const [unlockingId, setUnlockingId] = useState<string | null>(null);
+  const [tier, setTier] = useState<SubscriptionTier>("free");
 
   const refresh = useCallback(async () => {
-    const [w, l, u, h] = await Promise.all([
+    const [w, l, u, h, sub] = await Promise.all([
       fetchWallet(artisanId),
       fetchAvailableLeads({
         specialty,
@@ -79,11 +80,13 @@ export function ArtisanWalletPanel({
       }),
       fetchMyUnlocks(artisanId),
       fetchTransactions(artisanId),
+      fetchSubscription(artisanId),
     ]);
     setWallet(w);
     setLeads(l);
     setUnlocks(u);
     setHistory(h);
+    if (sub?.tier) setTier(sub.tier);
     setLoading(false);
   }, [artisanId, specialty, baseLat, baseLng, radiusKm]);
 
