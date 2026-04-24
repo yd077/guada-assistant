@@ -116,8 +116,24 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
     return <CreateArtisanProfile userId={userId} onCreated={refresh} />;
   }
 
+  const hasProfile = Boolean(
+    artisan.name && artisan.specialty && artisan.location && artisan.bio,
+  );
+  const hasZone = artisan.base_lat != null && artisan.base_lng != null;
+  const hasDocs = Boolean(artisan.kbis_url && artisan.insurance_url);
+  const isVerified = artisan.verification_status === "verified";
+
   return (
     <div className="space-y-12">
+      <Reveal>
+        <ArtisanOnboardingChecklist
+          hasProfile={hasProfile}
+          hasZone={hasZone}
+          hasDocs={hasDocs}
+          isVerified={isVerified}
+          hasTierChoice={hasPaidTier}
+        />
+      </Reveal>
       <ProfileEditor artisan={artisan} onSaved={refresh} />
       <ArtisanDocumentsPanel
         artisanId={artisan.id}
