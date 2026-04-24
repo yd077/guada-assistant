@@ -138,7 +138,7 @@ export function ArtisanWalletPanel({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [artisanId, specialty, refresh]);
+  }, [artisanId, specialty, refresh, tier]);
 
   const handleUnlock = async (lead: AvailableLead) => {
     if (wallet.balance < lead.lead_price_credits) {
@@ -188,6 +188,19 @@ export function ArtisanWalletPanel({
                 {wallet.balance}{" "}
                 <span className="text-base font-normal text-muted-foreground">crédits</span>
               </p>
+              <span
+                className={`mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
+                  tier === "elite"
+                    ? "bg-amber-100 text-amber-800"
+                    : tier === "premium"
+                      ? "bg-emerald/10 text-emerald"
+                      : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {tier === "elite" && "👑 "}
+                {tier === "premium" && "⭐ "}
+                Abonnement {TIER_LABEL[tier]}
+              </span>
             </div>
           </div>
           <div className="flex flex-col items-end gap-2">
@@ -236,7 +249,7 @@ export function ArtisanWalletPanel({
             onUnlock={handleUnlock}
           />
         )}
-        {tab === "mine" && <UnlocksList unlocks={unlocks} onChange={refresh} />}
+        {tab === "mine" && <UnlocksList unlocks={unlocks} artisanId={artisanId} onChange={refresh} />}
         {tab === "history" && <HistoryList history={history} />}
       </div>
     </Reveal>
