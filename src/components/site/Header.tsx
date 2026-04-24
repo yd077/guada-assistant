@@ -13,6 +13,9 @@ const NAV = [
 export function Header({ transparent = false }: { transparent?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const { user, signOut, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -21,7 +24,18 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
   const solid = !transparent || scrolled;
+  const initial = user?.email?.[0]?.toUpperCase() ?? "?";
 
   return (
     <header
@@ -54,6 +68,54 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
               {item.label}
             </Link>
           ))}
+
+          {isAuthenticated ? (
+            <div className="relative" ref={menuRef}>
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald text-sm font-semibold text-emerald-foreground shadow-glow transition hover:scale-105"
+                aria-label="Menu utilisateur"
+              >
+                {initial}
+              </button>
+              {menuOpen && (
+                <div className="absolute right-0 top-12 w-56 overflow-hidden rounded-xl border border-border bg-card shadow-elegant">
+                  <div className="border-b border-border px-4 py-3 text-xs">
+                    <p className="font-semibold text-foreground">Connecté en tant que</p>
+                    <p className="truncate text-muted-foreground">{user?.email}</p>
+                  </div>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted"
+                  >
+                    <UserIcon className="h-4 w-4" /> Mon espace
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      setMenuOpen(false);
+                      await signOut();
+                    }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-destructive hover:bg-destructive/10"
+                  >
+                    <LogOut className="h-4 w-4" /> Se déconnecter
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to="/auth"
+              className={`text-sm font-medium transition-colors ${
+                solid
+                  ? "text-foreground/70 hover:text-foreground"
+                  : "text-white/80 hover:text-white"
+              }`}
+            >
+              Connexion
+            </Link>
+          )}
+
           <Link
             to="/projet"
             className="inline-flex items-center rounded-full bg-emerald px-5 py-2.5 text-sm font-medium text-emerald-foreground shadow-glow transition-all hover:scale-[1.03] hover:shadow-elegant"
@@ -84,6 +146,25 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
                 {item.label}
               </Link>
             ))}
+            {isAuthenticated ? (
+              <button
+                onClick={async () => {
+                  setOpen(false);
+                  await signOut();
+                }}
+                className="rounded-md px-3 py-3 text-left text-sm font-medium text-destructive hover:bg-destructive/10"
+              >
+                Se déconnecter
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-3 text-sm font-medium text-foreground/80 hover:bg-muted"
+              >
+                Connexion / Inscription
+              </Link>
+            )}
           </div>
         </div>
       )}
