@@ -221,7 +221,18 @@ function ProjectPage() {
       return;
     }
 
-    navigate({ to: "/succes" });
+    // Envoi OTP email + redirection vers /succes (qui inclut désormais la vérif)
+    try {
+      const { sendProjectOtp } = await import("@/services/projet.functions");
+      await sendProjectOtp({ data: { token: email_verification_token } });
+    } catch (e) {
+      console.warn("[otp send]", e);
+    }
+
+    navigate({
+      to: "/succes",
+      search: { token: email_verification_token, email: data.email },
+    });
   };
 
   const canNext =
