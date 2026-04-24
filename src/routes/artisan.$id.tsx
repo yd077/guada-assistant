@@ -241,6 +241,13 @@ function ArtisanPage() {
       </main>
 
       <Footer />
+
+      <ReviewModal
+        open={reviewOpen}
+        artisanId={artisan.id}
+        artisanName={artisan.name}
+        onClose={() => setReviewOpen(false)}
+      />
     </div>
   );
 }
