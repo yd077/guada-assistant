@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as SuccesRouteImport } from './routes/succes'
+import { Route as SosRouteImport } from './routes/sos'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RechercheRouteImport } from './routes/recherche'
@@ -18,12 +19,14 @@ import { Route as ProjetRouteImport } from './routes/projet'
 import { Route as MetiersRouteImport } from './routes/metiers'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ContactProRouteImport } from './routes/contact-pro'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
 import { Route as CguRouteImport } from './routes/cgu'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AbonnementsRouteImport } from './routes/abonnements'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifierEmailTokenRouteImport } from './routes/verifier-email.$token'
 import { Route as SosMetierRouteImport } from './routes/sos.$metier'
@@ -42,6 +45,11 @@ const TarifsRoute = TarifsRouteImport.update({
 const SuccesRoute = SuccesRouteImport.update({
   id: '/succes',
   path: '/succes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SosRoute = SosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -79,6 +87,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactProRoute = ContactProRouteImport.update({
+  id: '/contact-pro',
+  path: '/contact-pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -109,6 +122,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AbonnementsRoute = AbonnementsRouteImport.update({
+  id: '/abonnements',
+  path: '/abonnements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -120,9 +138,9 @@ const VerifierEmailTokenRoute = VerifierEmailTokenRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const SosMetierRoute = SosMetierRouteImport.update({
-  id: '/sos/$metier',
-  path: '/sos/$metier',
-  getParentRoute: () => rootRouteImport,
+  id: '/$metier',
+  path: '/$metier',
+  getParentRoute: () => SosRoute,
 } as any)
 const MetiersMetierRoute = MetiersMetierRouteImport.update({
   id: '/$metier',
@@ -157,12 +175,14 @@ const ArtisanMetierCommuneRoute = ArtisanMetierCommuneRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/cgu': typeof CguRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/contact-pro': typeof ContactProRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/metiers': typeof MetiersRouteWithChildren
@@ -170,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
@@ -183,12 +204,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/cgu': typeof CguRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/contact-pro': typeof ContactProRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/metiers': typeof MetiersRouteWithChildren
@@ -196,6 +219,7 @@ export interface FileRoutesByTo {
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
@@ -210,12 +234,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/cgu': typeof CguRoute
   '/comment-ca-marche': typeof CommentCaMarcheRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/contact-pro': typeof ContactProRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/metiers': typeof MetiersRouteWithChildren
@@ -223,6 +249,7 @@ export interface FileRoutesById {
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
@@ -238,12 +265,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/abonnements'
     | '/admin'
     | '/auth'
     | '/cgu'
     | '/comment-ca-marche'
     | '/confidentialite'
     | '/contact'
+    | '/contact-pro'
     | '/dashboard'
     | '/mentions-legales'
     | '/metiers'
@@ -251,6 +280,7 @@ export interface FileRouteTypes {
     | '/recherche'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/sos'
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
@@ -264,12 +294,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/abonnements'
     | '/admin'
     | '/auth'
     | '/cgu'
     | '/comment-ca-marche'
     | '/confidentialite'
     | '/contact'
+    | '/contact-pro'
     | '/dashboard'
     | '/mentions-legales'
     | '/metiers'
@@ -277,6 +309,7 @@ export interface FileRouteTypes {
     | '/recherche'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/sos'
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
@@ -290,12 +323,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/abonnements'
     | '/admin'
     | '/auth'
     | '/cgu'
     | '/comment-ca-marche'
     | '/confidentialite'
     | '/contact'
+    | '/contact-pro'
     | '/dashboard'
     | '/mentions-legales'
     | '/metiers'
@@ -303,6 +338,7 @@ export interface FileRouteTypes {
     | '/recherche'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/sos'
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
@@ -317,12 +353,14 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbonnementsRoute: typeof AbonnementsRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   CguRoute: typeof CguRoute
   CommentCaMarcheRoute: typeof CommentCaMarcheRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
+  ContactProRoute: typeof ContactProRoute
   DashboardRoute: typeof DashboardRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MetiersRoute: typeof MetiersRouteWithChildren
@@ -330,12 +368,12 @@ export interface RootRouteChildren {
   RechercheRoute: typeof RechercheRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SosRoute: typeof SosRouteWithChildren
   SuccesRoute: typeof SuccesRoute
   TarifsRoute: typeof TarifsRoute
   ArtisanIdRoute: typeof ArtisanIdRoute
   ArtisanMetierRoute: typeof ArtisanMetierRouteWithChildren
   ContactArtisanIdRoute: typeof ContactArtisanIdRoute
-  SosMetierRoute: typeof SosMetierRouteWithChildren
   VerifierEmailTokenRoute: typeof VerifierEmailTokenRoute
 }
 
@@ -353,6 +391,13 @@ declare module '@tanstack/react-router' {
       path: '/succes'
       fullPath: '/succes'
       preLoaderRoute: typeof SuccesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sos': {
+      id: '/sos'
+      path: '/sos'
+      fullPath: '/sos'
+      preLoaderRoute: typeof SosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -404,6 +449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact-pro': {
+      id: '/contact-pro'
+      path: '/contact-pro'
+      fullPath: '/contact-pro'
+      preLoaderRoute: typeof ContactProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -446,6 +498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abonnements': {
+      id: '/abonnements'
+      path: '/abonnements'
+      fullPath: '/abonnements'
+      preLoaderRoute: typeof AbonnementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -462,10 +521,10 @@ declare module '@tanstack/react-router' {
     }
     '/sos/$metier': {
       id: '/sos/$metier'
-      path: '/sos/$metier'
+      path: '/$metier'
       fullPath: '/sos/$metier'
       preLoaderRoute: typeof SosMetierRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof SosRoute
     }
     '/metiers/$metier': {
       id: '/metiers/$metier'
@@ -523,18 +582,6 @@ const MetiersRouteChildren: MetiersRouteChildren = {
 const MetiersRouteWithChildren =
   MetiersRoute._addFileChildren(MetiersRouteChildren)
 
-interface ArtisanMetierRouteChildren {
-  ArtisanMetierCommuneRoute: typeof ArtisanMetierCommuneRoute
-}
-
-const ArtisanMetierRouteChildren: ArtisanMetierRouteChildren = {
-  ArtisanMetierCommuneRoute: ArtisanMetierCommuneRoute,
-}
-
-const ArtisanMetierRouteWithChildren = ArtisanMetierRoute._addFileChildren(
-  ArtisanMetierRouteChildren,
-)
-
 interface SosMetierRouteChildren {
   SosMetierCommuneRoute: typeof SosMetierCommuneRoute
 }
@@ -547,14 +594,38 @@ const SosMetierRouteWithChildren = SosMetierRoute._addFileChildren(
   SosMetierRouteChildren,
 )
 
+interface SosRouteChildren {
+  SosMetierRoute: typeof SosMetierRouteWithChildren
+}
+
+const SosRouteChildren: SosRouteChildren = {
+  SosMetierRoute: SosMetierRouteWithChildren,
+}
+
+const SosRouteWithChildren = SosRoute._addFileChildren(SosRouteChildren)
+
+interface ArtisanMetierRouteChildren {
+  ArtisanMetierCommuneRoute: typeof ArtisanMetierCommuneRoute
+}
+
+const ArtisanMetierRouteChildren: ArtisanMetierRouteChildren = {
+  ArtisanMetierCommuneRoute: ArtisanMetierCommuneRoute,
+}
+
+const ArtisanMetierRouteWithChildren = ArtisanMetierRoute._addFileChildren(
+  ArtisanMetierRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbonnementsRoute: AbonnementsRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   CguRoute: CguRoute,
   CommentCaMarcheRoute: CommentCaMarcheRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
+  ContactProRoute: ContactProRoute,
   DashboardRoute: DashboardRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   MetiersRoute: MetiersRouteWithChildren,
@@ -562,14 +633,23 @@ const rootRouteChildren: RootRouteChildren = {
   RechercheRoute: RechercheRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SosRoute: SosRouteWithChildren,
   SuccesRoute: SuccesRoute,
   TarifsRoute: TarifsRoute,
   ArtisanIdRoute: ArtisanIdRoute,
   ArtisanMetierRoute: ArtisanMetierRouteWithChildren,
   ContactArtisanIdRoute: ContactArtisanIdRoute,
-  SosMetierRoute: SosMetierRouteWithChildren,
   VerifierEmailTokenRoute: VerifierEmailTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
