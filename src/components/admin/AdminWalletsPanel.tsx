@@ -263,3 +263,99 @@ function UnlocksTable({
     </div>
   );
 }
+
+function FragmentRow({
+  wallet,
+  isEditing,
+  onToggle,
+  amount,
+  setAmount,
+  note,
+  setNote,
+  type,
+  setType,
+  busy,
+  onSubmit,
+}: {
+  wallet: WalletRow;
+  isEditing: boolean;
+  onToggle: () => void;
+  amount: string;
+  setAmount: (v: string) => void;
+  note: string;
+  setNote: (v: string) => void;
+  type: CreditTxType;
+  setType: (v: CreditTxType) => void;
+  busy: boolean;
+  onSubmit: () => void;
+}) {
+  return (
+    <>
+      <tr>
+        <td className="px-4 py-3">
+          <p className="font-medium">{wallet.artisans?.name ?? "—"}</p>
+          <p className="text-xs text-muted-foreground">{wallet.artisans?.location}</p>
+        </td>
+        <td className="px-4 py-3 text-muted-foreground">
+          {wallet.artisans?.specialty ?? "—"}
+        </td>
+        <td className="px-4 py-3 text-right">
+          <span className="inline-flex items-center gap-1 rounded-full bg-emerald/10 px-3 py-1 font-semibold text-emerald tabular-nums">
+            <Wallet className="h-3 w-3" /> {wallet.credits_balance}
+          </span>
+        </td>
+        <td className="px-4 py-3 text-right">
+          <button
+            onClick={onToggle}
+            className="rounded-full border border-border px-3 py-1 text-xs hover:bg-muted"
+          >
+            {isEditing ? "Fermer" : "Ajuster"}
+          </button>
+        </td>
+      </tr>
+      {isEditing && (
+        <tr className="bg-muted/30">
+          <td colSpan={4} className="px-4 py-4">
+            <div className="grid gap-3 md:grid-cols-[120px_140px_1fr_auto]">
+              <input
+                type="number"
+                placeholder="Montant ±"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
+              />
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value as CreditTxType)}
+                className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
+              >
+                <option value="admin_adjust">Ajustement</option>
+                <option value="bonus">Bonus</option>
+                <option value="refund">Remboursement</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Motif (visible dans l'historique)"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
+              />
+              <button
+                onClick={onSubmit}
+                disabled={busy}
+                className="inline-flex items-center gap-2 rounded-full bg-emerald px-4 py-2 text-sm font-semibold text-emerald-foreground disabled:opacity-50"
+              >
+                {Number(amount) >= 0 ? (
+                  <Plus className="h-3 w-3" />
+                ) : (
+                  <Minus className="h-3 w-3" />
+                )}
+                Appliquer
+              </button>
+            </div>
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
