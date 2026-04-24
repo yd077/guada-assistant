@@ -119,7 +119,7 @@ export async function fetchAvailableLeads(opts: {
         ...l,
         distance_km:
           l.project_lat != null && l.project_lng != null
-            ? distanceKm(opts.baseLat!, opts.baseLng!, l.project_lat, l.project_lng)
+            ? haversineKm(opts.baseLat!, opts.baseLng!, l.project_lat, l.project_lng)
             : null,
       }))
       .filter((l) => {
