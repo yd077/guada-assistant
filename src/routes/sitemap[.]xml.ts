@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { SPECIALTIES_LIST } from "@/data/specialties";
+import { COMMUNES_LIST } from "@/data/communes";
 
 const STATIC_PATHS = [
   "/",
   "/recherche",
   "/projet",
   "/auth",
+  "/metiers",
   "/comment-ca-marche",
   "/tarifs",
   "/contact",
@@ -35,6 +38,18 @@ export const Route = createFileRoute("/sitemap.xml")({
         const urls: { loc: string; lastmod?: string; priority?: string }[] = STATIC_PATHS.map(
           (p) => ({ loc: p, lastmod: today, priority: p === "/" ? "1.0" : "0.7" }),
         );
+
+        // Pages SEO : /artisan/:metier  +  /artisan/:metier/:commune
+        for (const s of SPECIALTIES_LIST) {
+          urls.push({ loc: `/artisan/${s.slug}`, lastmod: today, priority: "0.8" });
+          for (const c of COMMUNES_LIST) {
+            urls.push({
+              loc: `/artisan/${s.slug}/${c.slug}`,
+              lastmod: today,
+              priority: "0.6",
+            });
+          }
+        }
 
         try {
           const { data } = await supabase
