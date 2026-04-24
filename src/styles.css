@@ -162,6 +162,8 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   }
   h1,
   h2,
@@ -171,6 +173,9 @@
     font-family: var(--font-serif);
     font-weight: 600;
     letter-spacing: -0.01em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "kern" 1, "liga" 1, "dlig" 1;
   }
   .font-display {
     font-family: var(--font-display);
