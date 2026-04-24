@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ArtisanCard } from "@/components/site/ArtisanCard";
 import { Reveal } from "@/components/site/Reveal";
-import { ARTISANS, SPECIALTIES, COMMUNES } from "@/data/artisans";
-import { Search, SlidersHorizontal, Star } from "lucide-react";
+import { SPECIALTIES, COMMUNES, type Artisan } from "@/data/artisans";
+import { listArtisans } from "@/services/artisans";
+import { Search, SlidersHorizontal, Star, Loader2 } from "lucide-react";
 import { z } from "zod";
 
 const searchSchema = z.object({
@@ -38,14 +39,26 @@ function SearchPage() {
   const [specialty, setSpecialty] = useState(initial.specialty ?? "");
   const [location, setLocation] = useState(initial.location ?? "");
   const [minRating, setMinRating] = useState(0);
+  const [results, setResults] = useState<Artisan[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const results = useMemo(() => {
-    return ARTISANS.filter(
-      (a) =>
-        (!specialty || a.specialty === specialty) &&
-        (!location || a.location === location) &&
-        a.rating >= minRating,
-    );
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    listArtisans({
+      specialty: specialty || undefined,
+      location: location || undefined,
+      minRating: minRating || undefined,
+    })
+      .then((data) => {
+        if (!cancelled) setResults(data);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [specialty, location, minRating]);
 
   return (
@@ -59,7 +72,9 @@ function SearchPage() {
                 Annuaire
               </span>
               <h1 className="mt-2 font-serif text-4xl md:text-5xl">
-                {results.length} artisan{results.length > 1 ? "s" : ""} d'exception
+                {loading
+                  ? "Recherche…"
+                  : `${results.length} artisan${results.length > 1 ? "s" : ""} d'exception`}
               </h1>
               <p className="mt-2 max-w-2xl text-muted-foreground">
                 Tous nos partenaires sont vérifiés, assurés et évalués par leurs clients.
@@ -145,7 +160,11 @@ function SearchPage() {
           </aside>
 
           <div>
-            {results.length === 0 ? (
+            {loading ? (
+              <div className="flex items-center justify-center rounded-2xl border border-dashed border-border p-16">
+                <Loader2 className="h-8 w-8 animate-spin text-emerald" />
+              </div>
+            ) : results.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border p-12 text-center">
                 <Search className="mx-auto h-10 w-10 text-muted-foreground" />
                 <p className="mt-4 font-serif text-2xl">Aucun artisan ne correspond</p>
