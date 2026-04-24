@@ -9,19 +9,42 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as SuccesRouteImport } from './routes/succes'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RechercheRouteImport } from './routes/recherche'
 import { Route as ProjetRouteImport } from './routes/projet'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
+import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
+import { Route as CguRouteImport } from './routes/cgu'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactArtisanIdRouteImport } from './routes/contact-artisan.$id'
 import { Route as ArtisanIdRouteImport } from './routes/artisan.$id'
 
+const TarifsRoute = TarifsRouteImport.update({
+  id: '/tarifs',
+  path: '/tarifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SuccesRoute = SuccesRouteImport.update({
   id: '/succes',
   path: '/succes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RechercheRoute = RechercheRouteImport.update({
@@ -34,9 +57,34 @@ const ProjetRoute = ProjetRouteImport.update({
   path: '/projet',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
+  id: '/confidentialite',
+  path: '/confidentialite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommentCaMarcheRoute = CommentCaMarcheRouteImport.update({
+  id: '/comment-ca-marche',
+  path: '/comment-ca-marche',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CguRoute = CguRouteImport.update({
+  id: '/cgu',
+  path: '/cgu',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -69,10 +117,18 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/cgu': typeof CguRoute
+  '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/confidentialite': typeof ConfidentialiteRoute
+  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/succes': typeof SuccesRoute
+  '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
 }
@@ -80,10 +136,18 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/cgu': typeof CguRoute
+  '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/confidentialite': typeof ConfidentialiteRoute
+  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/succes': typeof SuccesRoute
+  '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
 }
@@ -92,10 +156,18 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/cgu': typeof CguRoute
+  '/comment-ca-marche': typeof CommentCaMarcheRoute
+  '/confidentialite': typeof ConfidentialiteRoute
+  '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/succes': typeof SuccesRoute
+  '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
 }
@@ -105,10 +177,18 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/cgu'
+    | '/comment-ca-marche'
+    | '/confidentialite'
+    | '/contact'
     | '/dashboard'
+    | '/mentions-legales'
     | '/projet'
     | '/recherche'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/succes'
+    | '/tarifs'
     | '/artisan/$id'
     | '/contact-artisan/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -116,10 +196,18 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/cgu'
+    | '/comment-ca-marche'
+    | '/confidentialite'
+    | '/contact'
     | '/dashboard'
+    | '/mentions-legales'
     | '/projet'
     | '/recherche'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/succes'
+    | '/tarifs'
     | '/artisan/$id'
     | '/contact-artisan/$id'
   id:
@@ -127,10 +215,18 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/cgu'
+    | '/comment-ca-marche'
+    | '/confidentialite'
+    | '/contact'
     | '/dashboard'
+    | '/mentions-legales'
     | '/projet'
     | '/recherche'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/succes'
+    | '/tarifs'
     | '/artisan/$id'
     | '/contact-artisan/$id'
   fileRoutesById: FileRoutesById
@@ -139,21 +235,50 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
+  CguRoute: typeof CguRoute
+  CommentCaMarcheRoute: typeof CommentCaMarcheRoute
+  ConfidentialiteRoute: typeof ConfidentialiteRoute
+  ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
   ProjetRoute: typeof ProjetRoute
   RechercheRoute: typeof RechercheRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccesRoute: typeof SuccesRoute
+  TarifsRoute: typeof TarifsRoute
   ArtisanIdRoute: typeof ArtisanIdRoute
   ContactArtisanIdRoute: typeof ContactArtisanIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tarifs': {
+      id: '/tarifs'
+      path: '/tarifs'
+      fullPath: '/tarifs'
+      preLoaderRoute: typeof TarifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/succes': {
       id: '/succes'
       path: '/succes'
       fullPath: '/succes'
       preLoaderRoute: typeof SuccesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recherche': {
@@ -170,11 +295,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjetRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confidentialite': {
+      id: '/confidentialite'
+      path: '/confidentialite'
+      fullPath: '/confidentialite'
+      preLoaderRoute: typeof ConfidentialiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comment-ca-marche': {
+      id: '/comment-ca-marche'
+      path: '/comment-ca-marche'
+      fullPath: '/comment-ca-marche'
+      preLoaderRoute: typeof CommentCaMarcheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cgu': {
+      id: '/cgu'
+      path: '/cgu'
+      fullPath: '/cgu'
+      preLoaderRoute: typeof CguRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -219,10 +379,18 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
+  CguRoute: CguRoute,
+  CommentCaMarcheRoute: CommentCaMarcheRoute,
+  ConfidentialiteRoute: ConfidentialiteRoute,
+  ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
+  MentionsLegalesRoute: MentionsLegalesRoute,
   ProjetRoute: ProjetRoute,
   RechercheRoute: RechercheRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccesRoute: SuccesRoute,
+  TarifsRoute: TarifsRoute,
   ArtisanIdRoute: ArtisanIdRoute,
   ContactArtisanIdRoute: ContactArtisanIdRoute,
 }
