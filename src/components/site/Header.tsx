@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
-import { Menu, X, LogOut, User as UserIcon } from "lucide-react";
+import { Menu, X, LogOut, User as UserIcon, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const NAV = [
@@ -15,7 +15,7 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { user, signOut, isAuthenticated } = useAuth();
+  const { user, role, signOut, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -91,6 +91,15 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
                   >
                     <UserIcon className="h-4 w-4" /> Mon espace
                   </Link>
+                  {role === "admin" && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-emerald hover:bg-muted"
+                    >
+                      <ShieldCheck className="h-4 w-4" /> Panel admin
+                    </Link>
+                  )}
                   <button
                     onClick={async () => {
                       setMenuOpen(false);
