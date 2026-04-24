@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { distanceKm } from "@/services/geocoding";
+import { haversineKm } from "@/services/geocoding";
 
 export type WalletState = {
   balance: number;
