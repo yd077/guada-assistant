@@ -1,9 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useState } from "react";
 import type { Artisan } from "@/data/artisans";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Reveal } from "@/components/site/Reveal";
 import { getArtisanDetail } from "@/services/artisans";
+import { useAuth } from "@/hooks/useAuth";
+import { ReviewModal } from "@/components/dashboard/ReviewModal";
 import {
   MapPin,
   Star,
