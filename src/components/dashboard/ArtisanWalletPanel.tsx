@@ -103,16 +103,26 @@ export function ArtisanWalletPanel({
         { event: "INSERT", schema: "public", table: "projects", filter: `specialty=eq.${specialty}` },
         (payload) => {
           const p = payload.new as { id: string; location: string };
-          toast.success(`⚡ Lead-Flash : nouveau chantier ${specialty} à ${p.location}`, {
-            duration: 8000,
-            action: {
-              label: "Voir",
-              onClick: () => {
-                setTab("leads");
-                refresh();
+          const tierBadge =
+            tier === "elite"
+              ? "👑 Élite — accès immédiat"
+              : tier === "premium"
+                ? "⭐ Premium — accès dans 15 min"
+                : "Standard — accès dans 30 min";
+          toast.success(
+            `⚡ Lead-Flash ${specialty} à ${p.location}`,
+            {
+              description: tierBadge,
+              duration: tier === "elite" ? 12000 : 8000,
+              action: {
+                label: "Voir",
+                onClick: () => {
+                  setTab("leads");
+                  refresh();
+                },
               },
             },
-          });
+          );
           refresh();
         },
       )
