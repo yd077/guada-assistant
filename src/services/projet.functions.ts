@@ -3,6 +3,18 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendEmail, renderOtpEmail, renderNewLeadEmail } from "@/integrations/email.server";
 
+/**
+ * ⚠️ Vérifications email DÉSACTIVÉES temporairement (en attente du SMTP client).
+ * Toutes les fonctions ci-dessous sont court-circuitées et ne déclenchent aucun envoi.
+ * Pour réactiver : retirer le bloc `EMAIL_DISABLED` au début de chaque handler.
+ */
+const EMAIL_DISABLED = true;
+
+// Évite les warnings d'imports inutilisés tant que c'est désactivé.
+void sendEmail;
+void renderOtpEmail;
+void renderNewLeadEmail;
+
 /** Génère un code 6 chiffres et l'envoie par email au client. */
 export const sendProjectOtp = createServerFn({ method: "POST" })
   .inputValidator(
