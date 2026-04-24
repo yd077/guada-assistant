@@ -4,7 +4,7 @@ import { Footer } from "@/components/site/Footer";
 import { CheckCircle2, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/succes")({
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: Record<string, unknown>): { token?: string; email?: string } => ({
     token: typeof s.token === "string" ? s.token : undefined,
     email: typeof s.email === "string" ? s.email : undefined,
   }),
