@@ -4,6 +4,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { toast } from "sonner";
 import { SPECIALTIES, COMMUNES } from "@/data/artisans";
 import { ArtisanZoneEditor } from "./ArtisanZoneEditor";
+import { ArtisanWalletPanel } from "./ArtisanWalletPanel";
 import {
   Loader2,
   Save,
@@ -108,6 +109,13 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
   return (
     <div className="space-y-12">
       <ProfileEditor artisan={artisan} onSaved={refresh} />
+      <ArtisanWalletPanel
+        artisanId={artisan.id}
+        specialty={artisan.specialty}
+        baseLat={artisan.base_lat}
+        baseLng={artisan.base_lng}
+        radiusKm={artisan.radius_km}
+      />
       <ArtisanZoneEditor
         artisanId={artisan.id}
         initialLat={artisan.base_lat}
