@@ -45,6 +45,11 @@ export function Footer() {
                   Tarifs
                 </Link>
               </li>
+              <li>
+                <Link to="/a-propos" className="hover:text-white">
+                  À propos
+                </Link>
+              </li>
             </ul>
           </div>
 
