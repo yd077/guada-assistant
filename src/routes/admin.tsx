@@ -9,6 +9,7 @@ import { AdminStats } from "@/components/admin/AdminStats";
 import { AdminArtisansPanel } from "@/components/admin/AdminArtisansPanel";
 import { AdminProjectsPanel } from "@/components/admin/AdminProjectsPanel";
 import { AdminQuoteRequestsPanel } from "@/components/admin/AdminQuoteRequestsPanel";
+import { AdminWalletsPanel } from "@/components/admin/AdminWalletsPanel";
 import {
   fetchAdminStats,
   fetchAllArtisans,
@@ -31,7 +32,7 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type Tab = "artisans" | "projects" | "quotes";
+type Tab = "artisans" | "projects" | "quotes" | "wallets";
 
 function AdminPage() {
   const { user, role, loading, isAuthenticated } = useAuth();
@@ -142,6 +143,7 @@ function AdminPage() {
                     { value: "artisans", label: `Artisans (${artisans.length})` },
                     { value: "projects", label: `Projets (${projects.length})` },
                     { value: "quotes", label: `Devis (${quotes.length})` },
+                    { value: "wallets", label: "Wallets & leads" },
                   ] as { value: Tab; label: string }[]
                 ).map((t) => (
                   <button
@@ -165,6 +167,7 @@ function AdminPage() {
                 <AdminProjectsPanel projects={projects} onChange={loadAll} />
               )}
               {tab === "quotes" && <AdminQuoteRequestsPanel requests={quotes} />}
+              {tab === "wallets" && <AdminWalletsPanel />}
             </>
           )}
         </div>
