@@ -19,6 +19,9 @@ type DbArtisan = {
   certifications: string[] | null;
   rating: number | null;
   reviews_count: number | null;
+  base_lat?: number | null;
+  base_lng?: number | null;
+  radius_km?: number | null;
 };
 
 type DbPortfolio = { image_url: string; title: string | null };
@@ -53,6 +56,9 @@ function mapDbArtisan(
     cover: row.cover_url || FALLBACK_COVER,
     bio: row.bio ?? "",
     certifications: row.certifications ?? [],
+    baseLat: row.base_lat ?? null,
+    baseLng: row.base_lng ?? null,
+    radiusKm: row.radius_km ?? null,
     portfolio: portfolio.map((p) => ({
       src: p.image_url,
       title: p.title ?? "",
@@ -71,9 +77,13 @@ function mapDbArtisan(
 
 /** Liste paginée d'artisans vérifiés. Fallback mock si DB vide. */
 export async function listArtisans(filters: ArtisanFilters = {}): Promise<Artisan[]> {
+  // On essaie d'abord avec les colonnes geo. Si elles n'existent pas (migration
+  // pas encore exécutée), on retombe sur le select de base.
   let query = supabase
     .from("artisans")
-    .select("*")
+    .select(
+      "id, name, specialty, location, bio, avatar_url, cover_url, experience_years, certifications, rating, reviews_count, base_lat, base_lng, radius_km",
+    )
     .eq("status", "verified")
     .order("rating", { ascending: false });
 
@@ -82,14 +92,30 @@ export async function listArtisans(filters: ArtisanFilters = {}): Promise<Artisa
   if (filters.minRating && filters.minRating > 0)
     query = query.gte("rating", filters.minRating);
 
-  const { data, error } = await query;
+  let { data, error } = await query;
+
+  // Si erreur (colonnes geo absentes), retry sans elles
+  if (error && /base_lat|base_lng|radius_km/.test(error.message)) {
+    let q2 = supabase
+      .from("artisans")
+      .select("*")
+      .eq("status", "verified")
+      .order("rating", { ascending: false });
+    if (filters.specialty) q2 = q2.eq("specialty", filters.specialty);
+    if (filters.location) q2 = q2.eq("location", filters.location);
+    if (filters.minRating && filters.minRating > 0)
+      q2 = q2.gte("rating", filters.minRating);
+    const r = await q2;
+    data = r.data;
+    error = r.error;
+  }
+
   if (error) {
     console.error("[listArtisans] supabase error:", error.message);
     return applyMockFilters(filters);
   }
 
   if (!data || data.length === 0) {
-    // DB vide → fallback mock filtré (utile en démo / seed)
     return applyMockFilters(filters);
   }
 

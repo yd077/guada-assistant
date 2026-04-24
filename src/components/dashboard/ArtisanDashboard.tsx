@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Reveal } from "@/components/site/Reveal";
 import { toast } from "sonner";
 import { SPECIALTIES, COMMUNES } from "@/data/artisans";
+import { ArtisanZoneEditor } from "./ArtisanZoneEditor";
 import {
   Loader2,
   Save,
@@ -27,6 +28,10 @@ type ArtisanRow = {
   experience_years: number | null;
   certifications: string[] | null;
   status: "pending" | "verified" | "rejected";
+  base_lat: number | null;
+  base_lng: number | null;
+  radius_km: number | null;
+  base_address: string | null;
 };
 
 type PortfolioRow = {
@@ -103,6 +108,14 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
   return (
     <div className="space-y-12">
       <ProfileEditor artisan={artisan} onSaved={refresh} />
+      <ArtisanZoneEditor
+        artisanId={artisan.id}
+        initialLat={artisan.base_lat}
+        initialLng={artisan.base_lng}
+        initialRadiusKm={artisan.radius_km ?? 20}
+        initialAddress={artisan.base_address}
+        onSaved={refresh}
+      />
       <PortfolioManager
         artisanId={artisan.id}
         userId={userId}

@@ -1,12 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ArtisanCard } from "@/components/site/ArtisanCard";
 import { Reveal } from "@/components/site/Reveal";
-import { SPECIALTIES, COMMUNES, type Artisan } from "@/data/artisans";
+import { type Artisan } from "@/data/artisans";
+import { SPECIALTIES_LIST } from "@/data/specialties";
+import { COMMUNES_LIST, COMMUNE_BY_NAME } from "@/data/communes";
 import { listArtisans } from "@/services/artisans";
-import { Search, SlidersHorizontal, Star, Loader2 } from "lucide-react";
+import { haversineKm } from "@/services/geocoding";
+import { Search, SlidersHorizontal, Star, Loader2, MapPin } from "lucide-react";
 import { z } from "zod";
 
 const searchSchema = z.object({
@@ -22,7 +25,7 @@ export const Route = createFileRoute("/recherche")({
       {
         name: "description",
         content:
-          "Parcourez notre annuaire d'artisans BTP vérifiés en Guadeloupe. Filtrez par spécialité, commune et notation.",
+          "Parcourez notre annuaire d'artisans BTP vérifiés en Guadeloupe. Filtrez par spécialité, commune, distance et notation.",
       },
       { property: "og:title", content: "Trouver un artisan — BTP Guada" },
       {
@@ -39,6 +42,7 @@ function SearchPage() {
   const [specialty, setSpecialty] = useState(initial.specialty ?? "");
   const [location, setLocation] = useState(initial.location ?? "");
   const [minRating, setMinRating] = useState(0);
+  const [maxDistance, setMaxDistance] = useState(0); // 0 = pas de filtre distance
   const [results, setResults] = useState<Artisan[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +51,8 @@ function SearchPage() {
     setLoading(true);
     listArtisans({
       specialty: specialty || undefined,
-      location: location || undefined,
+      // si on filtre par distance depuis une commune, on relâche le filtre commune stricte
+      location: maxDistance > 0 ? undefined : location || undefined,
       minRating: minRating || undefined,
     })
       .then((data) => {
@@ -59,7 +64,28 @@ function SearchPage() {
     return () => {
       cancelled = true;
     };
-  }, [specialty, location, minRating]);
+  }, [specialty, location, minRating, maxDistance]);
+
+  // Filtrage par distance côté client (Haversine)
+  const filtered = useMemo(() => {
+    if (!maxDistance || !location) return results;
+    const center = COMMUNE_BY_NAME[location];
+    if (!center) return results;
+    return results
+      .map((a) => {
+        const lat = a.baseLat ?? COMMUNE_BY_NAME[a.location]?.lat ?? null;
+        const lng = a.baseLng ?? COMMUNE_BY_NAME[a.location]?.lng ?? null;
+        if (lat == null || lng == null) return null;
+        const distance = haversineKm(center.lat, center.lng, lat, lng);
+        // Si l'artisan a un rayon défini, on respecte aussi sa zone d'intervention
+        const artisanRadius = a.radiusKm ?? 100;
+        if (distance > maxDistance && distance > artisanRadius) return null;
+        return { artisan: a, distance };
+      })
+      .filter((x): x is { artisan: Artisan; distance: number } => x !== null)
+      .sort((x, y) => x.distance - y.distance)
+      .map((x) => x.artisan);
+  }, [results, maxDistance, location]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -74,7 +100,7 @@ function SearchPage() {
               <h1 className="mt-2 font-serif text-4xl md:text-5xl">
                 {loading
                   ? "Recherche…"
-                  : `${results.length} artisan${results.length > 1 ? "s" : ""} d'exception`}
+                  : `${filtered.length} artisan${filtered.length > 1 ? "s" : ""} d'exception`}
               </h1>
               <p className="mt-2 max-w-2xl text-muted-foreground">
                 Tous nos partenaires sont vérifiés, assurés et évalués par leurs clients.
@@ -101,9 +127,9 @@ function SearchPage() {
                     className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                   >
                     <option value="">Toutes</option>
-                    {SPECIALTIES.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
+                    {SPECIALTIES_LIST.map((s) => (
+                      <option key={s.slug} value={s.name}>
+                        {s.name}
                       </option>
                     ))}
                   </select>
@@ -119,12 +145,38 @@ function SearchPage() {
                     className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                   >
                     <option value="">Toute la Guadeloupe</option>
-                    {COMMUNES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
+                    {COMMUNES_LIST.map((c) => (
+                      <option key={c.slug} value={c.name}>
+                        {c.name}
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 flex items-center justify-between text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="h-3 w-3" /> Distance max
+                    </span>
+                    <span className="text-foreground">
+                      {maxDistance ? `${maxDistance} km` : "Tous"}
+                    </span>
+                  </label>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={maxDistance}
+                    onChange={(e) => setMaxDistance(parseInt(e.target.value, 10))}
+                    disabled={!location}
+                    className="w-full accent-emerald disabled:opacity-40"
+                  />
+                  {!location && (
+                    <p className="mt-1 text-[11px] text-muted-foreground">
+                      Sélectionnez une commune pour activer ce filtre.
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -150,6 +202,7 @@ function SearchPage() {
                     setSpecialty("");
                     setLocation("");
                     setMinRating(0);
+                    setMaxDistance(0);
                   }}
                   className="w-full rounded-lg border border-border py-2 text-sm text-muted-foreground hover:bg-muted"
                 >
@@ -164,7 +217,7 @@ function SearchPage() {
               <div className="flex items-center justify-center rounded-2xl border border-dashed border-border p-16">
                 <Loader2 className="h-8 w-8 animate-spin text-emerald" />
               </div>
-            ) : results.length === 0 ? (
+            ) : filtered.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border p-12 text-center">
                 <Search className="mx-auto h-10 w-10 text-muted-foreground" />
                 <p className="mt-4 font-serif text-2xl">Aucun artisan ne correspond</p>
@@ -174,7 +227,7 @@ function SearchPage() {
               </div>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">
-                {results.map((a, i) => (
+                {filtered.map((a, i) => (
                   <Reveal key={a.id} delay={i * 0.04}>
                     <ArtisanCard artisan={a} />
                   </Reveal>

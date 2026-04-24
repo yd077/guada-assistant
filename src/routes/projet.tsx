@@ -57,7 +57,23 @@ function ProjectPage() {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const { error } = await supabase.from("projects").insert({
+    // Géocodage commune (silencieux : si échec on continue sans coord)
+    let project_lat: number | null = null;
+    let project_lng: number | null = null;
+    try {
+      const { geocodeAddress } = await import("@/services/geocoding");
+      const r = await geocodeAddress(data.location);
+      if (r) {
+        project_lat = r.lat;
+        project_lng = r.lng;
+      }
+    } catch {
+      // pas bloquant
+    }
+
+    // On insère d'abord avec les coords, et si la colonne n'existe pas encore
+    // (migration pas exécutée) on retombe sur le payload de base.
+    const basePayload = {
       client_id: user?.id ?? null,
       specialty: data.specialty,
       location: data.location,
@@ -68,7 +84,16 @@ function ProjectPage() {
       contact_name: data.name,
       contact_email: data.email,
       contact_phone: data.phone,
-    });
+    };
+
+    let { error } = await supabase
+      .from("projects")
+      .insert({ ...basePayload, project_lat, project_lng });
+
+    if (error && /project_lat|project_lng/.test(error.message)) {
+      const r = await supabase.from("projects").insert(basePayload);
+      error = r.error;
+    }
 
     if (error) {
       console.error("[projects insert]", error);

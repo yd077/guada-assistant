@@ -13,6 +13,9 @@ export type Artisan = {
   certifications: string[];
   portfolio: { src: string; title: string }[];
   reviews: { author: string; rating: number; comment: string; date: string }[];
+  baseLat?: number | null;
+  baseLng?: number | null;
+  radiusKm?: number | null;
 };
 
 export const SPECIALTIES = [
