@@ -318,6 +318,17 @@ function ProjectPage() {
                   );
                 })}
               </div>
+              {(data.client_type === "agence" || data.client_type === "syndic") && (
+                <div className="rounded-2xl border border-emerald/30 bg-emerald/5 p-4 text-sm">
+                  <p className="font-semibold text-emerald">
+                    Volume élevé ? Demandez un compte Pro
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Tarifs préférentiels, SLA garanti, interlocuteur dédié.{" "}
+                    <a href="/contact" className="underline">Nous contacter</a>.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
