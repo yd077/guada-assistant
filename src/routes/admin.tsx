@@ -11,6 +11,9 @@ import { AdminProjectsPanel } from "@/components/admin/AdminProjectsPanel";
 import { AdminQuoteRequestsPanel } from "@/components/admin/AdminQuoteRequestsPanel";
 import { AdminWalletsPanel } from "@/components/admin/AdminWalletsPanel";
 import { AdminPaymentsPanel } from "@/components/admin/AdminPaymentsPanel";
+import { AdminVerificationsPanel } from "@/components/admin/AdminVerificationsPanel";
+import { AdminDisputesPanel } from "@/components/admin/AdminDisputesPanel";
+import { AdminPricingRulesPanel } from "@/components/admin/AdminPricingRulesPanel";
 import {
   fetchAdminStats,
   fetchAllArtisans,
@@ -33,7 +36,7 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type Tab = "artisans" | "projects" | "quotes" | "wallets" | "payments";
+type Tab = "artisans" | "projects" | "quotes" | "wallets" | "payments" | "verifications" | "disputes" | "pricing";
 
 function AdminPage() {
   const { user, role, loading, isAuthenticated } = useAuth();
@@ -142,9 +145,12 @@ function AdminPage() {
                 {(
                   [
                     { value: "artisans", label: `Artisans (${artisans.length})` },
+                    { value: "verifications", label: "Vérifications" },
                     { value: "projects", label: `Projets (${projects.length})` },
                     { value: "quotes", label: `Devis (${quotes.length})` },
                     { value: "wallets", label: "Wallets & leads" },
+                    { value: "disputes", label: "Réclamations" },
+                    { value: "pricing", label: "Tarification" },
                     { value: "payments", label: "Paiements" },
                   ] as { value: Tab; label: string }[]
                 ).map((t) => (
@@ -165,11 +171,14 @@ function AdminPage() {
               {tab === "artisans" && (
                 <AdminArtisansPanel artisans={artisans} onChange={loadAll} />
               )}
+              {tab === "verifications" && <AdminVerificationsPanel />}
               {tab === "projects" && (
                 <AdminProjectsPanel projects={projects} onChange={loadAll} />
               )}
               {tab === "quotes" && <AdminQuoteRequestsPanel requests={quotes} />}
               {tab === "wallets" && <AdminWalletsPanel />}
+              {tab === "disputes" && <AdminDisputesPanel />}
+              {tab === "pricing" && <AdminPricingRulesPanel />}
               {tab === "payments" && <AdminPaymentsPanel />}
             </>
           )}
