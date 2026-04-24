@@ -61,6 +61,11 @@ export function AdminProjectsPanel({
                 >
                   {STATUS_LABEL[p.status]}
                 </span>
+                {p.client_type && (
+                  <span className="rounded-full bg-emerald/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald">
+                    {p.client_type}
+                  </span>
+                )}
                 {p.budget && (
                   <span className="text-xs text-muted-foreground">
                     Budget : {p.budget}
@@ -71,6 +76,13 @@ export function AdminProjectsPanel({
                 <MapPin className="h-3 w-3" /> {p.location} •{" "}
                 {new Date(p.created_at).toLocaleDateString("fr-FR")}
               </p>
+              {(p.company_name || p.internal_ref) && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {p.company_name && <span className="font-medium">{p.company_name}</span>}
+                  {p.company_name && p.internal_ref && " · "}
+                  {p.internal_ref && <span>Réf. {p.internal_ref}</span>}
+                </p>
+              )}
               <p className="mt-2 line-clamp-2 text-sm text-foreground/80">
                 {p.description}
               </p>

@@ -25,6 +25,9 @@ export type AdminProject = {
   contact_phone: string;
   budget: string | null;
   status: "open" | "in_review" | "closed";
+  client_type?: "particulier" | "entreprise" | "agence" | "syndic" | null;
+  company_name?: string | null;
+  internal_ref?: string | null;
   created_at: string;
 };
 

@@ -6,7 +6,16 @@ import { Reveal } from "@/components/site/Reveal";
 import { SPECIALTIES, COMMUNES } from "@/data/artisans";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardList } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  ClipboardList,
+  User,
+  Building2,
+  Briefcase,
+  Home,
+} from "lucide-react";
 
 export const Route = createFileRoute("/projet")({
   head: () => ({
@@ -15,24 +24,61 @@ export const Route = createFileRoute("/projet")({
       {
         name: "description",
         content:
-          "Décrivez votre projet en 3 étapes et recevez plusieurs devis d'artisans vérifiés en Guadeloupe.",
+          "Décrivez votre projet en 4 étapes et recevez plusieurs devis d'artisans vérifiés en Guadeloupe.",
       },
       { property: "og:title", content: "Soumettre un projet — BTP Guada" },
       {
         property: "og:description",
-        content: "3 étapes pour recevoir des devis d'artisans BTP vérifiés en Guadeloupe.",
+        content: "4 étapes pour recevoir des devis d'artisans BTP vérifiés en Guadeloupe.",
       },
     ],
   }),
   component: ProjectPage,
 });
 
-const STEPS = ["Type de projet", "Détails", "Coordonnées"] as const;
+const STEPS = ["Profil", "Type de projet", "Détails", "Coordonnées"] as const;
+
+type ClientType = "particulier" | "entreprise" | "agence" | "syndic";
+
+const PROFILES: {
+  value: ClientType;
+  title: string;
+  desc: string;
+  icon: typeof User;
+}[] = [
+  {
+    value: "particulier",
+    title: "Particulier",
+    desc: "Je suis propriétaire ou occupant pour un projet personnel.",
+    icon: User,
+  },
+  {
+    value: "entreprise",
+    title: "Entreprise",
+    desc: "Je représente une société (commerce, hôtel, bureau…).",
+    icon: Building2,
+  },
+  {
+    value: "agence",
+    title: "Agence immobilière",
+    desc: "Je gère un bien pour le compte d'un client.",
+    icon: Briefcase,
+  },
+  {
+    value: "syndic",
+    title: "Syndic / copropriété",
+    desc: "Je gère une copropriété ou un parc immobilier.",
+    icon: Home,
+  },
+];
 
 function ProjectPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
+    client_type: "" as ClientType | "",
+    company_name: "",
+    internal_ref: "",
     specialty: "",
     location: "",
     surface: "",
@@ -43,12 +89,20 @@ function ProjectPage() {
     email: "",
     phone: "",
   });
-  const update = (k: keyof typeof data) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setData((d) => ({ ...d, [k]: e.target.value }));
+
+  const update =
+    (k: keyof typeof data) =>
+    (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    ) =>
+      setData((d) => ({ ...d, [k]: e.target.value }));
+
+  const isPro = data.client_type && data.client_type !== "particulier";
 
   const [submitting, setSubmitting] = useState(false);
   const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -57,7 +111,7 @@ function ProjectPage() {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // Géocodage commune (silencieux : si échec on continue sans coord)
+    // Géocodage commune (silencieux)
     let project_lat: number | null = null;
     let project_lng: number | null = null;
     try {
@@ -71,10 +125,11 @@ function ProjectPage() {
       // pas bloquant
     }
 
-    // On insère d'abord avec les coords, et si la colonne n'existe pas encore
-    // (migration pas exécutée) on retombe sur le payload de base.
     const basePayload = {
       client_id: user?.id ?? null,
+      client_type: data.client_type || "particulier",
+      company_name: isPro ? data.company_name || null : null,
+      internal_ref: isPro ? data.internal_ref || null : null,
       specialty: data.specialty,
       location: data.location,
       surface: data.surface || null,
@@ -90,8 +145,30 @@ function ProjectPage() {
       .from("projects")
       .insert({ ...basePayload, project_lat, project_lng });
 
+    // Fallback si colonnes geo absentes
     if (error && /project_lat|project_lng/.test(error.message)) {
       const r = await supabase.from("projects").insert(basePayload);
+      error = r.error;
+    }
+
+    // Fallback si colonnes multi-profils absentes
+    if (
+      error &&
+      /client_type|internal_ref|company_name|phone_verified/.test(error.message)
+    ) {
+      const legacy = {
+        client_id: basePayload.client_id,
+        specialty: basePayload.specialty,
+        location: basePayload.location,
+        surface: basePayload.surface,
+        budget: basePayload.budget,
+        deadline: basePayload.deadline,
+        description: basePayload.description,
+        contact_name: basePayload.contact_name,
+        contact_email: basePayload.contact_email,
+        contact_phone: basePayload.contact_phone,
+      };
+      const r = await supabase.from("projects").insert(legacy);
       error = r.error;
     }
 
@@ -106,12 +183,13 @@ function ProjectPage() {
   };
 
   const canNext =
-    (step === 0 && data.specialty && data.location) ||
-    (step === 1 && data.description) ||
-    step === 2;
+    (step === 0 && data.client_type) ||
+    (step === 1 && data.specialty && data.location) ||
+    (step === 2 && data.description) ||
+    step === 3;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-32 md:pb-0">
       <Header />
       <main className="mx-auto max-w-4xl px-6 pb-24 pt-32">
         <Reveal>
@@ -154,9 +232,55 @@ function ProjectPage() {
 
         <form
           onSubmit={submit}
-          className="mt-10 rounded-3xl border border-border bg-card p-8 shadow-card md:p-12"
+          className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card md:p-12"
         >
+          {/* Étape 0 — Profil */}
           {step === 0 && (
+            <div className="space-y-6 animate-fade-in-up">
+              <h2 className="font-serif text-2xl">Vous êtes…</h2>
+              <p className="text-sm text-muted-foreground">
+                Sélectionnez le profil qui vous correspond pour adapter votre demande.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {PROFILES.map((p) => {
+                  const Icon = p.icon;
+                  const active = data.client_type === p.value;
+                  return (
+                    <button
+                      key={p.value}
+                      type="button"
+                      onClick={() => setData((d) => ({ ...d, client_type: p.value }))}
+                      className={`group flex items-start gap-3 rounded-2xl border p-4 text-left transition ${
+                        active
+                          ? "border-emerald bg-emerald/5 shadow-glow"
+                          : "border-border bg-card hover:border-emerald/50 hover:bg-emerald/5"
+                      }`}
+                    >
+                      <div
+                        className={`flex h-10 w-10 flex-none items-center justify-center rounded-xl transition ${
+                          active
+                            ? "bg-emerald text-emerald-foreground"
+                            : "bg-muted text-foreground group-hover:bg-emerald/10 group-hover:text-emerald"
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold">{p.title}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">{p.desc}</p>
+                      </div>
+                      {active && (
+                        <CheckCircle2 className="h-5 w-5 flex-none text-emerald" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Étape 1 — Type de chantier */}
+          {step === 1 && (
             <div className="space-y-6 animate-fade-in-up">
               <h2 className="font-serif text-2xl">Quel type de chantier ?</h2>
               <div>
@@ -192,7 +316,8 @@ function ProjectPage() {
             </div>
           )}
 
-          {step === 1 && (
+          {/* Étape 2 — Détails */}
+          {step === 2 && (
             <div className="space-y-6 animate-fade-in-up">
               <h2 className="font-serif text-2xl">Détails du projet</h2>
               <div className="grid gap-5 md:grid-cols-3">
@@ -225,9 +350,34 @@ function ProjectPage() {
             </div>
           )}
 
-          {step === 2 && (
+          {/* Étape 3 — Coordonnées */}
+          {step === 3 && (
             <div className="space-y-6 animate-fade-in-up">
               <h2 className="font-serif text-2xl">Vos coordonnées</h2>
+
+              {isPro && (
+                <div className="grid gap-5 rounded-2xl border border-emerald/30 bg-emerald/5 p-4 md:grid-cols-2">
+                  <Input
+                    label={
+                      data.client_type === "syndic"
+                        ? "Nom du syndic / copropriété"
+                        : data.client_type === "agence"
+                          ? "Nom de l'agence"
+                          : "Raison sociale"
+                    }
+                    required
+                    value={data.company_name}
+                    onChange={update("company_name")}
+                  />
+                  <Input
+                    label="Référence interne (optionnel)"
+                    placeholder="ex. DOSS-2025-042"
+                    value={data.internal_ref}
+                    onChange={update("internal_ref")}
+                  />
+                </div>
+              )}
+
               <Input label="Nom complet" required value={data.name} onChange={update("name")} />
               <div className="grid gap-5 md:grid-cols-2">
                 <Input
@@ -248,38 +398,87 @@ function ProjectPage() {
             </div>
           )}
 
-          <div className="mt-10 flex items-center justify-between gap-4">
-            <button
-              type="button"
-              onClick={prev}
-              disabled={step === 0}
-              className="inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground disabled:opacity-40"
-            >
-              <ArrowLeft className="h-4 w-4" /> Retour
-            </button>
-            {step < STEPS.length - 1 ? (
-              <button
-                type="button"
-                onClick={next}
-                disabled={!canNext}
-                className="inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-medium text-emerald-foreground transition hover:bg-emerald/90 disabled:opacity-50"
-              >
-                Continuer <ArrowRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                type="submit"
-                disabled={submitting}
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground shadow-glow transition hover:scale-105 disabled:opacity-60"
-              >
-                {submitting ? "Envoi…" : "Envoyer mon projet"} <CheckCircle2 className="h-4 w-4" />
-              </button>
-            )}
+          {/* Boutons desktop */}
+          <div className="mt-10 hidden items-center justify-between gap-4 md:flex">
+            <NavButtons
+              step={step}
+              total={STEPS.length}
+              canNext={!!canNext}
+              submitting={submitting}
+              onPrev={prev}
+              onNext={next}
+            />
+          </div>
+
+          {/* Boutons sticky mobile (dans le form pour que submit fonctionne) */}
+          <div className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-background/95 px-4 py-3 backdrop-blur md:hidden">
+            <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
+              <NavButtons
+                step={step}
+                total={STEPS.length}
+                canNext={!!canNext}
+                submitting={submitting}
+                onPrev={prev}
+                onNext={next}
+                compact
+              />
+            </div>
           </div>
         </form>
       </main>
       <Footer />
     </div>
+  );
+}
+
+function NavButtons({
+  step,
+  total,
+  canNext,
+  submitting,
+  onPrev,
+  onNext,
+  compact,
+}: {
+  step: number;
+  total: number;
+  canNext: boolean;
+  submitting: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+  compact?: boolean;
+}) {
+  return (
+    <>
+      <button
+        type="button"
+        onClick={onPrev}
+        disabled={step === 0}
+        className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground disabled:opacity-40 ${
+          compact ? "" : ""
+        }`}
+      >
+        <ArrowLeft className="h-4 w-4" /> Retour
+      </button>
+      {step < total - 1 ? (
+        <button
+          type="button"
+          onClick={onNext}
+          disabled={!canNext}
+          className="inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-medium text-emerald-foreground transition hover:bg-emerald/90 disabled:opacity-50"
+        >
+          Continuer <ArrowRight className="h-4 w-4" />
+        </button>
+      ) : (
+        <button
+          type="submit"
+          disabled={submitting}
+          className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-foreground shadow-glow transition hover:scale-105 disabled:opacity-60"
+        >
+          {submitting ? "Envoi…" : "Envoyer mon projet"} <CheckCircle2 className="h-4 w-4" />
+        </button>
+      )}
+    </>
   );
 }
 
