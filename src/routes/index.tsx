@@ -79,16 +79,14 @@ function HomePage() {
             <Sparkles className="h-3.5 w-3.5 text-accent" /> Artisans vérifiés · 100% Guadeloupe
           </span>
           <h1
-            className="mt-6 animate-fade-in-up font-serif text-5xl font-medium leading-[1.02] text-balance text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.45)] md:text-7xl lg:text-[5.75rem]"
-            style={{ animationDelay: "0.2s" }}
+            className="mt-6 animate-fade-in-up font-serif text-5xl font-medium leading-[1.02] text-balance text-white md:text-7xl lg:text-[5.75rem]"
+            style={{ animationDelay: "0.2s", textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
           >
-            L'excellence du chantier
-            <br />
-            <span className="italic text-accent">en Guadeloupe</span>
+...
           </h1>
           <p
-            className="mx-auto mt-6 max-w-2xl animate-fade-in-up text-lg leading-relaxed text-white/90 drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)] md:text-xl"
-            style={{ animationDelay: "0.35s" }}
+            className="mx-auto mt-6 max-w-2xl animate-fade-in-up text-lg leading-relaxed text-white/90 md:text-xl"
+            style={{ animationDelay: "0.35s", textShadow: "0 1px 10px rgba(0,0,0,0.5)" }}
           >
             La plateforme qui réunit les artisans BTP les plus exigeants de l'archipel.
             Trouvez la main d'œuvre qu'il vous faut, du devis à la livraison.
@@ -142,8 +140,8 @@ function HomePage() {
           </form>
 
           <div
-            className="mt-8 flex animate-fade-in-up flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/85 drop-shadow"
-            style={{ animationDelay: "0.65s" }}
+            className="mt-8 flex animate-fade-in-up flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/85"
+            style={{ animationDelay: "0.65s", textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}
           >
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4 text-accent" /> Décennale vérifiée
