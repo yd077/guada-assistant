@@ -36,6 +36,7 @@ import { Route as ArtisanMetierRouteImport } from './routes/artisan.$metier'
 import { Route as ArtisanIdRouteImport } from './routes/artisan.$id'
 import { Route as SosMetierCommuneRouteImport } from './routes/sos.$metier.$commune'
 import { Route as ArtisanMetierCommuneRouteImport } from './routes/artisan.$metier.$commune'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api.public.stripe-webhook'
 
 const TarifsRoute = TarifsRouteImport.update({
   id: '/tarifs',
@@ -172,6 +173,11 @@ const ArtisanMetierCommuneRoute = ArtisanMetierCommuneRouteImport.update({
   path: '/$commune',
   getParentRoute: () => ArtisanMetierRoute,
 } as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/metiers/$metier': typeof MetiersMetierRoute
   '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
   '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
@@ -228,6 +235,7 @@ export interface FileRoutesByTo {
   '/metiers/$metier': typeof MetiersMetierRoute
   '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
   '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/metiers/$metier': typeof MetiersMetierRoute
   '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
   '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
@@ -289,6 +298,7 @@ export interface FileRouteTypes {
     | '/metiers/$metier'
     | '/sos/$metier'
     | '/verifier-email/$token'
+    | '/api/public/stripe-webhook'
     | '/artisan/$metier/$commune'
     | '/sos/$metier/$commune'
   fileRoutesByTo: FileRoutesByTo
@@ -318,6 +328,7 @@ export interface FileRouteTypes {
     | '/metiers/$metier'
     | '/sos/$metier'
     | '/verifier-email/$token'
+    | '/api/public/stripe-webhook'
     | '/artisan/$metier/$commune'
     | '/sos/$metier/$commune'
   id:
@@ -347,6 +358,7 @@ export interface FileRouteTypes {
     | '/metiers/$metier'
     | '/sos/$metier'
     | '/verifier-email/$token'
+    | '/api/public/stripe-webhook'
     | '/artisan/$metier/$commune'
     | '/sos/$metier/$commune'
   fileRoutesById: FileRoutesById
@@ -375,6 +387,7 @@ export interface RootRouteChildren {
   ArtisanMetierRoute: typeof ArtisanMetierRouteWithChildren
   ContactArtisanIdRoute: typeof ContactArtisanIdRoute
   VerifierEmailTokenRoute: typeof VerifierEmailTokenRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -568,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtisanMetierCommuneRouteImport
       parentRoute: typeof ArtisanMetierRoute
     }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -640,6 +660,7 @@ const rootRouteChildren: RootRouteChildren = {
   ArtisanMetierRoute: ArtisanMetierRouteWithChildren,
   ContactArtisanIdRoute: ContactArtisanIdRoute,
   VerifierEmailTokenRoute: VerifierEmailTokenRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
