@@ -4,6 +4,8 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Reveal } from "@/components/site/Reveal";
 import { SPECIALTIES, COMMUNES } from "@/data/artisans";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardList } from "lucide-react";
 
 export const Route = createFileRoute("/projet")({
@@ -44,10 +46,37 @@ function ProjectPage() {
   const update = (k: keyof typeof data) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setData((d) => ({ ...d, [k]: e.target.value }));
 
+  const [submitting, setSubmitting] = useState(false);
   const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const { error } = await supabase.from("projects").insert({
+      client_id: user?.id ?? null,
+      specialty: data.specialty,
+      location: data.location,
+      surface: data.surface || null,
+      budget: data.budget || null,
+      deadline: data.timing || null,
+      description: data.description,
+      contact_name: data.name,
+      contact_email: data.email,
+      contact_phone: data.phone,
+    });
+
+    if (error) {
+      console.error("[projects insert]", error);
+      toast.error("Impossible d'envoyer le projet. Réessayez.");
+      setSubmitting(false);
+      return;
+    }
+
     navigate({ to: "/succes" });
   };
 

@@ -4,12 +4,14 @@ import { useState } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Reveal } from "@/components/site/Reveal";
-import { getArtisanById } from "@/data/artisans";
+import { getArtisanDetail } from "@/services/artisans";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { Send, MapPin, Star } from "lucide-react";
 
 export const Route = createFileRoute("/contact-artisan/$id")({
-  loader: ({ params }): { artisan: Artisan } => {
-    const artisan = getArtisanById(params.id);
+  loader: async ({ params }): Promise<{ artisan: Artisan }> => {
+    const artisan = await getArtisanDetail(params.id);
     if (!artisan) throw notFound();
     return { artisan };
   },
@@ -46,15 +48,51 @@ export const Route = createFileRoute("/contact-artisan/$id")({
   component: ContactArtisanPage,
 });
 
+// UUID v4 regex (Supabase artisans.id) — distinguish from mock slugs
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 function ContactArtisanPage() {
   const { artisan } = Route.useLoaderData() as { artisan: Artisan };
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => navigate({ to: "/succes" }), 700);
+
+    const fd = new FormData(e.currentTarget);
+    const payload = {
+      contact_name: String(fd.get("name") ?? ""),
+      contact_phone: String(fd.get("phone") ?? ""),
+      contact_email: String(fd.get("email") ?? ""),
+      city: String(fd.get("city") ?? ""),
+      message: String(fd.get("message") ?? ""),
+    };
+
+    // N'envoie en DB que si l'artisan provient de Supabase (UUID)
+    if (UUID_RE.test(artisan.id)) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const { error } = await supabase.from("quote_requests").insert({
+        artisan_id: artisan.id,
+        client_id: user?.id ?? null,
+        ...payload,
+      });
+
+      if (error) {
+        console.error("[quote_requests insert]", error);
+        toast.error("Impossible d'envoyer la demande. Réessayez.");
+        setSubmitting(false);
+        return;
+      }
+    } else {
+      // Démo : artisan mock → on simule
+      await new Promise((r) => setTimeout(r, 500));
+    }
+
+    navigate({ to: "/succes" });
   };
 
   return (

@@ -3,7 +3,7 @@ import type { Artisan } from "@/data/artisans";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Reveal } from "@/components/site/Reveal";
-import { getArtisanById } from "@/data/artisans";
+import { getArtisanDetail } from "@/services/artisans";
 import {
   MapPin,
   Star,
@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/artisan/$id")({
-  loader: ({ params }): { artisan: Artisan } => {
-    const artisan = getArtisanById(params.id);
+  loader: async ({ params }): Promise<{ artisan: Artisan }> => {
+    const artisan = await getArtisanDetail(params.id);
     if (!artisan) throw notFound();
     return { artisan };
   },
@@ -112,52 +112,60 @@ function ArtisanPage() {
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{artisan.bio}</p>
           </Reveal>
 
-          <Reveal>
-            <h2 className="font-serif text-3xl">Réalisations</h2>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {artisan.portfolio.map((p) => (
-                <figure
-                  key={p.title}
-                  className="group overflow-hidden rounded-2xl shadow-card"
-                >
-                  <div className="aspect-[4/3] overflow-hidden">
-                    <img
-                      src={p.src}
-                      alt={p.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                  </div>
-                  <figcaption className="bg-card p-4 text-sm font-medium">{p.title}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <h2 className="font-serif text-3xl">Avis clients</h2>
-            <div className="mt-6 space-y-4">
-              {artisan.reviews.map((r) => (
-                <div
-                  key={r.author + r.date}
-                  className="rounded-2xl border border-border bg-card p-6 shadow-card"
-                >
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold">{r.author}</p>
-                    <div className="flex">
-                      {Array.from({ length: r.rating }).map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-accent text-accent" />
-                      ))}
+          {artisan.portfolio.length > 0 && (
+            <Reveal>
+              <h2 className="font-serif text-3xl">Réalisations</h2>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {artisan.portfolio.map((p) => (
+                  <figure
+                    key={p.src}
+                    className="group overflow-hidden rounded-2xl shadow-card"
+                  >
+                    <div className="aspect-[4/3] overflow-hidden">
+                      <img
+                        src={p.src}
+                        alt={p.title}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                      />
                     </div>
+                    {p.title && (
+                      <figcaption className="bg-card p-4 text-sm font-medium">
+                        {p.title}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            </Reveal>
+          )}
+
+          {artisan.reviews.length > 0 && (
+            <Reveal>
+              <h2 className="font-serif text-3xl">Avis clients</h2>
+              <div className="mt-6 space-y-4">
+                {artisan.reviews.map((r, idx) => (
+                  <div
+                    key={`${r.author}-${idx}`}
+                    className="rounded-2xl border border-border bg-card p-6 shadow-card"
+                  >
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold">{r.author}</p>
+                      <div className="flex">
+                        {Array.from({ length: r.rating }).map((_, i) => (
+                          <Star key={i} className="h-4 w-4 fill-accent text-accent" />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="mt-2 text-muted-foreground">{r.comment}</p>
+                    <p className="mt-3 text-xs uppercase tracking-wider text-muted-foreground">
+                      {r.date}
+                    </p>
                   </div>
-                  <p className="mt-2 text-muted-foreground">{r.comment}</p>
-                  <p className="mt-3 text-xs uppercase tracking-wider text-muted-foreground">
-                    {r.date}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
+                ))}
+              </div>
+            </Reveal>
+          )}
         </div>
 
         <aside className="lg:sticky lg:top-28 lg:self-start">
