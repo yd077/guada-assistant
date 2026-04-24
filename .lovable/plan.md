@@ -1,77 +1,59 @@
 
+Corriger la page d’accueil en ciblant d’abord les deux causes visibles du bug, puis rehausser le rendu premium sans fragiliser la lisibilité.
 
-# Plateforme BTP & Services Guadeloupe — Adaptation Plan
+1. Réparer immédiatement le hero
+- Restaurer le vrai texte du `h1` dans `src/routes/index.tsx` : il a été remplacé par `...`, ce qui explique la disparition du titre.
+- Vérifier tout le bloc hero (badge, titre, paragraphe, formulaire, trust badges) pour s’assurer qu’aucun autre contenu n’a été tronqué.
+- Garder la hiérarchie visuelle forte avec un titre clair, lisible et centré.
 
-I found the source code in `https://github.com/yd077/plateforme-btp-guada.git`. It's a React 19 single-page app generated from Google AI Studio (single `App.tsx` of ~1500 lines using local `view` state for navigation). I'll adapt it to this project's stack (TanStack Start + Tailwind v4) with the same design system, sections, and flows — but split into proper file-based routes.
+2. Supprimer la cause du texte “grésillé”
+- Revoir le rendu du hero pour que le texte ne soit plus composité au-dessus d’effets agressifs.
+- Éviter les combinaisons qui dégradent le rendu des glyphes dans cette zone : overlays trop lourds, blur excessif autour du texte, ombres trop diffuses, couches animées trop proches visuellement du contenu.
+- Remplacer le traitement actuel par une structure plus propre :
+  - diaporama en fond seul,
+  - overlays de contraste séparés,
+  - contenu texte sur une couche dédiée stable et nette.
+- Conserver uniquement un `text-shadow` léger et précis, sans effet susceptible de repixelliser le texte.
 
-## What gets built
+3. Fiabiliser le diaporama en arrière-plan
+- Ajuster `src/components/site/HeroSlideshow.tsx` pour que les images restent bien visibles derrière le contenu.
+- Renforcer la séparation entre :
+  - couche image,
+  - couche overlays,
+  - couche contenu.
+- Conserver l’effet Ken Burns, mais l’appliquer uniquement aux images, jamais aux conteneurs de texte.
+- Garder des transitions fluides entre slides avec opacité progressive et timing harmonisé.
 
-**Concept**: A premium marketplace connecting people in Guadeloupe (homeowners, businesses, agencies) with verified BTP artisans (masonry, electricity, plumbing, painting, landscaping, etc.).
+4. Améliorer la lisibilité globale du hero
+- Ajouter un voile de contraste premium derrière la zone centrale du texte, plus subtil qu’un simple assombrissement global.
+- Recalibrer les opacités des overlays pour laisser vivre les images tout en gardant le texte parfaitement lisible.
+- Affiner la largeur du bloc texte et les espacements verticaux pour donner plus de respiration.
+- Vérifier le contraste du formulaire de recherche pour qu’il reste élégant mais immédiatement lisible.
 
-### Routes (TanStack Start)
+5. Rendre la home plus premium
+- Raffiner les finitions du hero :
+  - badge plus discret et plus luxueux,
+  - meilleur équilibre entre titre, sous-titre et formulaire,
+  - indicateurs du slideshow plus haut de gamme.
+- Harmoniser les sections juste sous le hero pour que la montée en gamme soit cohérente :
+  - bande KPI plus raffinée,
+  - cartes métiers plus nettes,
+  - transitions d’espacement plus élégantes entre sections.
+- Garder le style premium existant, mais avec moins d’effets “forcés” et plus de sobriété.
 
-| File | URL | Purpose |
-|---|---|---|
-| `src/routes/index.tsx` | `/` | Homepage: hero slideshow, search bar, KPIs counter, featured trades, value props, CTA |
-| `src/routes/recherche.tsx` | `/recherche` | Artisan search results grid with filters (specialty, location, rating) |
-| `src/routes/artisan.$id.tsx` | `/artisan/:id` | Artisan profile: portfolio, reviews, certifications, "Contacter" CTA |
-| `src/routes/contact-artisan.$id.tsx` | `/contact-artisan/:id` | Quote request form to a specific artisan |
-| `src/routes/projet.tsx` | `/projet` | 3-step project submission wizard (type → details → contact) |
-| `src/routes/succes.tsx` | `/succes` | Confirmation page after booking/submission |
+6. Fichiers concernés
+- `src/routes/index.tsx`
+- `src/components/site/HeroSlideshow.tsx`
+- `src/styles.css`
 
-Plus shared layout components in `src/components/site/` (Header, Footer, Logo, HeroSlideshow, CountUp, Reveal animation wrapper, ArtisanCard).
-
-### Design system (in `src/styles.css`)
-
-Imported via Tailwind v4 `@theme`:
-- **Colors**: emerald `#065F46`, midnight `#0F172A`, azure `#3B82F6`, soft-white `#F8FAFC`, gold `#D4AF37`
-- **Fonts**: Inter (body), Cormorant Garamond (headings, serif), Bebas Neue (KPI counters) — loaded from Google Fonts
-- **Effects**: Ken Burns hero animation, glass morphism cards, shimmer hover, premium shadows, reveal-on-scroll
-
-### Homepage sections
-
-1. Sticky transparent header that turns solid on scroll
-2. Full-screen hero with rotating slideshow + headline "L'excellence du chantier en Guadeloupe" + search bar (specialty + location)
-3. KPI band: animated counters (artisans vérifiés, chantiers réalisés, communes couvertes, satisfaction)
-4. Trades grid (Maçonnerie, Électricité, Plomberie, Peinture, Paysagisme, Architecture d'intérieur…)
-5. "Comment ça marche" 3-step explainer
-6. Featured artisans carousel (6 mock profiles from the original)
-7. Dual CTA: "Soumettre un projet" / "Devenir artisan partenaire"
-8. Footer with contact, legal, social
-
-### Mock data
-
-I'll inline the 6 mock artisans from the source (Jean-Pierre Durand, Marie-Line Gauthier, Sébastien Hoarau, Lucie Belrose, Thomas Valery, Karine Desrosiers) in `src/data/artisans.ts` — used by the search and profile routes.
-
-### Navigation
-
-`<Link to="...">` from `@tanstack/react-router` everywhere — replacing the original's `setView('search')` state-based navigation. Each route gets its own `head()` with unique title/description for SEO.
-
-### Dependencies to add
-
-- `motion` (Framer Motion v12, used by the original for animations)
-- `lucide-react` (already used in original — Search, MapPin, Upload, ChevronRight, CheckCircle2, Star, etc.)
-
-### What I'm NOT including
-
-- `@google/genai` and the Express server from the original `package.json` — they aren't used in the UI code, no Gemini features visible. If you want AI features later (e.g., AI project description helper), I'll add them via Lovable AI Gateway.
-- No backend/auth yet — all data is mock. We can wire Lovable Cloud (database for artisans, auth for clients/artisans, storage for portfolio photos) in a follow-up step.
-
-## Technical notes
-
-- Replace `src/routes/index.tsx` placeholder entirely
-- Convert single-file SPA `view` state machine into separate route files
-- Keep all visual design 1:1 with the original (colors, fonts, hero, layout)
-- All copy stays in French
-- Images referenced via Unsplash URLs from the original mock data
-- Per-route `head()` meta with og:image set to each page's hero image
-
-## Follow-ups (after approval)
-
-1. Wire Lovable Cloud: artisans table, reviews table, project submissions table
-2. Add auth (clients vs artisans roles via separate `user_roles` table)
-3. Storage bucket for artisan portfolio photos
-4. Email notifications on quote requests
-
-Approve this plan and I'll switch to default mode and build it.
-
+Détails techniques
+- Cause la plus probable du titre disparu : le contenu du `h1` a été remplacé par `...` dans `src/routes/index.tsx`.
+- Cause probable du crénelage : le texte du hero est rendu au-dessus de plusieurs couches visuelles fortes, avec un traitement qui nuit au rendu net.
+- La correction visera un empilement propre :
+```text
+Hero section
+├─ Slideshow images (animées)
+├─ Overlays de contraste (fixes)
+└─ Contenu texte + formulaire (couche nette, stable, lisible)
+```
+- Les animations resteront sur les images et les blocs, pas sur le rendu typographique lui-même.
