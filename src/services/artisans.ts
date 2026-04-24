@@ -19,6 +19,9 @@ type DbArtisan = {
   certifications: string[] | null;
   rating: number | null;
   reviews_count: number | null;
+  base_lat?: number | null;
+  base_lng?: number | null;
+  radius_km?: number | null;
 };
 
 type DbPortfolio = { image_url: string; title: string | null };
@@ -53,6 +56,9 @@ function mapDbArtisan(
     cover: row.cover_url || FALLBACK_COVER,
     bio: row.bio ?? "",
     certifications: row.certifications ?? [],
+    baseLat: row.base_lat ?? null,
+    baseLng: row.base_lng ?? null,
+    radiusKm: row.radius_km ?? null,
     portfolio: portfolio.map((p) => ({
       src: p.image_url,
       title: p.title ?? "",
