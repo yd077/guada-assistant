@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { RelatedLinks } from "@/components/site/RelatedLinks";
 import { findSpecialtyBySlug } from "@/data/specialties";
 import { findCommuneBySlug, COMMUNES_LIST } from "@/data/communes";
 import { listArtisans } from "@/services/artisans";
@@ -194,32 +195,17 @@ function MetierCommunePage() {
           )}
         </section>
 
-        <section className="border-t border-border bg-soft py-12">
-          <div className="mx-auto max-w-7xl px-6">
-            <h2 className="mb-2 font-serif text-2xl">
-              {specialty.singular} dans les communes voisines
-            </h2>
-            <p className="mb-6 text-sm text-muted-foreground">
-              Élargissez votre recherche aux communes proches de {commune.name}.
-            </p>
-            <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {COMMUNES_LIST.filter((c) => c.slug !== commune.slug)
-                .slice(0, 12)
-                .map((c) => (
-                  <Link
-                    key={c.slug}
-                    to="/artisan/$metier/$commune"
-                    params={{ metier: specialty.slug, commune: c.slug }}
-                    className="group flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm transition-colors hover:border-emerald hover:bg-emerald/5"
-                  >
-                    <MapPin className="h-3.5 w-3.5 text-emerald" />
-                    <span className="group-hover:text-emerald">
-                      {specialty.singular} à {c.name}
-                    </span>
-                  </Link>
-                ))}
-            </div>
-          </div>
+        <section className="mx-auto max-w-7xl px-6">
+          <RelatedLinks
+            mode="communes-around"
+            specialty={specialty}
+            commune={commune}
+          />
+          <RelatedLinks
+            mode="specialties-here"
+            specialty={specialty}
+            commune={commune}
+          />
         </section>
       </main>
       <Footer />

@@ -35,6 +35,12 @@ import {
   type AvailableLead,
   type LeadUnlock,
 } from "@/services/wallet";
+import {
+  fetchSubscription,
+  hoursUntilDeadline,
+  TIER_LABEL,
+  type SubscriptionTier,
+} from "@/services/subscriptions";
 
 type Props = {
   artisanId: string;
@@ -60,9 +66,10 @@ export function ArtisanWalletPanel({
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("leads");
   const [unlockingId, setUnlockingId] = useState<string | null>(null);
+  const [tier, setTier] = useState<SubscriptionTier>("free");
 
   const refresh = useCallback(async () => {
-    const [w, l, u, h] = await Promise.all([
+    const [w, l, u, h, sub] = await Promise.all([
       fetchWallet(artisanId),
       fetchAvailableLeads({
         specialty,
@@ -73,11 +80,13 @@ export function ArtisanWalletPanel({
       }),
       fetchMyUnlocks(artisanId),
       fetchTransactions(artisanId),
+      fetchSubscription(artisanId),
     ]);
     setWallet(w);
     setLeads(l);
     setUnlocks(u);
     setHistory(h);
+    if (sub?.tier) setTier(sub.tier);
     setLoading(false);
   }, [artisanId, specialty, baseLat, baseLng, radiusKm]);
 
@@ -94,16 +103,26 @@ export function ArtisanWalletPanel({
         { event: "INSERT", schema: "public", table: "projects", filter: `specialty=eq.${specialty}` },
         (payload) => {
           const p = payload.new as { id: string; location: string };
-          toast.success(`⚡ Lead-Flash : nouveau chantier ${specialty} à ${p.location}`, {
-            duration: 8000,
-            action: {
-              label: "Voir",
-              onClick: () => {
-                setTab("leads");
-                refresh();
+          const tierBadge =
+            tier === "elite"
+              ? "👑 Élite — accès immédiat"
+              : tier === "premium"
+                ? "⭐ Premium — accès dans 15 min"
+                : "Standard — accès dans 30 min";
+          toast.success(
+            `⚡ Lead-Flash ${specialty} à ${p.location}`,
+            {
+              description: tierBadge,
+              duration: tier === "elite" ? 12000 : 8000,
+              action: {
+                label: "Voir",
+                onClick: () => {
+                  setTab("leads");
+                  refresh();
+                },
               },
             },
-          });
+          );
           refresh();
         },
       )
@@ -119,7 +138,7 @@ export function ArtisanWalletPanel({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [artisanId, specialty, refresh]);
+  }, [artisanId, specialty, refresh, tier]);
 
   const handleUnlock = async (lead: AvailableLead) => {
     if (wallet.balance < lead.lead_price_credits) {
@@ -169,6 +188,19 @@ export function ArtisanWalletPanel({
                 {wallet.balance}{" "}
                 <span className="text-base font-normal text-muted-foreground">crédits</span>
               </p>
+              <span
+                className={`mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
+                  tier === "elite"
+                    ? "bg-amber-100 text-amber-800"
+                    : tier === "premium"
+                      ? "bg-emerald/10 text-emerald"
+                      : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {tier === "elite" && "👑 "}
+                {tier === "premium" && "⭐ "}
+                Abonnement {TIER_LABEL[tier]}
+              </span>
             </div>
           </div>
           <div className="flex flex-col items-end gap-2">
@@ -217,7 +249,7 @@ export function ArtisanWalletPanel({
             onUnlock={handleUnlock}
           />
         )}
-        {tab === "mine" && <UnlocksList unlocks={unlocks} onChange={refresh} />}
+        {tab === "mine" && <UnlocksList unlocks={unlocks} artisanId={artisanId} onChange={refresh} />}
         {tab === "history" && <HistoryList history={history} />}
       </div>
     </Reveal>
@@ -339,9 +371,11 @@ function LeadsList({
 /* ─────────────── Mes leads débloqués ─────────────── */
 function UnlocksList({
   unlocks,
+  artisanId,
   onChange,
 }: {
   unlocks: LeadUnlock[];
+  artisanId: string;
   onChange: () => void;
 }) {
   if (unlocks.length === 0) {
@@ -356,14 +390,23 @@ function UnlocksList({
   return (
     <div className="space-y-3">
       {unlocks.map((u) => (
-        <UnlockCard key={u.id} unlock={u} onChange={onChange} />
+        <UnlockCard key={u.id} unlock={u} artisanId={artisanId} onChange={onChange} />
       ))}
     </div>
   );
 }
 
-function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => void }) {
+function UnlockCard({
+  unlock,
+  artisanId,
+  onChange,
+}: {
+  unlock: LeadUnlock;
+  artisanId: string;
+  onChange: () => void;
+}) {
   const p = unlock.project;
+  const [disputeOpen, setDisputeOpen] = useState(false);
   const setStatus = async (s: "contacted" | "won" | "lost") => {
     const { error } = await updateUnlockStatus(unlock.id, s);
     if (error) toast.error("Mise à jour impossible");
@@ -372,6 +415,12 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
       onChange();
     }
   };
+
+  // Compte à rebours 24h
+  const hoursLeft = unlock.deadline_at ? hoursUntilDeadline(unlock.deadline_at) : null;
+  const contacted = !!unlock.first_contact_at || unlock.status === "contacted" || unlock.status === "won";
+  const showCountdown = !contacted && hoursLeft !== null;
+  const overdue = showCountdown && hoursLeft <= 0;
 
   return (
     <article className="rounded-2xl border border-border bg-card p-5 shadow-card">
@@ -397,6 +446,22 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
               <Phone className="h-3.5 w-3.5" /> {p?.contact_phone}
             </a>
           </div>
+          {showCountdown && (
+            <div
+              className={`mt-2 inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
+                overdue
+                  ? "bg-destructive/10 text-destructive"
+                  : hoursLeft <= 6
+                    ? "bg-amber-100 text-amber-800"
+                    : "bg-emerald/10 text-emerald"
+              }`}
+            >
+              <Clock className="h-3 w-3" />
+              {overdue
+                ? "Délai dépassé — relance client envoyée"
+                : `Contactez sous ${hoursLeft}h`}
+            </div>
+          )}
         </div>
         <UnlockStatusBadge status={unlock.status} />
       </div>
@@ -413,6 +478,13 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
           {unlock.credits_spent} crédits
         </span>
         <div className="ml-auto flex flex-wrap gap-2">
+          <button
+            onClick={() => setDisputeOpen(true)}
+            className="inline-flex items-center gap-1 rounded-full border border-amber-300 px-3 py-1 text-amber-700 hover:bg-amber-50"
+            title="Lead invalide ? Demander un remboursement"
+          >
+            <AlertOctagon className="h-3 w-3" /> Signaler
+          </button>
           {unlock.status !== "contacted" && unlock.status !== "won" && unlock.status !== "lost" && (
             <button
               onClick={() => setStatus("contacted")}
@@ -439,6 +511,14 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
           )}
         </div>
       </div>
+
+      <LeadDisputeModal
+        open={disputeOpen}
+        unlockId={unlock.id}
+        artisanId={artisanId}
+        onClose={() => setDisputeOpen(false)}
+        onSubmitted={onChange}
+      />
     </article>
   );
 }
