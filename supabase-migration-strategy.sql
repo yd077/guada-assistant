@@ -370,7 +370,7 @@ on conflict do nothing;
 --    + max_unlocks   + unlocks_count   + available_at par tier
 -- ────────────────────────────────────────────────────────────
 
-drop view if exists public.available_leads;
+drop view if exists public.available_leads cascade;
 
 create view public.available_leads as
 with counts as (
