@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as SuccesRouteImport } from './routes/succes'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RechercheRouteImport } from './routes/recherche'
 import { Route as ProjetRouteImport } from './routes/projet'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
@@ -33,6 +35,16 @@ const TarifsRoute = TarifsRouteImport.update({
 const SuccesRoute = SuccesRouteImport.update({
   id: '/succes',
   path: '/succes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RechercheRoute = RechercheRouteImport.update({
@@ -113,6 +125,8 @@ export interface FileRoutesByFullPath {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
@@ -130,6 +144,8 @@ export interface FileRoutesByTo {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
@@ -148,6 +164,8 @@ export interface FileRoutesById {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/succes': typeof SuccesRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
@@ -167,6 +185,8 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/projet'
     | '/recherche'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
@@ -184,6 +204,8 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/projet'
     | '/recherche'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
@@ -201,6 +223,8 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/projet'
     | '/recherche'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/succes'
     | '/tarifs'
     | '/artisan/$id'
@@ -219,6 +243,8 @@ export interface RootRouteChildren {
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   ProjetRoute: typeof ProjetRoute
   RechercheRoute: typeof RechercheRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccesRoute: typeof SuccesRoute
   TarifsRoute: typeof TarifsRoute
   ArtisanIdRoute: typeof ArtisanIdRoute
@@ -239,6 +265,20 @@ declare module '@tanstack/react-router' {
       path: '/succes'
       fullPath: '/succes'
       preLoaderRoute: typeof SuccesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recherche': {
@@ -347,6 +387,8 @@ const rootRouteChildren: RootRouteChildren = {
   MentionsLegalesRoute: MentionsLegalesRoute,
   ProjetRoute: ProjetRoute,
   RechercheRoute: RechercheRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccesRoute: SuccesRoute,
   TarifsRoute: TarifsRoute,
   ArtisanIdRoute: ArtisanIdRoute,
@@ -355,3 +397,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
