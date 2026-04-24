@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TarifsRouteImport } from './routes/tarifs'
+import { Route as SuccesPaiementRouteImport } from './routes/succes-paiement'
 import { Route as SuccesRouteImport } from './routes/succes'
 import { Route as SosRouteImport } from './routes/sos'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -27,6 +28,7 @@ import { Route as CguRouteImport } from './routes/cgu'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AbonnementsRouteImport } from './routes/abonnements'
+import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifierEmailTokenRouteImport } from './routes/verifier-email.$token'
 import { Route as SosMetierRouteImport } from './routes/sos.$metier'
@@ -41,6 +43,11 @@ import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api.public.
 const TarifsRoute = TarifsRouteImport.update({
   id: '/tarifs',
   path: '/tarifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccesPaiementRoute = SuccesPaiementRouteImport.update({
+  id: '/succes-paiement',
+  path: '/succes-paiement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuccesRoute = SuccesRouteImport.update({
@@ -128,6 +135,11 @@ const AbonnementsRoute = AbonnementsRouteImport.update({
   path: '/abonnements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AProposRoute = AProposRouteImport.update({
+  id: '/a-propos',
+  path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -181,6 +193,7 @@ const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
@@ -198,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
+  '/succes-paiement': typeof SuccesPaiementRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
@@ -211,6 +225,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
@@ -228,6 +243,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
+  '/succes-paiement': typeof SuccesPaiementRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
@@ -242,6 +258,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/a-propos': typeof AProposRoute
   '/abonnements': typeof AbonnementsRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
@@ -259,6 +276,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRouteWithChildren
   '/succes': typeof SuccesRoute
+  '/succes-paiement': typeof SuccesPaiementRoute
   '/tarifs': typeof TarifsRoute
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
@@ -274,6 +292,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/a-propos'
     | '/abonnements'
     | '/admin'
     | '/auth'
@@ -291,6 +310,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sos'
     | '/succes'
+    | '/succes-paiement'
     | '/tarifs'
     | '/artisan/$id'
     | '/artisan/$metier'
@@ -304,6 +324,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/a-propos'
     | '/abonnements'
     | '/admin'
     | '/auth'
@@ -321,6 +342,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sos'
     | '/succes'
+    | '/succes-paiement'
     | '/tarifs'
     | '/artisan/$id'
     | '/artisan/$metier'
@@ -334,6 +356,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/a-propos'
     | '/abonnements'
     | '/admin'
     | '/auth'
@@ -351,6 +374,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/sos'
     | '/succes'
+    | '/succes-paiement'
     | '/tarifs'
     | '/artisan/$id'
     | '/artisan/$metier'
@@ -365,6 +389,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AProposRoute: typeof AProposRoute
   AbonnementsRoute: typeof AbonnementsRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
@@ -382,6 +407,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SosRoute: typeof SosRouteWithChildren
   SuccesRoute: typeof SuccesRoute
+  SuccesPaiementRoute: typeof SuccesPaiementRoute
   TarifsRoute: typeof TarifsRoute
   ArtisanIdRoute: typeof ArtisanIdRoute
   ArtisanMetierRoute: typeof ArtisanMetierRouteWithChildren
@@ -397,6 +423,13 @@ declare module '@tanstack/react-router' {
       path: '/tarifs'
       fullPath: '/tarifs'
       preLoaderRoute: typeof TarifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/succes-paiement': {
+      id: '/succes-paiement'
+      path: '/succes-paiement'
+      fullPath: '/succes-paiement'
+      preLoaderRoute: typeof SuccesPaiementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/succes': {
@@ -516,6 +549,13 @@ declare module '@tanstack/react-router' {
       path: '/abonnements'
       fullPath: '/abonnements'
       preLoaderRoute: typeof AbonnementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/a-propos': {
+      id: '/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof AProposRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -638,6 +678,7 @@ const ArtisanMetierRouteWithChildren = ArtisanMetierRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AProposRoute: AProposRoute,
   AbonnementsRoute: AbonnementsRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
@@ -655,6 +696,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SosRoute: SosRouteWithChildren,
   SuccesRoute: SuccesRoute,
+  SuccesPaiementRoute: SuccesPaiementRoute,
   TarifsRoute: TarifsRoute,
   ArtisanIdRoute: ArtisanIdRoute,
   ArtisanMetierRoute: ArtisanMetierRouteWithChildren,
@@ -665,3 +707,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
