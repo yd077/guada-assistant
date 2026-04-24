@@ -370,7 +370,9 @@ on conflict do nothing;
 --    + max_unlocks   + unlocks_count   + available_at par tier
 -- ────────────────────────────────────────────────────────────
 
-create or replace view public.available_leads as
+drop view if exists public.available_leads;
+
+create view public.available_leads as
 with counts as (
   select project_id, count(*)::int as unlocks_count
     from public.lead_unlocks group by project_id
