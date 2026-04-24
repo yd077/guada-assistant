@@ -1,17 +1,27 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { toast } from "sonner";
+import {
+  Loader2,
+  Briefcase,
+  MessageCircle,
+  MapPin,
+  Calendar,
+  Phone,
+  Mail,
+  Check,
+  Clock,
+  Star,
+  Users,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Reveal } from "@/components/site/Reveal";
-import { Link } from "@tanstack/react-router";
-import { Loader2, Briefcase, MessageCircle, MapPin, Calendar } from "lucide-react";
-
-type Project = {
-  id: string;
-  specialty: string;
-  location: string;
-  description: string;
-  status: string;
-  created_at: string;
-};
+import {
+  fetchClientProjectsWithUnlocks,
+  clientMarkContacted,
+  type ClientProjectWithUnlocks,
+} from "@/services/clientProjects";
+import { ReviewModal } from "./ReviewModal";
 
 type QuoteRequest = {
   id: string;
@@ -23,18 +33,16 @@ type QuoteRequest = {
 };
 
 export function ClientDashboard({ userId }: { userId: string }) {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ClientProjectWithUnlocks[]>([]);
   const [quotes, setQuotes] = useState<QuoteRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reviewing, setReviewing] = useState<{ id: string; name: string } | null>(
+    null,
+  );
 
-  useEffect(() => {
-    let cancelled = false;
-    Promise.all([
-      supabase
-        .from("projects")
-        .select("id, specialty, location, description, status, created_at")
-        .eq("client_id", userId)
-        .order("created_at", { ascending: false }),
+  const refresh = async () => {
+    const [p, q] = await Promise.all([
+      fetchClientProjectsWithUnlocks(userId),
       supabase
         .from("quote_requests")
         .select(
@@ -42,15 +50,15 @@ export function ClientDashboard({ userId }: { userId: string }) {
         )
         .eq("client_id", userId)
         .order("created_at", { ascending: false }),
-    ]).then(([p, q]) => {
-      if (cancelled) return;
-      setProjects((p.data ?? []) as Project[]);
-      setQuotes((q.data ?? []) as unknown as QuoteRequest[]);
-      setLoading(false);
-    });
-    return () => {
-      cancelled = true;
-    };
+    ]);
+    setProjects(p);
+    setQuotes((q.data ?? []) as unknown as QuoteRequest[]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   if (loading) {
@@ -61,9 +69,19 @@ export function ClientDashboard({ userId }: { userId: string }) {
     );
   }
 
+  const handleMarkContacted = async (unlockId: string) => {
+    const r = await clientMarkContacted(unlockId);
+    if (!r.ok) {
+      toast.error(r.error ?? "Action impossible");
+      return;
+    }
+    toast.success("Contact confirmé. Merci !");
+    refresh();
+  };
+
   return (
     <div className="space-y-12">
-      {/* Mes projets */}
+      {/* Mes projets enrichis */}
       <Reveal>
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-2xl">Mes projets ({projects.length})</h2>
@@ -74,6 +92,7 @@ export function ClientDashboard({ userId }: { userId: string }) {
             Nouveau projet
           </Link>
         </div>
+
         {projects.length === 0 ? (
           <EmptyState
             icon={<Briefcase />}
@@ -81,41 +100,160 @@ export function ClientDashboard({ userId }: { userId: string }) {
             cta={{ to: "/projet", label: "Soumettre un projet" }}
           />
         ) : (
-          <div className="mt-4 grid gap-3">
-            {projects.map((p) => (
-              <article
-                key={p.id}
-                className="rounded-2xl border border-border bg-card p-5 shadow-card"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="font-semibold">{p.specialty}</p>
-                    <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                      <MapPin className="h-3.5 w-3.5" /> {p.location}
-                    </p>
-                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                      {p.description}
-                    </p>
+          <div className="mt-4 space-y-4">
+            {projects.map((p) => {
+              const remaining = Math.max(
+                0,
+                (p.max_unlocks ?? 3) - p.unlocks.length,
+              );
+              return (
+                <article
+                  key={p.id}
+                  className="overflow-hidden rounded-2xl border border-border bg-card shadow-card"
+                >
+                  <header className="flex flex-wrap items-start justify-between gap-4 border-b border-border/60 p-5">
+                    <div>
+                      <p className="font-semibold">{p.specialty}</p>
+                      <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                        <MapPin className="h-3.5 w-3.5" /> {p.location}
+                      </p>
+                      <p className="mt-2 line-clamp-2 max-w-2xl text-sm text-muted-foreground">
+                        {p.description}
+                      </p>
+                      <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
+                        <Calendar className="h-3 w-3" />{" "}
+                        {new Date(p.created_at).toLocaleDateString("fr-FR", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <StatusPill status={p.status} />
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald/10 px-3 py-1 text-xs font-medium text-emerald">
+                        <Users className="h-3 w-3" />
+                        {p.unlocks.length}/{p.max_unlocks ?? 3} artisans
+                      </span>
+                      {p.urgency_level === "sos" && (
+                        <span className="inline-flex items-center rounded-full bg-destructive px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-destructive-foreground">
+                          SOS
+                        </span>
+                      )}
+                    </div>
+                  </header>
+
+                  {/* Liste des artisans qui ont débloqué */}
+                  <div className="p-5">
+                    {p.unlocks.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">
+                        En attente d'artisans intéressés. Vous serez recontacté
+                        sous 24h.
+                      </p>
+                    ) : (
+                      <>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          Artisans en contact
+                        </p>
+                        <div className="mt-3 space-y-3">
+                          {p.unlocks.map((u) => (
+                            <div
+                              key={u.id}
+                              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/60 bg-background p-3"
+                            >
+                              <div className="flex items-center gap-3">
+                                <img
+                                  src={
+                                    u.artisans?.avatar_url ??
+                                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+                                  }
+                                  alt={u.artisans?.name ?? "Artisan"}
+                                  className="h-10 w-10 rounded-full object-cover"
+                                />
+                                <div>
+                                  <p className="text-sm font-semibold">
+                                    {u.artisans?.id ? (
+                                      <Link
+                                        to="/artisan/$id"
+                                        params={{ id: u.artisans.id }}
+                                        className="hover:text-emerald"
+                                      >
+                                        {u.artisans.name}
+                                      </Link>
+                                    ) : (
+                                      (u.artisans?.name ?? "Artisan")
+                                    )}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {u.artisans?.specialty} ·{" "}
+                                    {u.artisans?.location}
+                                    {u.artisans?.rating ? (
+                                      <span className="ml-2 inline-flex items-center gap-0.5">
+                                        <Star className="h-3 w-3 fill-accent text-accent" />
+                                        {Number(u.artisans.rating).toFixed(1)}
+                                      </span>
+                                    ) : null}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {u.first_contact_at ? (
+                                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald/10 px-2.5 py-1 text-xs text-emerald">
+                                    <Check className="h-3 w-3" /> Contacté
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-2.5 py-1 text-xs text-accent">
+                                    <Clock className="h-3 w-3" /> Sous 24h
+                                  </span>
+                                )}
+                                {!u.first_contact_at && (
+                                  <button
+                                    onClick={() => handleMarkContacted(u.id)}
+                                    className="rounded-full border border-border px-3 py-1 text-xs font-medium hover:bg-muted"
+                                  >
+                                    J'ai été contacté
+                                  </button>
+                                )}
+                                {u.status === "won" && u.artisans && (
+                                  <button
+                                    onClick={() =>
+                                      setReviewing({
+                                        id: u.artisans!.id,
+                                        name: u.artisans!.name,
+                                      })
+                                    }
+                                    className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground hover:opacity-90"
+                                  >
+                                    <Star className="h-3 w-3" /> Donner mon avis
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {remaining > 0 && p.status === "open" && (
+                          <p className="mt-3 text-xs text-muted-foreground">
+                            Encore {remaining} place
+                            {remaining > 1 ? "s" : ""} possible
+                            {remaining > 1 ? "s" : ""} pour d'autres artisans.
+                          </p>
+                        )}
+                      </>
+                    )}
                   </div>
-                  <StatusPill status={p.status} />
-                </div>
-                <p className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
-                  <Calendar className="h-3 w-3" />{" "}
-                  {new Date(p.created_at).toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </p>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
       </Reveal>
 
-      {/* Mes demandes de devis */}
+      {/* Mes demandes de devis directes */}
       <Reveal>
-        <h2 className="font-serif text-2xl">Mes demandes de devis ({quotes.length})</h2>
+        <h2 className="font-serif text-2xl">
+          Mes demandes de devis ({quotes.length})
+        </h2>
         {quotes.length === 0 ? (
           <EmptyState
             icon={<MessageCircle />}
@@ -153,6 +291,16 @@ export function ClientDashboard({ userId }: { userId: string }) {
           </div>
         )}
       </Reveal>
+
+      {reviewing && (
+        <ReviewModal
+          open
+          artisanId={reviewing.id}
+          artisanName={reviewing.name}
+          onClose={() => setReviewing(null)}
+          onSubmitted={refresh}
+        />
+      )}
     </div>
   );
 }
@@ -193,7 +341,9 @@ function StatusPill({ status }: { status: string }) {
   };
   const s = map[status] ?? { label: status, cls: "bg-muted text-muted-foreground" };
   return (
-    <span className={`flex-none rounded-full px-3 py-1 text-xs font-medium ${s.cls}`}>
+    <span
+      className={`flex-none rounded-full px-3 py-1 text-xs font-medium ${s.cls}`}
+    >
       {s.label}
     </span>
   );
