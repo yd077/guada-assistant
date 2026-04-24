@@ -64,6 +64,7 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
   const [portfolio, setPortfolio] = useState<PortfolioRow[]>([]);
   const [quotes, setQuotes] = useState<QuoteRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasPaidTier, setHasPaidTier] = useState(false);
 
   const refresh = async () => {
     const { data: a } = await supabase
@@ -74,7 +75,7 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
 
     if (a) {
       setArtisan(a as ArtisanRow);
-      const [{ data: p }, { data: q }] = await Promise.all([
+      const [{ data: p }, { data: q }, sub] = await Promise.all([
         supabase
           .from("portfolio_items")
           .select("id, image_url, title")
@@ -87,9 +88,11 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
           )
           .eq("artisan_id", a.id)
           .order("created_at", { ascending: false }),
+        fetchSubscription(a.id),
       ]);
       setPortfolio((p ?? []) as PortfolioRow[]);
       setQuotes((q ?? []) as QuoteRow[]);
+      setHasPaidTier(sub?.tier === "premium" || sub?.tier === "elite");
     } else {
       setArtisan(null);
     }
