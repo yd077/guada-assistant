@@ -35,6 +35,12 @@ import {
   type AvailableLead,
   type LeadUnlock,
 } from "@/services/wallet";
+import {
+  fetchSubscription,
+  hoursUntilDeadline,
+  TIER_LABEL,
+  type SubscriptionTier,
+} from "@/services/subscriptions";
 
 type Props = {
   artisanId: string;
