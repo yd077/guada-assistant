@@ -71,22 +71,32 @@ function HomePage() {
       {/* HERO */}
       <section className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden pt-32 pb-20 text-white">
         <HeroSlideshow />
+        {/* Centered contrast veil for text legibility */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[1]"
+          aria-hidden="true"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 55% at 50% 45%, rgba(15,23,42,0.55) 0%, rgba(15,23,42,0.25) 55%, transparent 80%)",
+          }}
+        />
         <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
           <span
-            className="inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.22em] text-white shadow-lg backdrop-blur-md"
+            className="inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-white/20 bg-white/[0.07] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.22em] text-white/95 backdrop-blur-md"
             style={{ animationDelay: "0.1s" }}
           >
             <Sparkles className="h-3.5 w-3.5 text-accent" /> Artisans vérifiés · 100% Guadeloupe
           </span>
           <h1
-            className="mt-6 animate-fade-in-up font-serif text-5xl font-medium leading-[1.02] text-balance text-white md:text-7xl lg:text-[5.75rem]"
-            style={{ animationDelay: "0.2s", textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
+            className="mt-7 animate-fade-in-up font-serif text-5xl font-medium leading-[1.05] text-balance text-white md:text-7xl lg:text-[5.5rem]"
+            style={{ animationDelay: "0.2s", textShadow: "0 2px 24px rgba(0,0,0,0.45)" }}
           >
-...
+            L'excellence du chantier{" "}
+            <span className="italic text-accent">en Guadeloupe</span>
           </h1>
           <p
             className="mx-auto mt-6 max-w-2xl animate-fade-in-up text-lg leading-relaxed text-white/90 md:text-xl"
-            style={{ animationDelay: "0.35s", textShadow: "0 1px 10px rgba(0,0,0,0.5)" }}
+            style={{ animationDelay: "0.35s", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
           >
             La plateforme qui réunit les artisans BTP les plus exigeants de l'archipel.
             Trouvez la main d'œuvre qu'il vous faut, du devis à la livraison.
