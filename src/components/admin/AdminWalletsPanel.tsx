@@ -162,75 +162,22 @@ function WalletsTable({
         </thead>
         <tbody className="divide-y divide-border bg-card">
           {wallets.map((w) => (
-            <>
-              <tr key={w.artisan_id}>
-                <td className="px-4 py-3">
-                  <p className="font-medium">{w.artisans?.name ?? "—"}</p>
-                  <p className="text-xs text-muted-foreground">{w.artisans?.location}</p>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">
-                  {w.artisans?.specialty ?? "—"}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald/10 px-3 py-1 font-semibold text-emerald tabular-nums">
-                    <Wallet className="h-3 w-3" /> {w.credits_balance}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <button
-                    onClick={() =>
-                      setEditing((e) => (e === w.artisan_id ? null : w.artisan_id))
-                    }
-                    className="rounded-full border border-border px-3 py-1 text-xs hover:bg-muted"
-                  >
-                    {editing === w.artisan_id ? "Fermer" : "Ajuster"}
-                  </button>
-                </td>
-              </tr>
-              {editing === w.artisan_id && (
-                <tr key={`${w.artisan_id}-edit`} className="bg-muted/30">
-                  <td colSpan={4} className="px-4 py-4">
-                    <div className="grid gap-3 md:grid-cols-[120px_140px_1fr_auto]">
-                      <input
-                        type="number"
-                        placeholder="Montant ±"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                      />
-                      <select
-                        value={type}
-                        onChange={(e) => setType(e.target.value as CreditTxType)}
-                        className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                      >
-                        <option value="admin_adjust">Ajustement</option>
-                        <option value="bonus">Bonus</option>
-                        <option value="refund">Remboursement</option>
-                      </select>
-                      <input
-                        type="text"
-                        placeholder="Motif (visible dans l'historique)"
-                        value={note}
-                        onChange={(e) => setNote(e.target.value)}
-                        className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                      />
-                      <button
-                        onClick={() => submit(w.artisan_id)}
-                        disabled={busy}
-                        className="inline-flex items-center gap-2 rounded-full bg-emerald px-4 py-2 text-sm font-semibold text-emerald-foreground disabled:opacity-50"
-                      >
-                        {Number(amount) >= 0 ? (
-                          <Plus className="h-3 w-3" />
-                        ) : (
-                          <Minus className="h-3 w-3" />
-                        )}
-                        Appliquer
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </>
+            <FragmentRow
+              key={w.artisan_id}
+              wallet={w}
+              isEditing={editing === w.artisan_id}
+              onToggle={() =>
+                setEditing((e) => (e === w.artisan_id ? null : w.artisan_id))
+              }
+              amount={amount}
+              setAmount={setAmount}
+              note={note}
+              setNote={setNote}
+              type={type}
+              setType={setType}
+              busy={busy}
+              onSubmit={() => submit(w.artisan_id)}
+            />
           ))}
         </tbody>
       </table>
