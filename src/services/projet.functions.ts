@@ -23,6 +23,7 @@ export const sendProjectOtp = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (EMAIL_DISABLED) return { ok: true, sent: false, disabled: true } as const;
     const { data: project } = await supabaseAdmin
       .from("projects")
       .select("id, contact_email, location, email_verified")
@@ -65,6 +66,7 @@ export const verifyProjectOtp = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (EMAIL_DISABLED) return { ok: true, reason: "disabled" as const };
     const { data: result, error } = await supabaseAdmin.rpc("verify_project_otp", {
       _token: data.token,
       _code: data.code,
@@ -88,6 +90,7 @@ export const notifyArtisansOfNewLead = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (EMAIL_DISABLED) return { ok: true, sent: 0, disabled: true } as const;
     const { data: project } = await supabaseAdmin
       .from("projects")
       .select(
