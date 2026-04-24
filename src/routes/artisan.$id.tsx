@@ -172,9 +172,24 @@ function ArtisanPage() {
             </Reveal>
           )}
 
-          {artisan.reviews.length > 0 && (
-            <Reveal>
+          <Reveal>
+            <div className="flex items-center justify-between">
               <h2 className="font-serif text-3xl">Avis clients</h2>
+              {isAuthenticated && (
+                <button
+                  type="button"
+                  onClick={() => setReviewOpen(true)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-xs font-medium hover:border-emerald hover:bg-emerald/5"
+                >
+                  <Star className="h-3.5 w-3.5" /> Donner mon avis
+                </button>
+              )}
+            </div>
+            {artisan.reviews.length === 0 ? (
+              <p className="mt-4 text-sm text-muted-foreground">
+                Aucun avis pour le moment.
+              </p>
+            ) : (
               <div className="mt-6 space-y-4">
                 {artisan.reviews.map((r, idx) => (
                   <div
@@ -196,8 +211,8 @@ function ArtisanPage() {
                   </div>
                 ))}
               </div>
-            </Reveal>
-          )}
+            )}
+          </Reveal>
         </div>
 
         <aside className="lg:sticky lg:top-28 lg:self-start">
