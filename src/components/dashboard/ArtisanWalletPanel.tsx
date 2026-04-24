@@ -371,9 +371,11 @@ function LeadsList({
 /* ─────────────── Mes leads débloqués ─────────────── */
 function UnlocksList({
   unlocks,
+  artisanId,
   onChange,
 }: {
   unlocks: LeadUnlock[];
+  artisanId: string;
   onChange: () => void;
 }) {
   if (unlocks.length === 0) {
@@ -388,14 +390,23 @@ function UnlocksList({
   return (
     <div className="space-y-3">
       {unlocks.map((u) => (
-        <UnlockCard key={u.id} unlock={u} onChange={onChange} />
+        <UnlockCard key={u.id} unlock={u} artisanId={artisanId} onChange={onChange} />
       ))}
     </div>
   );
 }
 
-function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => void }) {
+function UnlockCard({
+  unlock,
+  artisanId,
+  onChange,
+}: {
+  unlock: LeadUnlock;
+  artisanId: string;
+  onChange: () => void;
+}) {
   const p = unlock.project;
+  const [disputeOpen, setDisputeOpen] = useState(false);
   const setStatus = async (s: "contacted" | "won" | "lost") => {
     const { error } = await updateUnlockStatus(unlock.id, s);
     if (error) toast.error("Mise à jour impossible");
@@ -404,6 +415,12 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
       onChange();
     }
   };
+
+  // Compte à rebours 24h
+  const hoursLeft = unlock.deadline_at ? hoursUntilDeadline(unlock.deadline_at) : null;
+  const contacted = !!unlock.first_contact_at || unlock.status === "contacted" || unlock.status === "won";
+  const showCountdown = !contacted && hoursLeft !== null;
+  const overdue = showCountdown && hoursLeft <= 0;
 
   return (
     <article className="rounded-2xl border border-border bg-card p-5 shadow-card">
@@ -429,6 +446,22 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
               <Phone className="h-3.5 w-3.5" /> {p?.contact_phone}
             </a>
           </div>
+          {showCountdown && (
+            <div
+              className={`mt-2 inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${
+                overdue
+                  ? "bg-destructive/10 text-destructive"
+                  : hoursLeft <= 6
+                    ? "bg-amber-100 text-amber-800"
+                    : "bg-emerald/10 text-emerald"
+              }`}
+            >
+              <Clock className="h-3 w-3" />
+              {overdue
+                ? "Délai dépassé — relance client envoyée"
+                : `Contactez sous ${hoursLeft}h`}
+            </div>
+          )}
         </div>
         <UnlockStatusBadge status={unlock.status} />
       </div>
@@ -445,6 +478,13 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
           {unlock.credits_spent} crédits
         </span>
         <div className="ml-auto flex flex-wrap gap-2">
+          <button
+            onClick={() => setDisputeOpen(true)}
+            className="inline-flex items-center gap-1 rounded-full border border-amber-300 px-3 py-1 text-amber-700 hover:bg-amber-50"
+            title="Lead invalide ? Demander un remboursement"
+          >
+            <AlertOctagon className="h-3 w-3" /> Signaler
+          </button>
           {unlock.status !== "contacted" && unlock.status !== "won" && unlock.status !== "lost" && (
             <button
               onClick={() => setStatus("contacted")}
@@ -471,6 +511,14 @@ function UnlockCard({ unlock, onChange }: { unlock: LeadUnlock; onChange: () => 
           )}
         </div>
       </div>
+
+      <LeadDisputeModal
+        open={disputeOpen}
+        unlockId={unlock.id}
+        artisanId={artisanId}
+        onClose={() => setDisputeOpen(false)}
+        onSubmitted={onChange}
+      />
     </article>
   );
 }
