@@ -29,11 +29,17 @@ export type AvailableLead = {
   surface: string | null;
   budget: string | null;
   deadline: string | null;
+  urgency_level?: "normal" | "urgent" | "sos" | null;
+  client_type?: string | null;
   description_preview: string | null;
   lead_price_credits: number;
   project_lat: number | null;
   project_lng: number | null;
   created_at: string;
+  max_unlocks?: number | null;
+  unlocks_count?: number | null;
+  remaining_slots?: number | null;
+  available_at?: string | null;
   distance_km?: number | null;
 };
 
@@ -43,6 +49,8 @@ export type LeadUnlock = {
   credits_spent: number;
   status: "new" | "contacted" | "won" | "lost";
   unlocked_at: string;
+  first_contact_at?: string | null;
+  deadline_at?: string | null;
   project?: {
     specialty: string;
     location: string;
@@ -154,7 +162,7 @@ export async function fetchMyUnlocks(artisanId: string): Promise<LeadUnlock[]> {
   const { data, error } = await supabase
     .from("lead_unlocks")
     .select(
-      `id, project_id, credits_spent, status, unlocked_at,
+      `id, project_id, credits_spent, status, unlocked_at, first_contact_at, deadline_at,
        project:projects(specialty, location, description, contact_name, contact_email, contact_phone, budget, surface, deadline)`,
     )
     .eq("artisan_id", artisanId)

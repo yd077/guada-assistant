@@ -79,6 +79,9 @@ function ProjectPage() {
     client_type: "" as ClientType | "",
     company_name: "",
     internal_ref: "",
+    managed_units: "",
+    desired_sla: "",
+    urgency_level: "normal" as "normal" | "urgent" | "sos",
     specialty: "",
     location: "",
     surface: "",
@@ -137,6 +140,9 @@ function ProjectPage() {
       client_type: data.client_type || "particulier",
       company_name: isPro ? data.company_name || null : null,
       internal_ref: isPro ? data.internal_ref || null : null,
+      managed_units: isPro && data.managed_units ? Number(data.managed_units) : null,
+      desired_sla: isPro ? data.desired_sla || null : null,
+      urgency_level: data.urgency_level,
       specialty: data.specialty,
       location: data.location,
       surface: data.surface || null,
@@ -171,6 +177,19 @@ function ProjectPage() {
       delete (noEmail as Record<string, unknown>).email_verification_token;
       delete (noEmail as Record<string, unknown>).email_verification_sent_at;
       const r = await supabase.from("projects").insert(noEmail);
+      error = r.error;
+    }
+
+    // Fallback si colonnes urgency/managed/sla absentes
+    if (
+      error &&
+      /urgency_level|managed_units|desired_sla/.test(error.message)
+    ) {
+      const noUrgency: Record<string, unknown> = { ...basePayload };
+      delete noUrgency.urgency_level;
+      delete noUrgency.managed_units;
+      delete noUrgency.desired_sla;
+      const r = await supabase.from("projects").insert(noUrgency);
       error = r.error;
     }
 
@@ -299,6 +318,17 @@ function ProjectPage() {
                   );
                 })}
               </div>
+              {(data.client_type === "agence" || data.client_type === "syndic") && (
+                <div className="rounded-2xl border border-emerald/30 bg-emerald/5 p-4 text-sm">
+                  <p className="font-semibold text-emerald">
+                    Volume élevé ? Demandez un compte Pro
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Tarifs préférentiels, SLA garanti, interlocuteur dédié.{" "}
+                    <a href="/contact" className="underline">Nous contacter</a>.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -335,6 +365,35 @@ function ProjectPage() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-sm font-medium">Niveau d'urgence</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {(
+                    [
+                      { v: "normal", label: "Standard", desc: "Devis sous 48h" },
+                      { v: "urgent", label: "Urgent", desc: "Sous 24h" },
+                      { v: "sos", label: "SOS", desc: "Immédiat" },
+                    ] as const
+                  ).map((u) => (
+                    <button
+                      key={u.v}
+                      type="button"
+                      onClick={() => setData((d) => ({ ...d, urgency_level: u.v }))}
+                      className={`rounded-xl border p-3 text-left text-sm transition ${
+                        data.urgency_level === u.v
+                          ? u.v === "sos"
+                            ? "border-destructive bg-destructive/5 text-destructive"
+                            : "border-emerald bg-emerald/5"
+                          : "border-border hover:border-emerald/50"
+                      }`}
+                    >
+                      <p className="font-semibold">{u.label}</p>
+                      <p className="text-[11px] text-muted-foreground">{u.desc}</p>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}

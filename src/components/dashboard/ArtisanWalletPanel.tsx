@@ -18,7 +18,10 @@ import {
   RefreshCcw,
   Check,
   X,
+  AlertOctagon,
+  Users,
 } from "lucide-react";
+import { LeadDisputeModal } from "./LeadDisputeModal";
 import { Reveal } from "@/components/site/Reveal";
 import {
   fetchWallet,
@@ -251,7 +254,7 @@ function LeadsList({
             key={l.id}
             className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-card"
           >
-            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-emerald">
                   {l.specialty}
@@ -261,6 +264,25 @@ function LeadsList({
               <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
                 <Lock className="h-3 w-3" /> {l.lead_price_credits} cr.
               </span>
+            </div>
+
+            <div className="flex flex-wrap gap-2 text-[11px]">
+              {l.urgency_level === "sos" && (
+                <span className="rounded-full bg-destructive px-2 py-0.5 font-semibold text-destructive-foreground">
+                  🚨 SOS
+                </span>
+              )}
+              {l.urgency_level === "urgent" && (
+                <span className="rounded-full bg-amber-100 px-2 py-0.5 font-semibold text-amber-800">
+                  ⚡ Urgent
+                </span>
+              )}
+              {l.remaining_slots != null && l.remaining_slots <= 2 && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald/10 px-2 py-0.5 font-semibold text-emerald">
+                  <Users className="h-3 w-3" /> Plus que {l.remaining_slots} place
+                  {l.remaining_slots > 1 ? "s" : ""}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">

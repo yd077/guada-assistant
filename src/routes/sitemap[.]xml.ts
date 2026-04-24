@@ -39,14 +39,21 @@ export const Route = createFileRoute("/sitemap.xml")({
           (p) => ({ loc: p, lastmod: today, priority: p === "/" ? "1.0" : "0.7" }),
         );
 
-        // Pages SEO : /artisan/:metier  +  /artisan/:metier/:commune
+        // Pages SEO : /metiers/:metier hub + /artisan/:metier + /artisan/:metier/:commune
         for (const s of SPECIALTIES_LIST) {
+          urls.push({ loc: `/metiers/${s.slug}`, lastmod: today, priority: "0.8" });
           urls.push({ loc: `/artisan/${s.slug}`, lastmod: today, priority: "0.8" });
+          urls.push({ loc: `/sos/${s.slug}`, lastmod: today, priority: "0.7" });
           for (const c of COMMUNES_LIST) {
             urls.push({
               loc: `/artisan/${s.slug}/${c.slug}`,
               lastmod: today,
               priority: "0.6",
+            });
+            urls.push({
+              loc: `/sos/${s.slug}/${c.slug}`,
+              lastmod: today,
+              priority: "0.5",
             });
           }
         }

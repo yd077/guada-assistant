@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { SPECIALTIES, COMMUNES } from "@/data/artisans";
 import { ArtisanZoneEditor } from "./ArtisanZoneEditor";
 import { ArtisanWalletPanel } from "./ArtisanWalletPanel";
+import { ArtisanDocumentsPanel } from "./ArtisanDocumentsPanel";
 import {
   Loader2,
   Save,
@@ -33,6 +34,10 @@ type ArtisanRow = {
   base_lng: number | null;
   radius_km: number | null;
   base_address: string | null;
+  kbis_url: string | null;
+  insurance_url: string | null;
+  verification_status: "pending" | "verified" | "rejected";
+  verification_note: string | null;
 };
 
 type PortfolioRow = {
@@ -109,6 +114,15 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
   return (
     <div className="space-y-12">
       <ProfileEditor artisan={artisan} onSaved={refresh} />
+      <ArtisanDocumentsPanel
+        artisanId={artisan.id}
+        userId={userId}
+        initialKbisUrl={artisan.kbis_url ?? null}
+        initialInsuranceUrl={artisan.insurance_url ?? null}
+        initialStatus={artisan.verification_status ?? "pending"}
+        verificationNote={artisan.verification_note}
+        onSaved={refresh}
+      />
       <ArtisanWalletPanel
         artisanId={artisan.id}
         specialty={artisan.specialty}

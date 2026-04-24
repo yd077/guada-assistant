@@ -26,9 +26,12 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VerifierEmailTokenRouteImport } from './routes/verifier-email.$token'
+import { Route as SosMetierRouteImport } from './routes/sos.$metier'
+import { Route as MetiersMetierRouteImport } from './routes/metiers.$metier'
 import { Route as ContactArtisanIdRouteImport } from './routes/contact-artisan.$id'
 import { Route as ArtisanMetierRouteImport } from './routes/artisan.$metier'
 import { Route as ArtisanIdRouteImport } from './routes/artisan.$id'
+import { Route as SosMetierCommuneRouteImport } from './routes/sos.$metier.$commune'
 import { Route as ArtisanMetierCommuneRouteImport } from './routes/artisan.$metier.$commune'
 
 const TarifsRoute = TarifsRouteImport.update({
@@ -116,6 +119,16 @@ const VerifierEmailTokenRoute = VerifierEmailTokenRouteImport.update({
   path: '/verifier-email/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SosMetierRoute = SosMetierRouteImport.update({
+  id: '/sos/$metier',
+  path: '/sos/$metier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetiersMetierRoute = MetiersMetierRouteImport.update({
+  id: '/$metier',
+  path: '/$metier',
+  getParentRoute: () => MetiersRoute,
+} as any)
 const ContactArtisanIdRoute = ContactArtisanIdRouteImport.update({
   id: '/contact-artisan/$id',
   path: '/contact-artisan/$id',
@@ -130,6 +143,11 @@ const ArtisanIdRoute = ArtisanIdRouteImport.update({
   id: '/artisan/$id',
   path: '/artisan/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SosMetierCommuneRoute = SosMetierCommuneRouteImport.update({
+  id: '/$commune',
+  path: '/$commune',
+  getParentRoute: () => SosMetierRoute,
 } as any)
 const ArtisanMetierCommuneRoute = ArtisanMetierCommuneRouteImport.update({
   id: '/$commune',
@@ -147,7 +165,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
-  '/metiers': typeof MetiersRoute
+  '/metiers': typeof MetiersRouteWithChildren
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -157,8 +175,11 @@ export interface FileRoutesByFullPath {
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/metiers/$metier': typeof MetiersMetierRoute
+  '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
+  '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -170,7 +191,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
-  '/metiers': typeof MetiersRoute
+  '/metiers': typeof MetiersRouteWithChildren
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -180,8 +201,11 @@ export interface FileRoutesByTo {
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/metiers/$metier': typeof MetiersMetierRoute
+  '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
+  '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -194,7 +218,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/mentions-legales': typeof MentionsLegalesRoute
-  '/metiers': typeof MetiersRoute
+  '/metiers': typeof MetiersRouteWithChildren
   '/projet': typeof ProjetRoute
   '/recherche': typeof RechercheRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -204,8 +228,11 @@ export interface FileRoutesById {
   '/artisan/$id': typeof ArtisanIdRoute
   '/artisan/$metier': typeof ArtisanMetierRouteWithChildren
   '/contact-artisan/$id': typeof ContactArtisanIdRoute
+  '/metiers/$metier': typeof MetiersMetierRoute
+  '/sos/$metier': typeof SosMetierRouteWithChildren
   '/verifier-email/$token': typeof VerifierEmailTokenRoute
   '/artisan/$metier/$commune': typeof ArtisanMetierCommuneRoute
+  '/sos/$metier/$commune': typeof SosMetierCommuneRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -229,8 +256,11 @@ export interface FileRouteTypes {
     | '/artisan/$id'
     | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/metiers/$metier'
+    | '/sos/$metier'
     | '/verifier-email/$token'
     | '/artisan/$metier/$commune'
+    | '/sos/$metier/$commune'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -252,8 +282,11 @@ export interface FileRouteTypes {
     | '/artisan/$id'
     | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/metiers/$metier'
+    | '/sos/$metier'
     | '/verifier-email/$token'
     | '/artisan/$metier/$commune'
+    | '/sos/$metier/$commune'
   id:
     | '__root__'
     | '/'
@@ -275,8 +308,11 @@ export interface FileRouteTypes {
     | '/artisan/$id'
     | '/artisan/$metier'
     | '/contact-artisan/$id'
+    | '/metiers/$metier'
+    | '/sos/$metier'
     | '/verifier-email/$token'
     | '/artisan/$metier/$commune'
+    | '/sos/$metier/$commune'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -289,7 +325,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
-  MetiersRoute: typeof MetiersRoute
+  MetiersRoute: typeof MetiersRouteWithChildren
   ProjetRoute: typeof ProjetRoute
   RechercheRoute: typeof RechercheRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -299,6 +335,7 @@ export interface RootRouteChildren {
   ArtisanIdRoute: typeof ArtisanIdRoute
   ArtisanMetierRoute: typeof ArtisanMetierRouteWithChildren
   ContactArtisanIdRoute: typeof ContactArtisanIdRoute
+  SosMetierRoute: typeof SosMetierRouteWithChildren
   VerifierEmailTokenRoute: typeof VerifierEmailTokenRoute
 }
 
@@ -423,6 +460,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifierEmailTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sos/$metier': {
+      id: '/sos/$metier'
+      path: '/sos/$metier'
+      fullPath: '/sos/$metier'
+      preLoaderRoute: typeof SosMetierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metiers/$metier': {
+      id: '/metiers/$metier'
+      path: '/$metier'
+      fullPath: '/metiers/$metier'
+      preLoaderRoute: typeof MetiersMetierRouteImport
+      parentRoute: typeof MetiersRoute
+    }
     '/contact-artisan/$id': {
       id: '/contact-artisan/$id'
       path: '/contact-artisan/$id'
@@ -444,6 +495,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtisanIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sos/$metier/$commune': {
+      id: '/sos/$metier/$commune'
+      path: '/$commune'
+      fullPath: '/sos/$metier/$commune'
+      preLoaderRoute: typeof SosMetierCommuneRouteImport
+      parentRoute: typeof SosMetierRoute
+    }
     '/artisan/$metier/$commune': {
       id: '/artisan/$metier/$commune'
       path: '/$commune'
@@ -453,6 +511,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface MetiersRouteChildren {
+  MetiersMetierRoute: typeof MetiersMetierRoute
+}
+
+const MetiersRouteChildren: MetiersRouteChildren = {
+  MetiersMetierRoute: MetiersMetierRoute,
+}
+
+const MetiersRouteWithChildren =
+  MetiersRoute._addFileChildren(MetiersRouteChildren)
 
 interface ArtisanMetierRouteChildren {
   ArtisanMetierCommuneRoute: typeof ArtisanMetierCommuneRoute
@@ -466,6 +535,18 @@ const ArtisanMetierRouteWithChildren = ArtisanMetierRoute._addFileChildren(
   ArtisanMetierRouteChildren,
 )
 
+interface SosMetierRouteChildren {
+  SosMetierCommuneRoute: typeof SosMetierCommuneRoute
+}
+
+const SosMetierRouteChildren: SosMetierRouteChildren = {
+  SosMetierCommuneRoute: SosMetierCommuneRoute,
+}
+
+const SosMetierRouteWithChildren = SosMetierRoute._addFileChildren(
+  SosMetierRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
@@ -476,7 +557,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
-  MetiersRoute: MetiersRoute,
+  MetiersRoute: MetiersRouteWithChildren,
   ProjetRoute: ProjetRoute,
   RechercheRoute: RechercheRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
@@ -486,6 +567,7 @@ const rootRouteChildren: RootRouteChildren = {
   ArtisanIdRoute: ArtisanIdRoute,
   ArtisanMetierRoute: ArtisanMetierRouteWithChildren,
   ContactArtisanIdRoute: ContactArtisanIdRoute,
+  SosMetierRoute: SosMetierRouteWithChildren,
   VerifierEmailTokenRoute: VerifierEmailTokenRoute,
 }
 export const routeTree = rootRouteImport
