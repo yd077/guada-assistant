@@ -3,6 +3,18 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendEmail, renderOtpEmail, renderNewLeadEmail } from "@/integrations/email.server";
 
+/**
+ * ⚠️ Vérifications email DÉSACTIVÉES temporairement (en attente du SMTP client).
+ * Toutes les fonctions ci-dessous sont court-circuitées et ne déclenchent aucun envoi.
+ * Pour réactiver : retirer le bloc `EMAIL_DISABLED` au début de chaque handler.
+ */
+const EMAIL_DISABLED = true;
+
+// Évite les warnings d'imports inutilisés tant que c'est désactivé.
+void sendEmail;
+void renderOtpEmail;
+void renderNewLeadEmail;
+
 /** Génère un code 6 chiffres et l'envoie par email au client. */
 export const sendProjectOtp = createServerFn({ method: "POST" })
   .inputValidator(
@@ -11,6 +23,7 @@ export const sendProjectOtp = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (EMAIL_DISABLED) return { ok: true, sent: false, disabled: true } as const;
     const { data: project } = await supabaseAdmin
       .from("projects")
       .select("id, contact_email, location, email_verified")
@@ -53,6 +66,7 @@ export const verifyProjectOtp = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (EMAIL_DISABLED) return { ok: true, reason: "disabled" as const };
     const { data: result, error } = await supabaseAdmin.rpc("verify_project_otp", {
       _token: data.token,
       _code: data.code,
@@ -76,6 +90,7 @@ export const notifyArtisansOfNewLead = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
+    if (EMAIL_DISABLED) return { ok: true, sent: 0, disabled: true } as const;
     const { data: project } = await supabaseAdmin
       .from("projects")
       .select(

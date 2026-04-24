@@ -24,7 +24,7 @@ import {
 import { Crown, Star, Check, Loader2, ArrowRight, X } from "lucide-react";
 
 export const Route = createFileRoute("/abonnements")({
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: Record<string, unknown>): { cancelled?: boolean } => ({
     cancelled: s.cancelled === "1" ? true : undefined,
   }),
   head: () => ({
