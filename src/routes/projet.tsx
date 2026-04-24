@@ -180,6 +180,19 @@ function ProjectPage() {
       error = r.error;
     }
 
+    // Fallback si colonnes urgency/managed/sla absentes
+    if (
+      error &&
+      /urgency_level|managed_units|desired_sla/.test(error.message)
+    ) {
+      const noUrgency: Record<string, unknown> = { ...basePayload };
+      delete noUrgency.urgency_level;
+      delete noUrgency.managed_units;
+      delete noUrgency.desired_sla;
+      const r = await supabase.from("projects").insert(noUrgency);
+      error = r.error;
+    }
+
     // Fallback si colonnes multi-profils absentes
     if (
       error &&
