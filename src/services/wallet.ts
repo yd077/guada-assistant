@@ -184,7 +184,7 @@ export async function adminAdjustWallet(
   amount: number,
   note: string,
   type: CreditTxType = "admin_adjust",
-) {
+): Promise<{ ok: boolean; balance?: number; error?: string }> {
   const { data, error } = await supabase.rpc("admin_adjust_wallet", {
     p_artisan_id: artisanId,
     p_amount: amount,
@@ -196,7 +196,10 @@ export async function adminAdjustWallet(
 }
 
 /** Remboursement admin d'un unlock. */
-export async function adminRefundUnlock(unlockId: string, note?: string) {
+export async function adminRefundUnlock(
+  unlockId: string,
+  note?: string,
+): Promise<{ ok: boolean; refunded?: number; error?: string }> {
   const { data, error } = await supabase.rpc("admin_refund_unlock", {
     p_unlock_id: unlockId,
     p_note: note ?? null,
