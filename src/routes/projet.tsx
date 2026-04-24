@@ -409,22 +409,22 @@ function ProjectPage() {
               onNext={next}
             />
           </div>
-        </form>
 
-        {/* Boutons sticky mobile */}
-        <div className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-background/95 px-4 py-3 backdrop-blur md:hidden">
-          <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
-            <NavButtons
-              step={step}
-              total={STEPS.length}
-              canNext={!!canNext}
-              submitting={submitting}
-              onPrev={prev}
-              onNext={next}
-              compact
-            />
+          {/* Boutons sticky mobile (dans le form pour que submit fonctionne) */}
+          <div className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-background/95 px-4 py-3 backdrop-blur md:hidden">
+            <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
+              <NavButtons
+                step={step}
+                total={STEPS.length}
+                canNext={!!canNext}
+                submitting={submitting}
+                onPrev={prev}
+                onNext={next}
+                compact
+              />
+            </div>
           </div>
-        </div>
+        </form>
       </main>
       <Footer />
     </div>
