@@ -30,8 +30,16 @@ export function Footer() {
                   Soumettre un projet
                 </Link>
               </li>
-              <li className="text-white/50">Comment ça marche</li>
-              <li className="text-white/50">Tarifs indicatifs</li>
+              <li>
+                <Link to="/comment-ca-marche" className="hover:text-white">
+                  Comment ça marche
+                </Link>
+              </li>
+              <li>
+                <Link to="/tarifs" className="hover:text-white">
+                  Tarifs
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -40,9 +48,21 @@ export function Footer() {
               Artisans
             </h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li className="text-white/50">Devenir partenaire</li>
-              <li className="text-white/50">Espace pro</li>
-              <li className="text-white/50">Charte qualité</li>
+              <li>
+                <Link to="/auth" className="hover:text-white">
+                  Devenir partenaire
+                </Link>
+              </li>
+              <li>
+                <Link to="/dashboard" className="hover:text-white">
+                  Espace pro
+                </Link>
+              </li>
+              <li>
+                <Link to="/cgu" className="hover:text-white">
+                  Charte qualité
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -57,18 +77,23 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 flex-none text-accent" />
-                <span>+590 590 00 00 00</span>
+                <a href="tel:+590590000000" className="hover:text-white">+590 590 00 00 00</a>
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-none text-accent" />
-                <span>contact@btp-guada.fr</span>
+                <a href="mailto:contact@btp-guada.fr" className="hover:text-white">contact@btp-guada.fr</a>
+              </li>
+              <li>
+                <Link to="/contact" className="text-accent hover:text-white">
+                  → Formulaire de contact
+                </Link>
               </li>
             </ul>
             <div className="mt-4 flex gap-3">
-              <a className="rounded-full border border-white/15 p-2 hover:bg-white/10" href="#">
+              <a className="rounded-full border border-white/15 p-2 hover:bg-white/10" href="#" aria-label="Facebook">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a className="rounded-full border border-white/15 p-2 hover:bg-white/10" href="#">
+              <a className="rounded-full border border-white/15 p-2 hover:bg-white/10" href="#" aria-label="Instagram">
                 <Instagram className="h-4 w-4" />
               </a>
             </div>
@@ -77,10 +102,10 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/50 md:flex-row">
           <p>© {new Date().getFullYear()} BTP Guada — L'excellence du chantier en Guadeloupe.</p>
-          <div className="flex gap-6">
-            <span>Mentions légales</span>
-            <span>Confidentialité</span>
-            <span>CGU</span>
+          <div className="flex flex-wrap gap-6">
+            <Link to="/mentions-legales" className="hover:text-white">Mentions légales</Link>
+            <Link to="/confidentialite" className="hover:text-white">Confidentialité</Link>
+            <Link to="/cgu" className="hover:text-white">CGU</Link>
           </div>
         </div>
       </div>
