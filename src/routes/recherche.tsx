@@ -220,10 +220,16 @@ function SearchPage() {
             ) : filtered.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border p-12 text-center">
                 <Search className="mx-auto h-10 w-10 text-muted-foreground" />
-                <p className="mt-4 font-serif text-2xl">Aucun artisan ne correspond</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Élargissez vos critères pour découvrir d'autres profils.
+                <p className="mt-4 font-serif text-2xl">Notre annuaire arrive bientôt</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Aucun artisan ne correspond à vos critères pour le moment. En attendant, soumettez directement votre projet — nous trouvons les bons artisans pour vous.
                 </p>
+                <a
+                  href="/projet"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-emerald px-5 py-2.5 text-sm font-semibold text-emerald-foreground shadow-glow hover:opacity-90"
+                >
+                  Soumettre mon projet
+                </a>
               </div>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">

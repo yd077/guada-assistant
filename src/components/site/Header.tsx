@@ -45,7 +45,7 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 py-4">
         <Logo light={!solid} />
 
         <nav className="hidden items-center gap-8 md:flex">

@@ -59,7 +59,7 @@ function HowItWorksPage() {
 
         <div className="mt-16 grid gap-6 md:grid-cols-2">
           {STEPS.map((s, i) => (
-            <Reveal key={s.label} delay={i * 80}>
+            <Reveal key={s.label} delay={i * 0.08}>
               <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-elegant">
                 <span className="absolute right-6 top-6 font-serif text-6xl font-light text-emerald/10">
                   0{i + 1}

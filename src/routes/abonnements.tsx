@@ -188,7 +188,7 @@ function SubscriptionsPage() {
           {plans.map((plan, i) => {
             const isCurrent = sub?.tier === plan.tier;
             return (
-              <Reveal key={plan.tier} delay={i * 80}>
+              <Reveal key={plan.tier} delay={i * 0.08}>
                 <div
                   className={`relative h-full overflow-hidden rounded-3xl border p-8 shadow-sm transition hover:-translate-y-1 ${
                     plan.highlight

@@ -170,7 +170,7 @@ function AboutPage() {
           {PILLARS.map((p, i) => {
             const Icon = p.icon;
             return (
-              <Reveal key={p.title} delay={i * 80}>
+              <Reveal key={p.title} delay={i * 0.08}>
                 <article className="h-full rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-elegant">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/10 text-emerald">
                     <Icon className="h-6 w-6" />
@@ -201,7 +201,7 @@ function AboutPage() {
           {SEGMENTS.map((s, i) => {
             const Icon = s.icon;
             return (
-              <Reveal key={s.title} delay={i * 80}>
+              <Reveal key={s.title} delay={i * 0.08}>
                 <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/10 text-emerald">
                     <Icon className="h-6 w-6" />

@@ -123,7 +123,7 @@ function PricingPage() {
 
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {packs.map((pack, i) => (
-                <Reveal key={pack.id} delay={i * 80}>
+                <Reveal key={pack.id} delay={i * 0.08}>
                   <article
                     className={`relative h-full overflow-hidden rounded-3xl border p-8 shadow-sm transition hover:-translate-y-1 ${
                       pack.highlight
@@ -243,7 +243,7 @@ function PricingPage() {
 
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {plans.map((plan, i) => (
-                <Reveal key={plan.tier} delay={i * 80}>
+                <Reveal key={plan.tier} delay={i * 0.08}>
                   <article
                     className={`relative h-full overflow-hidden rounded-3xl border p-8 shadow-sm transition hover:-translate-y-1 ${
                       plan.highlight
