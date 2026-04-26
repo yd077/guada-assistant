@@ -8,6 +8,8 @@ const NAV = [
   { to: "/", label: "Accueil" },
   { to: "/recherche", label: "Trouver un artisan" },
   { to: "/projet", label: "Soumettre un projet" },
+  { to: "/tarifs", label: "Tarifs" },
+  { to: "/comment-ca-marche", label: "Comment ça marche" },
 ] as const;
 
 export function Header({ transparent = false }: { transparent?: boolean }) {
@@ -156,15 +158,33 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
               </Link>
             ))}
             {isAuthenticated ? (
-              <button
-                onClick={async () => {
-                  setOpen(false);
-                  await signOut();
-                }}
-                className="rounded-md px-3 py-3 text-left text-sm font-medium text-destructive hover:bg-destructive/10"
-              >
-                Se déconnecter
-              </button>
+              <>
+                <Link
+                  to="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-3 text-sm font-medium text-foreground/80 hover:bg-muted"
+                >
+                  Mon espace
+                </Link>
+                {role === "admin" && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setOpen(false)}
+                    className="rounded-md px-3 py-3 text-sm font-medium text-emerald hover:bg-muted"
+                  >
+                    Panel admin
+                  </Link>
+                )}
+                <button
+                  onClick={async () => {
+                    setOpen(false);
+                    await signOut();
+                  }}
+                  className="rounded-md px-3 py-3 text-left text-sm font-medium text-destructive hover:bg-destructive/10"
+                >
+                  Se déconnecter
+                </button>
+              </>
             ) : (
               <Link
                 to="/auth"
@@ -174,6 +194,13 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
                 Connexion / Inscription
               </Link>
             )}
+            <Link
+              to="/projet"
+              onClick={() => setOpen(false)}
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-emerald px-5 py-2.5 text-sm font-medium text-emerald-foreground shadow-glow"
+            >
+              Démarrer mon projet
+            </Link>
           </div>
         </div>
       )}

@@ -163,7 +163,7 @@ function SubscriptionsPage() {
                 <Check className="h-4 w-4" /> Votre abonnement actuel :{" "}
                 <strong>{TIER_LABEL[sub.tier]}</strong>
                 {sub.cancel_at_period_end && (
-                  <span className="ml-2 text-xs text-amber-700">(annulation programmée)</span>
+                  <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">(annulation programmée)</span>
                 )}
               </div>
               {sub.tier !== "free" && sub.stripe_subscription_id && !sub.cancel_at_period_end && (
