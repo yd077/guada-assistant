@@ -35,7 +35,7 @@ export function LegalLayout({
 
         <div className="mt-12 space-y-10">
           {sections.map((s, i) => (
-            <Reveal key={s.title} delay={i * 60}>
+            <Reveal key={s.title} delay={i * 0.06}>
               <section className="rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8">
                 <div className="flex items-center gap-3">
                   {Icon && (

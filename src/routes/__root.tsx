@@ -47,11 +47,8 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "BTP Guada — L'excellence du chantier en Guadeloupe" },
       { name: "twitter:title", content: "BTP Guada — L'excellence du chantier en Guadeloupe" },
-      { name: "description", content: "Guada Assistant is a platform connecting clients with BTP professionals in Guadeloupe." },
-      { property: "og:description", content: "Guada Assistant is a platform connecting clients with BTP professionals in Guadeloupe." },
-      { name: "twitter:description", content: "Guada Assistant is a platform connecting clients with BTP professionals in Guadeloupe." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ea3ef3e3-237e-4063-bbd6-dea4b3a06a53/id-preview-2f4393a0--51504c54-782a-4c54-ae51-bd8f540931ef.lovable.app-1777038007067.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ea3ef3e3-237e-4063-bbd6-dea4b3a06a53/id-preview-2f4393a0--51504c54-782a-4c54-ae51-bd8f540931ef.lovable.app-1777038007067.png" },
+      { property: "og:description", content: "Trouvez les meilleurs artisans BTP vérifiés en Guadeloupe : maçonnerie, électricité, plomberie, peinture, paysagisme. Devis gratuits." },
+      { name: "twitter:description", content: "Trouvez les meilleurs artisans BTP vérifiés en Guadeloupe : maçonnerie, électricité, plomberie, peinture, paysagisme. Devis gratuits." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
