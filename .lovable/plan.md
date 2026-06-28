@@ -1,95 +1,64 @@
-## Audit vs. dossier business `AIDAN_BIZ.pdf` — Ce qui manque
+## Plan de réponse à l'audit
 
-Comparaison entre la stratégie présentée dans votre PDF et l'état réel du code.
-
----
-
-### ✅ Déjà livré (conforme au dossier)
-
-
-| Élément du dossier                                                | État                      |
-| ----------------------------------------------------------------- | ------------------------- |
-| Tunnel multi-profils (Particulier / Entreprise / Agence / Syndic) | ✅ `/projet` 4 étapes      |
-| Réf. interne pour clients pro                                     | ✅ champ `internal_ref`    |
-| Mobile-first                                                      | ✅                         |
-| Dashboard artisan géolocalisé (rayon km)                          | ✅ `ArtisanZoneEditor`     |
-| Documents Kbis + Décennale                                        | ✅ `ArtisanDocumentsPanel` |
-| Wallet de crédits + historique                                    | ✅ `ArtisanWalletPanel`    |
-| Système Lead-Flash (3 artisans max, délais par tier)              | ✅ migration strategy      |
-| Abonnements Free/Premium/Élite                                    | ✅ `/abonnements`          |
-| SEO local : `/artisan/[metier]/[commune]`                         | ✅                         |
-| Schema markup LocalBusiness + AggregateRating                     | ✅                         |
-| Hub `/sos` + pages SOS par métier/commune                         | ✅                         |
-| Admin : artisans, projets, paiements, litiges, wallets            | ✅                         |
-
+Note: plusieurs points de l'audit sont **déjà livrés** dans le code (page /tarifs avec packs crédits + abonnements, dashboard artisan + wallet, rôle client/artisan à l'inscription, champ `internal_ref` pour agences/syndics, pages légales, dispatch 3 artisans max, contestation 48h, SEO `/artisan/[metier]/[commune]`). Le plan ci-dessous traite uniquement le **reste réellement manquant**, en respectant tes choix actés: **pas de SMS** (remplacé par email plus tard) et **vérifications email désactivées** jusqu'au SMTP.
 
 ---
 
-### ❌ Écarts par rapport au dossier business
+### Lot 1 — Crédibilité (BLOQUANT, priorité 1)
 
-#### 1. Grille tarifaire artisan **non conforme au PDF**
+1. **Homepage — supprimer données fictives**
+   - Masquer la section stats `0+ / 0+ / 0 / 0%` (la retirer tant qu'on n'a pas de vraies données).
+   - Remplacer la section "Artisans à la une" (qui lit `ARTISANS` fictifs) par un état vide premium: "Nos premiers artisans vérifiés arrivent bientôt" + CTA `Devenir partenaire` / `Soumettre un projet`.
+   - Garder les compteurs `count` des métiers mais les remplacer par des libellés neutres (sans nombre inventé).
 
-Le PDF annonce :
+2. **Footer — placeholders**
+   - Retirer le numéro `+590 590 00 00 00` (masquer la ligne tant qu'aucun numéro réel).
+   - Garder `contact@btp-guada.fr` (à toi de confirmer la boîte; sinon je la masquerai aussi sur demande).
+   - Retirer les liens morts du footer ou les pointer vers une vraie page (cf. Lot 3).
 
-- **Packs crédits** : Starter 10cr/50€, Pro 35cr/150€, Expert 120cr/500€
-- **Abonnements** : Gratuit 5km / Premium 25km/29€ / Élite Toute la Guadeloupe/49€
-- **Coût par lead** : 8 cr (dépannage) / 20 cr (moyen) / 50 cr (gros) / 70 cr (marché pro)
-
-Code actuel :
-
-- `/tarifs` affiche "Artisan Pro 39€" — **ne correspond pas** aux packs du dossier
-- `/abonnements` affiche les 3 tiers mais sans les rayons (5/25/Toute Guadeloupe) ni les prix exacts (29€/49€) du PDF
-- Pas de page "Packs de crédits" affichant Starter/Pro/Expert
-- Aucune règle visible de prix par type de demande (8/20/50/70 cr)
-
-
-
-#### 3. Paiement Stripe **non branché**
-
-- Bouton "Recharger" du wallet : `disabled` avec tooltip "Bientôt disponible"
-- `/abonnements` : commentaire explicite "Pas de Stripe pour l'instant"
-- L'admin peut saisir les clés Stripe mais aucun checkout/webhook n'existe côté code applicatif
-- Pas de facturation automatique mensuelle pour abonnements
-- Pas de Stripe Connect pour remboursements
-
-
-
-
-
-#### 6. Mots-clés SEO du dossier non couverts
-
-Le PDF cite "Urgence plomberie agence Guadeloupe", "Devis travaux 971". Pas de page dédiée "marché pro" / agences-syndics avec ces mots-clés (existe `/contact-pro` mais sans contenu SEO travaillé).
+3. **Badge "Edit with Lovable"** — je le masquerai côté projet (option Pro requise).
 
 ---
 
-### 🎯 Priorisation suggérée (par impact business)
+### Lot 2 — Auth & parcours (BLOQUANT/MOYEN)
 
-
-| Priorité  | Chantier                                                                                                                   | Impact                    |
-| --------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| 🔴 **P0** | Aligner `/tarifs` + `/abonnements` sur la grille exacte du dossier (packs Starter/Pro/Expert, rayons 5/25/GP, prix 29/49€) | Cohérence pitch ↔ produit |
-| 🔴 **P0** | Stripe Checkout : achat de packs de crédits (3 produits)                                                                   | Monétisation immédiate    |
-| 🟠 **P1** | Stripe Subscriptions pour Premium 29€ / Élite 49€ + webhook                                                                | Récurrent mensuel         |
-| 🟠 **P1** | Vérification OTP SMS via Twilio sur formulaire `/projet`                                                                   | Qualité des leads         |
-| 🟡 **P2** | Notifications email (puis SMS) artisan quand un lead match                                                                 | Activation artisan        |
-| 🟡 **P2** | Page `/a-propos` ou `/investisseurs` reprenant le pitch                                                                    | Crédibilité               |
-
+4. **Mot de passe oublié** sur `/auth` (onglet connexion) + nouvelle page `/reset-password` (publique). Email Supabase natif — désactivé tant que SMTP non configuré, le bouton restera mais avec message "Bientôt disponible" pour cohérence avec ta consigne "pas de vérif email pour l'instant".
+5. **Google OAuth** sur `/auth` via `lovable.auth.signInWithOAuth("google", ...)` + appel `supabase--configure_social_auth`. (Facebook non supporté nativement — je ne l'ajoute pas.)
+6. **Pas d'OTP SMS** sur `/projet`: conformément à ta consigne, on garde le tunnel actuel sans vérification téléphone. Je laisse un TODO clair dans le code pour brancher l'email de confirmation plus tard.
 
 ---
 
-### 📋 Plan d'action proposé (à approuver)
+### Lot 3 — Pages manquantes (MOYEN)
 
-Je propose de traiter dans cet ordre, en **un sprint = un livrable** :
+7. **`/sos`** — page d'urgence 24/7 avec CTA WhatsApp/téléphone (placeholder neutre tant que pas de numéro).
+8. **`/contact-pro`** — landing Agences/Syndics avec formulaire de pré-inscription (déjà câblé via `proInquiries`, juste vérifier que la page existe et l'enrichir si vide).
+9. **`/comment-ca-marche`** — ajouter un onglet/section "Parcours artisan" (inscription → vérif docs → zone → leads → crédits).
+10. **Pages légales** — vérifier `/mentions-legales`, `/confidentialite`, `/cgu` et compléter le contenu si vide (trames standard plateforme de mise en relation FR).
 
-1. **Sprint A — Alignement tarifaire (sans paiement)**
-  Refondre `/tarifs` et `/abonnements` pour matcher le dossier exactement (3 packs crédits, 3 abonnements avec rayons et prix, grille de coût par type de lead). Mettre à jour les seeds DB pour les tarifs serveurs.
-2. **Sprint B — Stripe achat de crédits**
-  Activer Stripe via le connecteur Lovable, créer une server function `create-checkout` + webhook `/api/public/stripe-webhook`, créditer le wallet à la confirmation.
-3. **Sprint C — Stripe abonnements Premium/Élite**
-  Subscriptions mensuelles, mise à jour `artisan_subscriptions.tier` via webhook, gestion résiliation.
-4. **Sprint D — OTP SMS (Twilio)**
-  Server function `send-otp` + `verify-otp`, branchement à l'étape 4 du tunnel `/projet`.
-5. **Sprint E — Notifications leads + page pitch**
-  Email transactionnel artisan sur nouveau lead matchant + page `/a-propos` reprenant le dossier.
+---
 
-**Question** : on commence par le **Sprint A** seul (alignement visuel sans payer encore), ou je groupe **A + B** (alignement + Stripe crédits) en un seul lot ?  on commence par tout mais retire sms on remplacera par email. Je configurerai stripe dans les parametres admin
+### Lot 4 — SEO & marque (MOYEN)
+
+11. **Métadonnées** — passer en revue chaque route et écrire title/description uniques ciblés Guadeloupe (mots-clés: artisan Guadeloupe, devis travaux 971, etc.). Les pages SEO `/artisan/[metier]/[commune]` existent déjà — je vérifierai juste leurs meta + schema LocalBusiness.
+12. **Nom de marque** — **décision à prendre** (cf. question ci-dessous) avant remplacement global "BTP Guada" → nom retenu.
+
+---
+
+### Hors scope (déjà fait ou exclu par tes consignes)
+
+- Page /tarifs + packs crédits + abonnements ✅
+- Dashboard artisan + wallet + zone ✅
+- Tunnel inscription artisan (via `/auth` rôle artisan + onboarding checklist) ✅
+- Champ "Référence interne" agences/syndics ✅
+- Dispatch 3 artisans max + contestation 48h + remboursement crédits ✅
+- Stripe — configuration via panneau admin (toi)
+- OTP SMS et notifications SMS — exclus (sera email)
+- Vérifications email — désactivées pour l'instant
+
+---
+
+### Questions avant exécution
+
+1. **Nom de marque définitif**: "BTP Guada", "ArtisansGP", ou autre ? (impacte header/footer/SEO partout)
+2. **Footer téléphone**: je masque complètement la ligne, ou je mets un lien WhatsApp avec un numéro que tu me donnes ?
+3. **Lot 1 (crédibilité) seul d'abord**, puis je propose les lots 2-4 ? Ou **je fais les 4 lots d'un coup** ?
