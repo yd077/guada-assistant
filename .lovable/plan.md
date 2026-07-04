@@ -1,64 +1,63 @@
-## Plan de réponse à l'audit
+## Réponse à l'audit — état actuel et reste à faire
 
-Note: plusieurs points de l'audit sont **déjà livrés** dans le code (page /tarifs avec packs crédits + abonnements, dashboard artisan + wallet, rôle client/artisan à l'inscription, champ `internal_ref` pour agences/syndics, pages légales, dispatch 3 artisans max, contestation 48h, SEO `/artisan/[metier]/[commune]`). Le plan ci-dessous traite uniquement le **reste réellement manquant**, en respectant tes choix actés: **pas de SMS** (remplacé par email plus tard) et **vérifications email désactivées** jusqu'au SMTP.
-
----
-
-### Lot 1 — Crédibilité (BLOQUANT, priorité 1)
-
-1. **Homepage — supprimer données fictives**
-   - Masquer la section stats `0+ / 0+ / 0 / 0%` (la retirer tant qu'on n'a pas de vraies données).
-   - Remplacer la section "Artisans à la une" (qui lit `ARTISANS` fictifs) par un état vide premium: "Nos premiers artisans vérifiés arrivent bientôt" + CTA `Devenir partenaire` / `Soumettre un projet`.
-   - Garder les compteurs `count` des métiers mais les remplacer par des libellés neutres (sans nombre inventé).
-
-2. **Footer — placeholders**
-   - Retirer le numéro `+590 590 00 00 00` (masquer la ligne tant qu'aucun numéro réel).
-   - Garder `contact@btp-guada.fr` (à toi de confirmer la boîte; sinon je la masquerai aussi sur demande).
-   - Retirer les liens morts du footer ou les pointer vers une vraie page (cf. Lot 3).
-
-3. **Badge "Edit with Lovable"** — je le masquerai côté projet (option Pro requise).
+Ce rapport reprend les 20 points de l'audit. Une grande partie a déjà été livrée dans les tours précédents. Ce plan liste **uniquement ce qui reste**, plus les décisions à trancher.
 
 ---
 
-### Lot 2 — Auth & parcours (BLOQUANT/MOYEN)
+### Déjà livré (à valider visuellement, aucune action requise ici)
 
-4. **Mot de passe oublié** sur `/auth` (onglet connexion) + nouvelle page `/reset-password` (publique). Email Supabase natif — désactivé tant que SMTP non configuré, le bouton restera mais avec message "Bientôt disponible" pour cohérence avec ta consigne "pas de vérif email pour l'instant".
-5. **Google OAuth** sur `/auth` via `lovable.auth.signInWithOAuth("google", ...)` + appel `supabase--configure_social_auth`. (Facebook non supporté nativement — je ne l'ajoute pas.)
-6. **Pas d'OTP SMS** sur `/projet`: conformément à ta consigne, on garde le tunnel actuel sans vérification téléphone. Je laisse un TODO clair dans le code pour brancher l'email de confirmation plus tard.
-
----
-
-### Lot 3 — Pages manquantes (MOYEN)
-
-7. **`/sos`** — page d'urgence 24/7 avec CTA WhatsApp/téléphone (placeholder neutre tant que pas de numéro).
-8. **`/contact-pro`** — landing Agences/Syndics avec formulaire de pré-inscription (déjà câblé via `proInquiries`, juste vérifier que la page existe et l'enrichir si vide).
-9. **`/comment-ca-marche`** — ajouter un onglet/section "Parcours artisan" (inscription → vérif docs → zone → leads → crédits).
-10. **Pages légales** — vérifier `/mentions-legales`, `/confidentialite`, `/cgu` et compléter le contenu si vide (trames standard plateforme de mise en relation FR).
-
----
-
-### Lot 4 — SEO & marque (MOYEN)
-
-11. **Métadonnées** — passer en revue chaque route et écrire title/description uniques ciblés Guadeloupe (mots-clés: artisan Guadeloupe, devis travaux 971, etc.). Les pages SEO `/artisan/[metier]/[commune]` existent déjà — je vérifierai juste leurs meta + schema LocalBusiness.
-12. **Nom de marque** — **décision à prendre** (cf. question ci-dessous) avant remplacement global "BTP Guada" → nom retenu.
+- Stats homepage à 0 → **section supprimée** (option A choisie).
+- Faux profils "Artisans à la une" → remplacés par un bloc "Nos premiers artisans vérifiés arrivent bientôt" + CTA partenaire / projet.
+- Téléphone placeholder `+590 590 00 00 00` → **retiré du footer et des mentions légales**.
+- Badge "Edit with Lovable" → **masqué** (set_badge_visibility).
+- Page `/tarifs` (packs 50/150/500 € + abonnements 0/29/49 €) → présente.
+- Dashboard artisan + wallet + zone d'intervention → présents.
+- Rôle client/artisan à l'inscription (`/auth`) → présent.
+- Champ "Référence interne" conditionnel agences/syndics → présent dans `/projet`.
+- Dispatch max 3 artisans + contestation 48 h + remboursement crédits → présents côté service.
+- Pages `/mentions-legales`, `/confidentialite`, `/cgu` → contenu réel via `LegalLayout`.
+- Pages `/sos`, `/contact-pro`, `/a-propos`, `/comment-ca-marche` (avec parcours artisan ajouté) → présentes.
+- SEO par métier × commune (`/artisan/$metier/$commune`) + sitemap + robots → présents.
+- Lien "Mot de passe oublié" + page `/reset-password` → ajoutés.
 
 ---
 
-### Hors scope (déjà fait ou exclu par tes consignes)
+### Reste à faire
 
-- Page /tarifs + packs crédits + abonnements ✅
-- Dashboard artisan + wallet + zone ✅
-- Tunnel inscription artisan (via `/auth` rôle artisan + onboarding checklist) ✅
-- Champ "Référence interne" agences/syndics ✅
-- Dispatch 3 artisans max + contestation 48h + remboursement crédits ✅
-- Stripe — configuration via panneau admin (toi)
-- OTP SMS et notifications SMS — exclus (sera email)
-- Vérifications email — désactivées pour l'instant
+**Lot 1 — Google OAuth (audit 3.2)**
+
+1. Activer le provider Google via `supabase--configure_social_auth`.
+2. Ajouter un bouton "Continuer avec Google" sur `/auth` (onglets connexion + inscription) via le helper `lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin })`.
+3. Router post-OAuth : lecture de la session, redirection vers `/dashboard` (artisan) ou `/` (client).
+
+Facebook non supporté nativement par Lovable Cloud — je ne l'ajoute pas.
+
+**Lot 2 — SEO & marque (audit 5.2, 6)**
+
+4. **Nom de marque** : décision à prendre (voir question ci-dessous). Sans réponse, je conserve "BTP Guada" partout.
+5. Vérifier/rédiger meta title + description uniques pour chaque route restante, en cohérence avec les mots-clés du BP ("artisan Guadeloupe", "devis travaux 971", "plombier urgence Guadeloupe"). Ajouter `canonical` + `og:url` sur les leaves qui n'en ont pas encore.
+
+**Lot 3 — Vérification mobile (audit 5.3)**
+
+6. Test Playwright headless (375×812 iOS, 412×914 Android) sur `/`, `/projet` (les 4 étapes), `/auth`, `/tarifs`, `/dashboard`. Captures d'écran + correction des zones de clic < 44 px et débordements éventuels.
+
+**Lot 4 — Contact email opérationnel (audit 1.5)**
+
+7. Point de confirmation utilisateur : la boîte `contact@btp-guada.fr` est-elle réellement active ? Sinon, je la remplace par une adresse temporaire fournie, ou je masque la ligne email du footer.
 
 ---
 
-### Questions avant exécution
+### Explicitement exclus (conformément à tes consignes précédentes)
 
-1. **Nom de marque définitif**: "BTP Guada", "ArtisansGP", ou autre ? (impacte header/footer/SEO partout)
-2. **Footer téléphone**: je masque complètement la ligne, ou je mets un lien WhatsApp avec un numéro que tu me donnes ?
-3. **Lot 1 (crédibilité) seul d'abord**, puis je propose les lots 2-4 ? Ou **je fais les 4 lots d'un coup** ?
+- **OTP SMS sur `/projet`** (audit 2.3) : tu as dit "retire SMS, on remplacera par email plus tard". Statu quo — pas d'OTP pour l'instant.
+- **Envois email transactionnels** (audit 2.7, réinit mdp) : désactivés jusqu'à la configuration du SMTP.
+- **Configuration Stripe** (audit 2.2) : tu la fais toi-même via les paramètres admin. Le webhook et les server-fns sont en place côté code.
+
+---
+
+### Questions bloquantes avant exécution
+
+1. **Nom de marque définitif** — "BTP Guada" (garder), "ArtisansGP", "Plateforme BTP & Services Guadeloupe", ou autre ? (impact : header, footer, meta, JSON-LD, mentions légales, emails futurs)
+2. **Google OAuth** — je l'active maintenant ? (Facebook n'est pas dispo nativement, je le laisse de côté)
+3. **Email `contact@btp-guada.fr`** — active et surveillée, ou à remplacer / masquer ?
+4. **Test mobile Playwright** — je le lance après les corrections ci-dessus, ou uniquement à la fin ?
