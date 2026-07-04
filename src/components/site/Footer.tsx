@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -100,10 +100,7 @@ export function Footer() {
                 <MapPin className="mt-0.5 h-4 w-4 flex-none text-accent" />
                 <span>Pointe-à-Pitre, Guadeloupe</span>
               </li>
-              <li className="flex items-start gap-2">
-                <Phone className="mt-0.5 h-4 w-4 flex-none text-accent" />
-                <a href="tel:+590590000000" className="hover:text-white">+590 590 00 00 00</a>
-              </li>
+              {/* Ligne téléphone masquée tant qu'un numéro opérationnel n'est pas fourni. */}
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-none text-accent" />
                 <a href="mailto:contact@btp-guada.fr" className="hover:text-white">contact@btp-guada.fr</a>

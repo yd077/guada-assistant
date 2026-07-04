@@ -25,7 +25,7 @@ export const Route = createFileRoute("/mentions-legales")({
               <p><strong>BTP Guada</strong> — Plateforme de mise en relation BTP en Guadeloupe.</p>
               <p>Siège social : Pointe-à-Pitre, 97110 Guadeloupe (France).</p>
               <p>Email : contact@btp-guada.fr</p>
-              <p>Téléphone : +590 590 00 00 00</p>
+              {/* Téléphone masqué tant qu'un numéro opérationnel n'est pas fourni. */}
               <p>Directeur de la publication : l'éditeur du site.</p>
             </>
           ),
