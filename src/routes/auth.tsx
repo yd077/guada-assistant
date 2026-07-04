@@ -7,6 +7,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Mail, Lock, User, Phone, ArrowRight, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
@@ -131,6 +132,23 @@ function AuthPage() {
     setInfo(
       "Compte créé. Si la confirmation email est activée, vérifiez votre boîte. Sinon vous êtes déjà connecté·e.",
     );
+  };
+
+  const handleGoogle = async () => {
+    setError(null);
+    setInfo(null);
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}${search.redirect ?? "/"}`,
+      },
+    });
+    setLoading(false);
+    if (error) {
+      toast.error("Connexion Google indisponible : activez le provider Google dans les paramètres Supabase.");
+      setError(error.message);
+    }
   };
 
   return (
