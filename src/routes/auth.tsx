@@ -198,6 +198,14 @@ function AuthPage() {
                 name="password"
                 type="password"
               />
+              <div className="flex justify-end -mt-2">
+                <Link
+                  to="/reset-password"
+                  className="text-xs font-medium text-emerald hover:underline"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
               <SubmitBtn loading={loading}>Se connecter</SubmitBtn>
             </form>
           ) : (

@@ -3,10 +3,8 @@ import { useState } from "react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { HeroSlideshow } from "@/components/site/HeroSlideshow";
-import { CountUp } from "@/components/site/CountUp";
 import { Reveal } from "@/components/site/Reveal";
-import { ArtisanCard } from "@/components/site/ArtisanCard";
-import { ARTISANS, SPECIALTIES, COMMUNES } from "@/data/artisans";
+import { SPECIALTIES, COMMUNES } from "@/data/artisans";
 import {
   Search,
   MapPin,
@@ -50,14 +48,14 @@ export const Route = createFileRoute("/")({
 });
 
 const TRADES = [
-  { icon: Hammer, name: "Maçonnerie", count: 142 },
-  { icon: Zap, name: "Électricité", count: 98 },
-  { icon: Wrench, name: "Plomberie", count: 87 },
-  { icon: PaintBucket, name: "Peinture", count: 64 },
-  { icon: Trees, name: "Paysagisme", count: 53 },
-  { icon: Sofa, name: "Architecture d'intérieur", count: 31 },
-  { icon: HomeIcon, name: "Couverture", count: 42 },
-  { icon: Sparkles, name: "Rénovation", count: 76 },
+  { icon: Hammer, name: "Maçonnerie" },
+  { icon: Zap, name: "Électricité" },
+  { icon: Wrench, name: "Plomberie" },
+  { icon: PaintBucket, name: "Peinture" },
+  { icon: Trees, name: "Paysagisme" },
+  { icon: Sofa, name: "Architecture d'intérieur" },
+  { icon: HomeIcon, name: "Couverture" },
+  { icon: Sparkles, name: "Rénovation" },
 ];
 
 function HomePage() {
@@ -183,24 +181,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* KPI BAND */}
-      <section className="bg-midnight py-20 text-midnight-foreground">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-12 px-6 md:grid-cols-4">
-          {[
-            { end: 480, suffix: "+", label: "Artisans vérifiés" },
-            { end: 2300, suffix: "+", label: "Chantiers réalisés" },
-            { end: 32, label: "Communes couvertes" },
-            { end: 98, suffix: "%", label: "Clients satisfaits" },
-          ].map((stat) => (
-            <Reveal key={stat.label} className="text-center">
-              <CountUp end={stat.end} suffix={stat.suffix ?? ""} />
-              <p className="mt-2 text-sm uppercase tracking-[0.18em] text-white/60">
-                {stat.label}
-              </p>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+      {/* KPI band retiré tant qu'aucune donnée réelle n'est disponible. */}
 
       {/* TRADES */}
       <section className="py-24">
@@ -232,7 +213,7 @@ function HomePage() {
                   </span>
                   <div>
                     <p className="font-serif text-xl text-foreground">{t.name}</p>
-                    <p className="text-sm text-muted-foreground">{t.count} artisans</p>
+                    <p className="text-sm text-muted-foreground">Artisans vérifiés</p>
                   </div>
                   <span className="mt-auto inline-flex items-center text-xs font-medium text-emerald opacity-0 transition-opacity group-hover:opacity-100">
                     Explorer <ChevronRight className="h-3 w-3" />
@@ -289,33 +270,38 @@ function HomePage() {
         </div>
       </section>
 
-      {/* FEATURED ARTISANS */}
+      {/* FEATURED ARTISANS — état d'attente tant que le réseau se constitue */}
       <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <Reveal className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-xl">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald">
-                Artisans à la une
-              </span>
-              <h2 className="mt-3 font-serif text-4xl md:text-5xl text-balance">
-                Des talents <span className="italic text-emerald">d'exception</span>
-              </h2>
+        <div className="mx-auto max-w-5xl px-6">
+          <Reveal className="text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald">
+              Réseau d'artisans
+            </span>
+            <h2 className="mt-3 font-serif text-4xl md:text-5xl text-balance">
+              Nos premiers artisans vérifiés{" "}
+              <span className="italic text-emerald">arrivent bientôt</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+              Nous constituons actuellement le réseau d'artisans BTP le plus exigeant
+              de Guadeloupe. Kbis, décennale et références chantier sont vérifiés
+              avant chaque référencement.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/auth"
+                search={{ mode: "signup" } as never}
+                className="inline-flex items-center gap-2 rounded-full bg-emerald px-6 py-3 text-sm font-medium text-emerald-foreground transition hover:bg-emerald/90"
+              >
+                Devenir partenaire <ChevronRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/projet"
+                className="inline-flex items-center gap-2 rounded-full border border-emerald px-6 py-3 text-sm font-medium text-emerald transition hover:bg-emerald/5"
+              >
+                Soumettre un projet
+              </Link>
             </div>
-            <Link
-              to="/recherche"
-              className="inline-flex items-center gap-1 text-sm font-medium text-emerald hover:gap-2 transition-all"
-            >
-              Voir tous les artisans <ChevronRight className="h-4 w-4" />
-            </Link>
           </Reveal>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {ARTISANS.map((a, i) => (
-              <Reveal key={a.id} delay={i * 0.05}>
-                <ArtisanCard artisan={a} />
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
