@@ -63,20 +63,22 @@ export function HeroSlideshow() {
         }}
       />
 
-      {/* Slide indicators */}
-      <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-2.5">
+      {/* Slide indicators — 44px hit area, thin visual bar */}
+      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-1">
         {SLIDES.map((_, i) => (
           <button
             key={i}
             type="button"
             onClick={() => setIndex(i)}
             aria-label={`Slide ${i + 1}`}
-            className={`h-[3px] rounded-full transition-all duration-500 ${
-              i === index
-                ? "w-12 bg-accent"
-                : "w-5 bg-white/35 hover:bg-white/70"
-            }`}
-          />
+            className="group flex h-11 items-center justify-center px-2"
+          >
+            <span
+              className={`block h-[3px] rounded-full transition-all duration-500 ${
+                i === index ? "w-12 bg-accent" : "w-5 bg-white/35 group-hover:bg-white/70"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>

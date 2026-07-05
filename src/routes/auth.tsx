@@ -172,7 +172,7 @@ function AuthPage() {
             <button
               type="button"
               onClick={() => setTab("signin")}
-              className={`rounded-full px-4 py-2 font-medium transition ${
+              className={`rounded-full px-4 py-2.5 min-h-11 font-medium transition ${
                 tab === "signin"
                   ? "bg-emerald text-emerald-foreground shadow-glow"
                   : "text-muted-foreground hover:text-foreground"
@@ -183,7 +183,7 @@ function AuthPage() {
             <button
               type="button"
               onClick={() => setTab("signup")}
-              className={`rounded-full px-4 py-2 font-medium transition ${
+              className={`rounded-full px-4 py-2.5 min-h-11 font-medium transition ${
                 tab === "signup"
                   ? "bg-emerald text-emerald-foreground shadow-glow"
                   : "text-muted-foreground hover:text-foreground"
