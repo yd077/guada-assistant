@@ -525,7 +525,7 @@ function NavButtons({
         type="button"
         onClick={onPrev}
         disabled={step === 0}
-        className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground disabled:opacity-40 ${
+        className={`inline-flex min-h-11 items-center gap-1 rounded-full px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground disabled:opacity-40 ${
           compact ? "" : ""
         }`}
       >
