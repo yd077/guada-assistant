@@ -137,7 +137,7 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className={`md:hidden rounded-md p-2 ${solid ? "text-foreground" : "text-white"}`}
+          className={`md:hidden inline-flex h-11 w-11 items-center justify-center rounded-md ${solid ? "text-foreground" : "text-white"}`}
           aria-label="Menu"
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
