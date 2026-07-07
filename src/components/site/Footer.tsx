@@ -100,7 +100,6 @@ export function Footer() {
                 <MapPin className="mt-0.5 h-4 w-4 flex-none text-accent" />
                 <span>Pointe-à-Pitre, Guadeloupe</span>
               </li>
-              {/* Ligne téléphone masquée tant qu'un numéro opérationnel n'est pas fourni. */}
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-none text-accent" />
                 <a href="mailto:contact@btp-guada.fr" className="hover:text-white">contact@btp-guada.fr</a>

@@ -3,7 +3,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Reveal } from "@/components/site/Reveal";
 import { SPECIALTIES_LIST } from "@/data/specialties";
-import { Phone, Zap, Clock, ShieldCheck, ChevronRight } from "lucide-react";
+import { Zap, Clock, ShieldCheck, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/sos")({
   head: () => ({
@@ -29,7 +29,6 @@ export const Route = createFileRoute("/sos")({
           name: "SOS BTP Guadeloupe",
           areaServed: { "@type": "AdministrativeArea", name: "Guadeloupe" },
           hoursAvailable: "Mo-Su 00:00-23:59",
-          telephone: "+590590000000",
           url: "/sos",
         }),
       },
@@ -69,21 +68,6 @@ function SosHubPage() {
               Une fuite, une panne, une porte claquée ? Intervention en moins de
               2h, partout en Guadeloupe.
             </p>
-
-            <a
-              href="tel:+590590000000"
-              className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-destructive px-8 py-6 text-destructive-foreground shadow-glow transition hover:scale-[1.02]"
-            >
-              <Phone className="h-7 w-7" />
-              <div className="text-left">
-                <div className="text-xs uppercase tracking-wider opacity-80">
-                  Appel direct
-                </div>
-                <div className="font-serif text-2xl md:text-4xl">
-                  0590 00 00 00
-                </div>
-              </div>
-            </a>
 
             <div className="mx-auto mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
               <Promise icon={<Clock className="h-4 w-4" />} text="Intervention < 2h" />
