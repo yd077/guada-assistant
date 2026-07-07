@@ -87,7 +87,7 @@ function AuthPage() {
       );
       return;
     }
-    navigate({ to: search.redirect ?? "/" });
+    navigate({ to: search.redirect ?? "/dashboard" });
   };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
