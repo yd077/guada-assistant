@@ -6,7 +6,7 @@ import { findSpecialtyBySlug, SPECIALTIES_LIST } from "@/data/specialties";
 import { COMMUNES_LIST } from "@/data/communes";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Phone, Zap, Clock, ShieldCheck, ChevronRight, Loader2 } from "lucide-react";
+import { Zap, Clock, ShieldCheck, ChevronRight, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/sos/$metier")({
   loader: ({ params }) => {
@@ -106,17 +106,6 @@ function SosPage() {
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-[2fr_3fr]">
-            <a
-              href="tel:+590590000000"
-              className="flex flex-col items-center justify-center rounded-2xl bg-destructive px-6 py-8 text-destructive-foreground shadow-glow transition hover:scale-[1.02]"
-            >
-              <Phone className="h-8 w-8" />
-              <span className="mt-2 text-xs uppercase tracking-wider opacity-80">
-                Appel direct
-              </span>
-              <span className="font-serif text-3xl md:text-4xl">0590 00 00 00</span>
-            </a>
-
             <form
               onSubmit={submit}
               className="rounded-2xl border border-border bg-card p-5"
