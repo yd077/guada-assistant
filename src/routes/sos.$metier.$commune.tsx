@@ -73,7 +73,7 @@ function SosCommunePage() {
     });
     setBusy(false);
     if (error) {
-      toast.error("Envoi impossible — appelez le numéro.");
+      toast.error("Envoi impossible — merci de réessayer.");
       return;
     }
     toast.success("Demande envoyée — un artisan va vous rappeler.");

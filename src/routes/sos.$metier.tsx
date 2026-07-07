@@ -82,7 +82,7 @@ function SosPage() {
     setBusy(false);
     if (error) {
       console.error(error);
-      toast.error("Envoi impossible — appelez le numéro ci-dessous.");
+      toast.error("Envoi impossible — merci de réessayer.");
       return;
     }
     toast.success("Demande envoyée — un artisan va vous rappeler.");
