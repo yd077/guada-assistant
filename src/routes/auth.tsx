@@ -59,7 +59,7 @@ function AuthPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      navigate({ to: search.redirect ?? "/" });
+      navigate({ to: search.redirect ?? "/dashboard" });
     }
   }, [authLoading, isAuthenticated, navigate, search.redirect]);
 
