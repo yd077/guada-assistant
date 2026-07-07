@@ -59,7 +59,7 @@ function AuthPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      navigate({ to: search.redirect ?? "/" });
+      navigate({ to: search.redirect ?? "/dashboard" });
     }
   }, [authLoading, isAuthenticated, navigate, search.redirect]);
 
@@ -87,7 +87,7 @@ function AuthPage() {
       );
       return;
     }
-    navigate({ to: search.redirect ?? "/" });
+    navigate({ to: search.redirect ?? "/dashboard" });
   };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -107,7 +107,7 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/dashboard`;
     const { error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
@@ -141,7 +141,7 @@ function AuthPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}${search.redirect ?? "/"}`,
+        redirectTo: `${window.location.origin}${search.redirect ?? "/dashboard"}`,
       },
     });
     setLoading(false);
