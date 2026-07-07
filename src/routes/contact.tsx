@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
+import { Mail, MapPin, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — BTP Guada" },
-      { name: "description", content: "Une question, une suggestion ? Contactez l'équipe BTP Guada par email, téléphone ou via le formulaire." },
+      { name: "description", content: "Une question, une suggestion ? Contactez l'équipe BTP Guada par email ou via le formulaire." },
       { property: "og:title", content: "Contact — BTP Guada" },
       { property: "og:description", content: "Joignez l'équipe BTP Guada — réponse sous 24h." },
     ],
@@ -66,7 +66,6 @@ function ContactPage() {
           <Reveal>
             <div className="space-y-4 lg:col-span-2">
               <ContactCard icon={Mail} label="Email" value="contact@btp-guada.fr" href="mailto:contact@btp-guada.fr" />
-              <ContactCard icon={Phone} label="Téléphone" value="+590 590 00 00 00" href="tel:+590590000000" />
               <ContactCard icon={MapPin} label="Adresse" value="Pointe-à-Pitre, Guadeloupe" />
               <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
                 <h3 className="font-serif text-lg">Horaires</h3>
