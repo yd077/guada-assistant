@@ -107,7 +107,7 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/dashboard`;
     const { error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
