@@ -10,7 +10,7 @@ export const Route = createFileRoute("/succes")({
   }),
   head: () => ({
     meta: [
-      { title: "Demande envoyée — BTP Guada" },
+      { title: "Demande envoyée — Devis Connect" },
       {
         name: "description",
         content:

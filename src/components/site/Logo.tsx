@@ -24,7 +24,7 @@ export function Logo({ light = false }: { light?: boolean }) {
             light ? "text-white" : "text-foreground"
           }`}
         >
-          BTP Guada
+          Devis Connect
         </span>
         <span
           className={`text-[10px] uppercase tracking-[0.2em] ${

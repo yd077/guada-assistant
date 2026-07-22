@@ -19,13 +19,13 @@ import {
 export const Route = createFileRoute("/contact-pro")({
   head: () => ({
     meta: [
-      { title: "Compte Pro Agences & Syndics — BTP Guada" },
+      { title: "Compte Pro Agences & Syndics — Devis Connect" },
       {
         name: "description",
         content:
           "Volume élevé, SLA garantis, tarifs négociés : ouvrez un compte Pro pour agences immobilières et syndics de copropriété en Guadeloupe.",
       },
-      { property: "og:title", content: "Compte Pro Agences & Syndics — BTP Guada" },
+      { property: "og:title", content: "Compte Pro Agences & Syndics — Devis Connect" },
       {
         property: "og:description",
         content:

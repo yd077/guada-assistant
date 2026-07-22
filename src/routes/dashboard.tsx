@@ -11,7 +11,7 @@ import { Loader2, ShieldCheck } from "lucide-react";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Mon espace — BTP Guada" },
+      { title: "Mon espace — Devis Connect" },
       {
         name: "description",
         content: "Gérez vos projets, vos demandes de devis et votre profil.",

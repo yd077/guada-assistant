@@ -9,10 +9,10 @@ import { Reveal } from "@/components/site/Reveal";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — BTP Guada" },
-      { name: "description", content: "Une question, une suggestion ? Contactez l'équipe BTP Guada par email ou via le formulaire." },
-      { property: "og:title", content: "Contact — BTP Guada" },
-      { property: "og:description", content: "Joignez l'équipe BTP Guada — réponse sous 24h." },
+      { title: "Contact — Devis Connect" },
+      { name: "description", content: "Une question, une suggestion ? Contactez l'équipe Devis Connect par email ou via le formulaire." },
+      { property: "og:title", content: "Contact — Devis Connect" },
+      { property: "og:description", content: "Joignez l'équipe Devis Connect — réponse sous 24h." },
     ],
   }),
   component: ContactPage,
@@ -65,7 +65,7 @@ function ContactPage() {
         <div className="mt-14 grid gap-8 lg:grid-cols-5">
           <Reveal>
             <div className="space-y-4 lg:col-span-2">
-              <ContactCard icon={Mail} label="Email" value="contact@btp-guada.fr" href="mailto:contact@btp-guada.fr" />
+              <ContactCard icon={Mail} label="Email" value="contact@devis-connect.fr" href="mailto:contact@devis-connect.fr" />
               <ContactCard icon={MapPin} label="Adresse" value="Pointe-à-Pitre, Guadeloupe" />
               <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
                 <h3 className="font-serif text-lg">Horaires</h3>

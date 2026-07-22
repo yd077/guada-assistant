@@ -5,9 +5,9 @@ import { LegalLayout } from "@/components/site/LegalLayout";
 export const Route = createFileRoute("/confidentialite")({
   head: () => ({
     meta: [
-      { title: "Politique de confidentialité — BTP Guada" },
-      { name: "description", content: "Comment BTP Guada collecte, traite et protège vos données personnelles, conformément au RGPD." },
-      { property: "og:title", content: "Politique de confidentialité — BTP Guada" },
+      { title: "Politique de confidentialité — Devis Connect" },
+      { name: "description", content: "Comment Devis Connect collecte, traite et protège vos données personnelles, conformément au RGPD." },
+      { property: "og:title", content: "Politique de confidentialité — Devis Connect" },
       { property: "og:description", content: "RGPD : finalités, durées, droits et contact DPO." },
     ],
   }),
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/confidentialite")({
       eyebrow="RGPD"
       title="Politique de confidentialité"
       icon={Lock}
-      intro="BTP Guada s'engage à protéger vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés."
+      intro="Devis Connect s'engage à protéger vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés."
       sections={[
         {
           title: "Données collectées",
@@ -68,7 +68,7 @@ export const Route = createFileRoute("/confidentialite")({
                 <li>Portabilité de vos données.</li>
                 <li>Définition de directives post-mortem.</li>
               </ul>
-              <p>Pour exercer ces droits, écrivez à <strong>contact@btp-guada.fr</strong>. Vous pouvez également introduire une réclamation auprès de la <a href="https://www.cnil.fr" className="text-emerald hover:underline" target="_blank" rel="noopener">CNIL</a>.</p>
+              <p>Pour exercer ces droits, écrivez à <strong>contact@devis-connect.fr</strong>. Vous pouvez également introduire une réclamation auprès de la <a href="https://www.cnil.fr" className="text-emerald hover:underline" target="_blank" rel="noopener">CNIL</a>.</p>
             </>
           ),
         },

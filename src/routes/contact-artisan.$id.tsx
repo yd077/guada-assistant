@@ -21,8 +21,8 @@ export const Route = createFileRoute("/contact-artisan/$id")({
       meta: [
         {
           title: a
-            ? `Contacter ${a.name} — BTP Guada`
-            : "Contacter un artisan — BTP Guada",
+            ? `Contacter ${a.name} — Devis Connect`
+            : "Contacter un artisan — Devis Connect",
         },
         {
           name: "description",

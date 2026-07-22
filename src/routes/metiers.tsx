@@ -8,7 +8,7 @@ import { Hammer, ChevronRight } from "lucide-react";
 export const Route = createFileRoute("/metiers")({
   head: () => ({
     meta: [
-      { title: "Tous les métiers du BTP en Guadeloupe — BTP Guada" },
+      { title: "Tous les métiers du BTP en Guadeloupe — Devis Connect" },
       {
         name: "description",
         content:

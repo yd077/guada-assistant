@@ -25,7 +25,7 @@ export const Route = createFileRoute("/artisan/$id")({
   },
   head: ({ loaderData }) => {
     const a = loaderData?.artisan;
-    if (!a) return { meta: [{ title: "Artisan introuvable — BTP Guada" }] };
+    if (!a) return { meta: [{ title: "Artisan introuvable — Devis Connect" }] };
     const ld: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
@@ -52,7 +52,7 @@ export const Route = createFileRoute("/artisan/$id")({
     }
     return {
       meta: [
-        { title: `${a.name} — ${a.specialty} à ${a.location} · BTP Guada` },
+        { title: `${a.name} — ${a.specialty} à ${a.location} · Devis Connect` },
         { name: "description", content: a.bio },
         { property: "og:title", content: `${a.name} — ${a.specialty}` },
         { property: "og:description", content: a.bio },

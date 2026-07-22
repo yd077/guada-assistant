@@ -5,10 +5,10 @@ import { LegalLayout } from "@/components/site/LegalLayout";
 export const Route = createFileRoute("/mentions-legales")({
   head: () => ({
     meta: [
-      { title: "Mentions légales — BTP Guada" },
-      { name: "description", content: "Mentions légales de la plateforme BTP Guada : éditeur, hébergeur, propriété intellectuelle." },
-      { property: "og:title", content: "Mentions légales — BTP Guada" },
-      { property: "og:description", content: "Informations légales sur l'éditeur et l'hébergeur de BTP Guada." },
+      { title: "Mentions légales — Devis Connect" },
+      { name: "description", content: "Mentions légales de la plateforme Devis Connect : éditeur, hébergeur, propriété intellectuelle." },
+      { property: "og:title", content: "Mentions légales — Devis Connect" },
+      { property: "og:description", content: "Informations légales sur l'éditeur et l'hébergeur de Devis Connect." },
     ],
   }),
   component: () => (
@@ -22,9 +22,9 @@ export const Route = createFileRoute("/mentions-legales")({
           title: "Éditeur du site",
           body: (
             <>
-              <p><strong>BTP Guada</strong> — Plateforme de mise en relation BTP en Guadeloupe.</p>
+              <p><strong>Devis Connect</strong> — Plateforme de mise en relation BTP en Guadeloupe.</p>
               <p>Siège social : Pointe-à-Pitre, 97110 Guadeloupe (France).</p>
-              <p>Email : contact@btp-guada.fr</p>
+              <p>Email : contact@devis-connect.fr</p>
               <p>Directeur de la publication : l'éditeur du site.</p>
             </>
           ),
@@ -52,9 +52,9 @@ export const Route = createFileRoute("/mentions-legales")({
           title: "Responsabilité",
           body: (
             <>
-              <p>BTP Guada agit en qualité d'intermédiaire de mise en relation. La plateforme ne réalise pas les prestations de travaux et n'est pas partie aux contrats conclus entre les clients et les artisans référencés.</p>
+              <p>Devis Connect agit en qualité d'intermédiaire de mise en relation. La plateforme ne réalise pas les prestations de travaux et n'est pas partie aux contrats conclus entre les clients et les artisans référencés.</p>
               <p>Les artisans inscrits restent seuls responsables des prestations qu'ils fournissent, de leurs assurances professionnelles et du respect de la réglementation applicable.</p>
-              <p>BTP Guada vérifie les informations déclaratives à l'inscription mais ne peut garantir leur exactitude permanente.</p>
+              <p>Devis Connect vérifie les informations déclaratives à l'inscription mais ne peut garantir leur exactitude permanente.</p>
             </>
           ),
         },

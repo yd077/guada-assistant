@@ -16,7 +16,7 @@ function originFromRequest(): string {
     const url = new URL(r.url);
     return `${url.protocol}//${url.host}`;
   } catch {
-    return "https://btp-guada.lovable.app";
+    return "https://devis-connect.fr";
   }
 }
 

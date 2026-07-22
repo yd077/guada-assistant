@@ -5,10 +5,10 @@ import { LegalLayout } from "@/components/site/LegalLayout";
 export const Route = createFileRoute("/cgu")({
   head: () => ({
     meta: [
-      { title: "Conditions générales d'utilisation — BTP Guada" },
-      { name: "description", content: "Conditions d'utilisation de la plateforme BTP Guada pour clients et artisans." },
-      { property: "og:title", content: "CGU — BTP Guada" },
-      { property: "og:description", content: "Règles d'usage de la plateforme BTP Guada." },
+      { title: "Conditions générales d'utilisation — Devis Connect" },
+      { name: "description", content: "Conditions d'utilisation de la plateforme Devis Connect pour clients et artisans." },
+      { property: "og:title", content: "CGU — Devis Connect" },
+      { property: "og:description", content: "Règles d'usage de la plateforme Devis Connect." },
     ],
   }),
   component: () => (
@@ -16,11 +16,11 @@ export const Route = createFileRoute("/cgu")({
       eyebrow="Conditions"
       title="Conditions générales d'utilisation"
       icon={FileText}
-      intro="Les présentes CGU régissent l'utilisation de la plateforme BTP Guada par les visiteurs, clients et artisans inscrits."
+      intro="Les présentes CGU régissent l'utilisation de la plateforme Devis Connect par les visiteurs, clients et artisans inscrits."
       sections={[
         {
           title: "1. Objet",
-          body: <p>BTP Guada est une plateforme en ligne de mise en relation entre des particuliers ou professionnels (clients) souhaitant réaliser des travaux et des artisans du bâtiment exerçant en Guadeloupe.</p>,
+          body: <p>Devis Connect est une plateforme en ligne de mise en relation entre des particuliers ou professionnels (clients) souhaitant réaliser des travaux et des artisans du bâtiment exerçant en Guadeloupe.</p>,
         },
         {
           title: "2. Inscription",
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/cgu")({
           title: "3. Rôle de la plateforme",
           body: (
             <>
-              <p>BTP Guada facilite la mise en relation mais n'est <strong>pas partie aux contrats</strong> conclus entre clients et artisans.</p>
+              <p>Devis Connect facilite la mise en relation mais n'est <strong>pas partie aux contrats</strong> conclus entre clients et artisans.</p>
               <p>La plateforme ne garantit ni la réalisation des prestations, ni leur qualité, ni le paiement entre les parties.</p>
             </>
           ),
@@ -64,15 +64,15 @@ export const Route = createFileRoute("/cgu")({
         },
         {
           title: "6. Modération",
-          body: <p>BTP Guada se réserve le droit de modérer, suspendre ou supprimer un compte ou un contenu en cas de manquement aux présentes CGU, de comportement abusif ou de fraude avérée.</p>,
+          body: <p>Devis Connect se réserve le droit de modérer, suspendre ou supprimer un compte ou un contenu en cas de manquement aux présentes CGU, de comportement abusif ou de fraude avérée.</p>,
         },
         {
           title: "7. Limitation de responsabilité",
-          body: <p>La responsabilité de BTP Guada ne saurait être engagée pour les dommages directs ou indirects résultant des prestations fournies par les artisans, de l'utilisation du site ou d'une indisponibilité temporaire.</p>,
+          body: <p>La responsabilité de Devis Connect ne saurait être engagée pour les dommages directs ou indirects résultant des prestations fournies par les artisans, de l'utilisation du site ou d'une indisponibilité temporaire.</p>,
         },
         {
           title: "8. Modifications",
-          body: <p>BTP Guada peut modifier les présentes CGU à tout moment. Les utilisateurs seront informés des changements substantiels par email ou notification dans leur espace.</p>,
+          body: <p>Devis Connect peut modifier les présentes CGU à tout moment. Les utilisateurs seront informés des changements substantiels par email ou notification dans leur espace.</p>,
         },
         {
           title: "9. Loi applicable",

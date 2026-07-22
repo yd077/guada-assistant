@@ -16,13 +16,13 @@ import {
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
     meta: [
-      { title: "À propos — BTP Guada, la marketplace BTP de Guadeloupe" },
+      { title: "À propos — Devis Connect, la marketplace BTP de Guadeloupe" },
       {
         name: "description",
         content:
-          "BTP Guada connecte les particuliers, entreprises et agences aux meilleurs artisans BTP de Guadeloupe : leads vérifiés, paiement à l'usage, mise en relation < 24h.",
+          "Devis Connect connecte les particuliers, entreprises et agences aux meilleurs artisans BTP de Guadeloupe : leads vérifiés, paiement à l'usage, mise en relation < 24h.",
       },
-      { property: "og:title", content: "À propos — BTP Guada" },
+      { property: "og:title", content: "À propos — Devis Connect" },
       {
         property: "og:description",
         content: "La marketplace de référence pour les chantiers BTP en Guadeloupe.",
@@ -99,7 +99,7 @@ function AboutPage() {
               <span className="italic text-emerald">enfin connecté.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              BTP Guada est la marketplace 100 % locale qui met en relation
+              Devis Connect est la marketplace 100 % locale qui met en relation
               les particuliers, entreprises, agences et syndics avec les meilleurs
               artisans du bâtiment en Guadeloupe.
             </p>
@@ -137,7 +137,7 @@ function AboutPage() {
                 plus tenable.
               </p>
               <p className="mt-3 leading-relaxed text-muted-foreground">
-                BTP Guada apporte une solution simple : <strong>vérifier les pros</strong>,{" "}
+                Devis Connect apporte une solution simple : <strong>vérifier les pros</strong>,{" "}
                 <strong>qualifier les demandes</strong>, et garantir une mise en relation
                 rapide.
               </p>

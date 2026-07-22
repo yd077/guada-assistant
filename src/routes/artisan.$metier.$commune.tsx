@@ -22,7 +22,7 @@ export const Route = createFileRoute("/artisan/$metier/$commune")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
     const { specialty, commune, artisans } = loaderData;
-    const title = `${specialty.singular} à ${commune.name} — Devis gratuit | BTP Guada`;
+    const title = `${specialty.singular} à ${commune.name} — Devis gratuit | Devis Connect`;
     const description = `Trouvez un ${specialty.singular.toLowerCase()} de confiance à ${commune.name} (Guadeloupe). ${artisans.length} professionnel${artisans.length > 1 ? "s vérifiés" : " vérifié"}, devis gratuit sous 48h.`;
 
     // JSON-LD LocalBusiness pour chaque artisan + BreadcrumbList

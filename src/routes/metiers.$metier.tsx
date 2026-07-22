@@ -14,7 +14,7 @@ export const Route = createFileRoute("/metiers/$metier")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
     const { specialty } = loaderData;
-    const title = `${specialty.singular} en Guadeloupe — Toutes les communes | BTP Guada`;
+    const title = `${specialty.singular} en Guadeloupe — Toutes les communes | Devis Connect`;
     const description = `Trouvez un ${specialty.singular.toLowerCase()} dans les 32 communes de Guadeloupe. ${specialty.description}`;
     return {
       meta: [

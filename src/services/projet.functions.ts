@@ -136,7 +136,7 @@ export const notifyArtisansOfNewLead = createServerFn({ method: "POST" })
         budget: project.budget ?? null,
         urgency: project.urgency_level ?? "normal",
         creditsCost: project.lead_price_credits ?? 8,
-        dashboardUrl: "https://btp-guada.lovable.app/dashboard",
+        dashboardUrl: "https://devis-connect.fr/dashboard",
       });
       const r = await sendEmail({ to: a.email, ...tpl });
 

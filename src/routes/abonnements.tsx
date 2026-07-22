@@ -29,13 +29,13 @@ export const Route = createFileRoute("/abonnements")({
   }),
   head: () => ({
     meta: [
-      { title: "Abonnements artisan — BTP Guada" },
+      { title: "Abonnements artisan — Devis Connect" },
       {
         name: "description",
         content:
           "Standard 0€ (5 km) · Premium 29€/mois (25 km) · Élite 49€/mois (toute la Guadeloupe). Sans engagement.",
       },
-      { property: "og:title", content: "Abonnements artisan — BTP Guada" },
+      { property: "og:title", content: "Abonnements artisan — Devis Connect" },
     ],
   }),
   component: SubscriptionsPage,

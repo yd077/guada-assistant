@@ -11,7 +11,7 @@ export const Route = createFileRoute("/succes-paiement")({
   }),
   head: () => ({
     meta: [
-      { title: "Paiement confirmé — BTP Guada" },
+      { title: "Paiement confirmé — Devis Connect" },
       { name: "robots", content: "noindex" },
     ],
   }),

@@ -7,9 +7,9 @@ import { Search, MessageSquare, Handshake, Star, ArrowRight } from "lucide-react
 export const Route = createFileRoute("/comment-ca-marche")({
   head: () => ({
     meta: [
-      { title: "Comment ça marche — BTP Guada" },
+      { title: "Comment ça marche — Devis Connect" },
       { name: "description", content: "4 étapes simples pour trouver un artisan BTP vérifié en Guadeloupe : décrivez, comparez, choisissez, évaluez." },
-      { property: "og:title", content: "Comment ça marche — BTP Guada" },
+      { property: "og:title", content: "Comment ça marche — Devis Connect" },
       { property: "og:description", content: "Trouvez un artisan BTP en 4 étapes : projet, devis, choix, avis." },
     ],
   }),

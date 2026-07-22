@@ -18,11 +18,11 @@ export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Connexion / Inscription — BTP Guada" },
+      { title: "Connexion / Inscription — Devis Connect" },
       {
         name: "description",
         content:
-          "Connectez-vous ou créez un compte pour gérer vos projets et demandes de devis sur BTP Guada.",
+          "Connectez-vous ou créez un compte pour gérer vos projets et demandes de devis sur Devis Connect.",
       },
     ],
   }),
@@ -165,7 +165,7 @@ function AuthPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             {tab === "signin"
               ? "Accédez à votre tableau de bord et suivez vos projets."
-              : "Rejoignez la communauté BTP Guada en quelques secondes."}
+              : "Rejoignez la communauté Devis Connect en quelques secondes."}
           </p>
 
           <div className="mt-8 grid grid-cols-2 gap-1 rounded-full border border-border bg-card p-1 text-sm">

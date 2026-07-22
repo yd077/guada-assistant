@@ -20,13 +20,13 @@ import {
 export const Route = createFileRoute("/projet")({
   head: () => ({
     meta: [
-      { title: "Soumettre un projet BTP — BTP Guada" },
+      { title: "Soumettre un projet BTP — Devis Connect" },
       {
         name: "description",
         content:
           "Décrivez votre projet en 4 étapes et recevez plusieurs devis d'artisans vérifiés en Guadeloupe.",
       },
-      { property: "og:title", content: "Soumettre un projet — BTP Guada" },
+      { property: "og:title", content: "Soumettre un projet — Devis Connect" },
       {
         property: "og:description",
         content: "4 étapes pour recevoir des devis d'artisans BTP vérifiés en Guadeloupe.",
