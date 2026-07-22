@@ -28,13 +28,13 @@ const HERO_IMAGE =
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "BTP Guada — L'excellence du chantier en Guadeloupe" },
+      { title: "Devis Connect — L'excellence du chantier en Guadeloupe" },
       {
         name: "description",
         content:
           "Plateforme premium d'artisans BTP vérifiés en Guadeloupe. Maçonnerie, électricité, plomberie, peinture, paysagisme. Devis gratuits sous 48h.",
       },
-      { property: "og:title", content: "BTP Guada — L'excellence du chantier en Guadeloupe" },
+      { property: "og:title", content: "Devis Connect — L'excellence du chantier en Guadeloupe" },
       {
         property: "og:description",
         content:
@@ -332,7 +332,7 @@ function HomePage() {
             <div className="group relative overflow-hidden rounded-3xl border border-border bg-card p-10 shadow-card">
               <h3 className="font-serif text-3xl md:text-4xl">Vous êtes artisan ?</h3>
               <p className="mt-3 max-w-md text-muted-foreground">
-                Rejoignez le réseau d'excellence BTP Guada et accédez à des chantiers qualifiés
+                Rejoignez le réseau d'excellence Devis Connect et accédez à des chantiers qualifiés
                 partout en Guadeloupe.
               </p>
               <Link

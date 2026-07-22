@@ -102,7 +102,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-none text-accent" />
-                <a href="mailto:contact@btp-guada.fr" className="hover:text-white">contact@btp-guada.fr</a>
+                <a href="mailto:contact@devis-connect.fr" className="hover:text-white">contact@devis-connect.fr</a>
               </li>
               <li>
                 <Link to="/contact" className="text-accent hover:text-white">
@@ -122,7 +122,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/50 md:flex-row">
-          <p>© {new Date().getFullYear()} BTP Guada — L'excellence du chantier en Guadeloupe.</p>
+          <p>© {new Date().getFullYear()} Devis Connect — L'excellence du chantier en Guadeloupe.</p>
           <div className="flex flex-wrap gap-6">
             <Link to="/mentions-legales" className="hover:text-white">Mentions légales</Link>
             <Link to="/confidentialite" className="hover:text-white">Confidentialité</Link>

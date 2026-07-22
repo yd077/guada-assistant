@@ -28,8 +28,8 @@ import {
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin — BTP Guada" },
-      { name: "description", content: "Panel d'administration BTP Guada." },
+      { title: "Admin — Devis Connect" },
+      { name: "description", content: "Panel d'administration Devis Connect." },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),

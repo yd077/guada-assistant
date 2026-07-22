@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/verifier-email/$token")({
   head: () => ({
     meta: [
-      { title: "Vérification de votre email — BTP Guada" },
+      { title: "Vérification de votre email — Devis Connect" },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),

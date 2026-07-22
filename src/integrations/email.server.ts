@@ -3,7 +3,7 @@
  * Si RESEND_API_KEY n'est pas configuré, les envois sont loggés mais ne bloquent pas.
  */
 
-const FROM_EMAIL = process.env.NOTIFICATIONS_FROM_EMAIL ?? "BTP Guada <onboarding@resend.dev>";
+const FROM_EMAIL = process.env.NOTIFICATIONS_FROM_EMAIL ?? "Devis Connect <onboarding@resend.dev>";
 
 export async function sendEmail(opts: {
   to: string;
@@ -47,14 +47,14 @@ export async function sendEmail(opts: {
 /** Template OTP projet. */
 export function renderOtpEmail(code: string, projectLocation: string) {
   return {
-    subject: `BTP Guada — Code de vérification : ${code}`,
+    subject: `Devis Connect — Code de vérification : ${code}`,
     html: `
       <div style="font-family:system-ui,-apple-system,sans-serif;max-width:520px;margin:0 auto;padding:24px">
         <h1 style="font-family:Georgia,serif;color:#0f172a;font-size:22px;margin:0 0 16px">
           Confirmez votre demande
         </h1>
         <p style="color:#475569;font-size:14px;line-height:1.6">
-          Pour valider votre projet à <strong>${projectLocation}</strong>, saisissez ce code dans BTP Guada :
+          Pour valider votre projet à <strong>${projectLocation}</strong>, saisissez ce code dans Devis Connect :
         </p>
         <div style="margin:24px 0;padding:20px;background:#ecfdf5;border:1px solid #10b981;border-radius:12px;text-align:center">
           <span style="font-size:36px;font-weight:700;letter-spacing:8px;color:#047857;font-family:monospace">${code}</span>
@@ -62,7 +62,7 @@ export function renderOtpEmail(code: string, projectLocation: string) {
         <p style="color:#94a3b8;font-size:12px">Code valable 15 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
       </div>
     `,
-    text: `Code de vérification BTP Guada : ${code} (valable 15 min).`,
+    text: `Code de vérification Devis Connect : ${code} (valable 15 min).`,
   };
 }
 
@@ -104,7 +104,7 @@ export function renderNewLeadEmail(opts: {
           Voir le lead →
         </a>
         <p style="color:#94a3b8;font-size:11px;margin-top:24px">
-          Vous recevez cet email car vous êtes inscrit·e sur BTP Guada. <a href="${opts.dashboardUrl}" style="color:#94a3b8">Préférences</a>.
+          Vous recevez cet email car vous êtes inscrit·e sur Devis Connect. <a href="${opts.dashboardUrl}" style="color:#94a3b8">Préférences</a>.
         </p>
       </div>
     `,

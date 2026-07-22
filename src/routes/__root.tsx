@@ -37,7 +37,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BTP Guada — L'excellence du chantier en Guadeloupe" },
+      { title: "Devis Connect — L'excellence du chantier en Guadeloupe" },
       {
         name: "description",
         content:
@@ -45,8 +45,8 @@ export const Route = createRootRoute({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "BTP Guada — L'excellence du chantier en Guadeloupe" },
-      { name: "twitter:title", content: "BTP Guada — L'excellence du chantier en Guadeloupe" },
+      { property: "og:title", content: "Devis Connect — L'excellence du chantier en Guadeloupe" },
+      { name: "twitter:title", content: "Devis Connect — L'excellence du chantier en Guadeloupe" },
       { property: "og:description", content: "Trouvez les meilleurs artisans BTP vérifiés en Guadeloupe : maçonnerie, électricité, plomberie, peinture, paysagisme. Devis gratuits." },
       { name: "twitter:description", content: "Trouvez les meilleurs artisans BTP vérifiés en Guadeloupe : maçonnerie, électricité, plomberie, peinture, paysagisme. Devis gratuits." },
     ],

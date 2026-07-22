@@ -9,11 +9,11 @@ import { Mail, Lock, ArrowRight, Loader2, KeyRound } from "lucide-react";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Réinitialiser mon mot de passe — BTP Guada" },
+      { title: "Réinitialiser mon mot de passe — Devis Connect" },
       {
         name: "description",
         content:
-          "Réinitialisez le mot de passe de votre compte BTP Guada en toute sécurité.",
+          "Réinitialisez le mot de passe de votre compte Devis Connect en toute sécurité.",
       },
     ],
   }),

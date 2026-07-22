@@ -15,13 +15,13 @@ import {
 export const Route = createFileRoute("/tarifs")({
   head: () => ({
     meta: [
-      { title: "Tarifs — BTP Guada" },
+      { title: "Tarifs — Devis Connect" },
       {
         name: "description",
         content:
           "100% gratuit pour les clients. Pour les artisans : packs de crédits dès 50€ et abonnements Premium 29€ / Élite 49€.",
       },
-      { property: "og:title", content: "Tarifs — BTP Guada" },
+      { property: "og:title", content: "Tarifs — Devis Connect" },
       {
         property: "og:description",
         content: "Packs de crédits + abonnements transparents. Sans engagement.",

@@ -17,7 +17,7 @@ export const Route = createFileRoute("/artisan/$metier")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
     const { specialty } = loaderData;
-    const title = `${specialty.singular} en Guadeloupe — Devis gratuit | BTP Guada`;
+    const title = `${specialty.singular} en Guadeloupe — Devis gratuit | Devis Connect`;
     const description = `Trouvez le meilleur ${specialty.singular.toLowerCase()} en Guadeloupe. ${specialty.description} Devis gratuit sous 48h.`;
     return {
       meta: [

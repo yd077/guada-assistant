@@ -21,13 +21,13 @@ export const Route = createFileRoute("/recherche")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Trouver un artisan en Guadeloupe — BTP Guada" },
+      { title: "Trouver un artisan en Guadeloupe — Devis Connect" },
       {
         name: "description",
         content:
           "Parcourez notre annuaire d'artisans BTP vérifiés en Guadeloupe. Filtrez par spécialité, commune, distance et notation.",
       },
-      { property: "og:title", content: "Trouver un artisan — BTP Guada" },
+      { property: "og:title", content: "Trouver un artisan — Devis Connect" },
       {
         property: "og:description",
         content: "Annuaire des artisans BTP de Guadeloupe, vérifiés et notés.",

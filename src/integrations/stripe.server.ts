@@ -101,7 +101,7 @@ export async function createSubscriptionCheckout(opts: {
     "line_items[0][price_data][currency]": "eur",
     "line_items[0][price_data][unit_amount]": Math.round(opts.monthlyPriceEur * 100).toString(),
     "line_items[0][price_data][recurring][interval]": "month",
-    "line_items[0][price_data][product_data][name]": `Abonnement ${opts.tierName} — BTP Guada`,
+    "line_items[0][price_data][product_data][name]": `Abonnement ${opts.tierName} — Devis Connect`,
     "line_items[0][quantity]": "1",
     success_url: opts.successUrl,
     cancel_url: opts.cancelUrl,

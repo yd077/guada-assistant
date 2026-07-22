@@ -64,7 +64,7 @@ function SosCommunePage() {
       location: commune.name,
       description: `🚨 URGENCE SOS ${specialty.name} à ${commune.name}.`,
       contact_name: form.name,
-      contact_email: "sos@btpguada.fr",
+      contact_email: "sos@devisconnect.fr",
       contact_phone: form.phone,
       urgency_level: "sos",
       email_verified: true,
