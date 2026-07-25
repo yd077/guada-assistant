@@ -39,7 +39,8 @@ export function useAuth() {
       .from("user_roles")
       .select("role")
       .eq("user_id", userId)
-      .order("role", { ascending: true })
+      // enum app_role = client < artisan < admin → desc = rôle le plus élevé
+      .order("role", { ascending: false })
       .limit(1)
       .maybeSingle();
     setRole((data?.role as AppRole) ?? null);
