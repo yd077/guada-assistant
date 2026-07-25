@@ -47,6 +47,8 @@ function loadMap(): Promise<MapModule> {
   return mapModulePromise;
 }
 
+let mapInstanceCounter = 0;
+
 type Props = {
   artisanId: string;
   initialLat: number | null;
@@ -67,6 +69,9 @@ export function ArtisanZoneEditor({
   onSaved,
 }: Props) {
   const [Map, setMap] = useState<MapModule | null>(null);
+  // Nouvelle clé à CHAQUE montage (compteur global) : force un nouveau nœud DOM
+  // et évite "Map container is already initialized" (React 18 StrictMode).
+  const [mapKey] = useState(() => `map-${++mapInstanceCounter}`);
   const [lat, setLat] = useState<number | null>(initialLat);
   const [lng, setLng] = useState<number | null>(initialLng);
   const [radius, setRadius] = useState<number>(initialRadiusKm || 20);
@@ -189,8 +194,9 @@ export function ArtisanZoneEditor({
         {/* Carte */}
         <div className="mt-5 overflow-hidden rounded-xl border border-border">
           {Map ? (
-            <div className="h-80">
+            <div key={mapKey} className="h-80">
               <MapView
+                key={mapKey}
                 Map={Map}
                 center={center}
                 lat={lat}
