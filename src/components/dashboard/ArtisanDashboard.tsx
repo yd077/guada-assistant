@@ -6,7 +6,7 @@ import { SPECIALTIES, COMMUNES } from "@/data/artisans";
 import { ArtisanZoneEditor } from "./ArtisanZoneEditor";
 import { ArtisanWalletPanel } from "./ArtisanWalletPanel";
 import { ArtisanDocumentsPanel } from "./ArtisanDocumentsPanel";
-import { ArtisanOnboardingChecklist } from "./ArtisanOnboardingChecklist";
+
 import { fetchSubscription } from "@/services/subscriptions";
 import {
   Loader2,
