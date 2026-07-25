@@ -141,7 +141,7 @@ function ProjectPage() {
       specialty: data.specialty,
       location: data.location,
       surface: data.surface || null,
-      budget: data.budget || null,
+      budget: null,
       deadline: data.timing || null,
       description: data.description,
       contact_name: data.name,
