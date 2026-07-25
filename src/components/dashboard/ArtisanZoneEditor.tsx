@@ -1,53 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Reveal } from "@/components/site/Reveal";
 import { Loader2, MapPin, Save, Search } from "lucide-react";
 import { geocodeAddress } from "@/services/geocoding";
-
-// Leaflet est chargé dynamiquement (utilise window — pas SSR-safe)
-type MapModule = {
-  MapContainer: React.ComponentType<any>;
-  TileLayer: React.ComponentType<any>;
-  Marker: React.ComponentType<any>;
-  Circle: React.ComponentType<any>;
-  useMap: () => any;
-};
-
-let mapModulePromise: Promise<MapModule> | null = null;
-function loadMap(): Promise<MapModule> {
-  if (typeof window === "undefined") return Promise.reject(new Error("SSR"));
-  if (!mapModulePromise) {
-    mapModulePromise = (async () => {
-      const [rl, L] = await Promise.all([
-        import("react-leaflet"),
-        import("leaflet"),
-      ]);
-      // CSS Leaflet
-      await import("leaflet/dist/leaflet.css");
-      // Fix icônes par défaut (bug bundler bien connu)
-      // @ts-expect-error access private
-      delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-        shadowUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-      });
-      return {
-        MapContainer: rl.MapContainer,
-        TileLayer: rl.TileLayer,
-        Marker: rl.Marker,
-        Circle: rl.Circle,
-        useMap: rl.useMap,
-      };
-    })();
-  }
-  return mapModulePromise;
-}
-
-let mapInstanceCounter = 0;
+import { GoogleZoneMap } from "@/components/dashboard/GoogleZoneMap";
 
 type Props = {
   artisanId: string;
@@ -58,8 +15,6 @@ type Props = {
   onSaved?: () => void;
 };
 
-const GUADELOUPE_CENTER: [number, number] = [16.25, -61.55];
-
 export function ArtisanZoneEditor({
   artisanId,
   initialLat,
@@ -68,10 +23,6 @@ export function ArtisanZoneEditor({
   initialAddress,
   onSaved,
 }: Props) {
-  const [Map, setMap] = useState<MapModule | null>(null);
-  // Nouvelle clé à CHAQUE montage (compteur global) : force un nouveau nœud DOM
-  // et évite "Map container is already initialized" (React 18 StrictMode).
-  const [mapKey] = useState(() => `map-${++mapInstanceCounter}`);
   const [lat, setLat] = useState<number | null>(initialLat);
   const [lng, setLng] = useState<number | null>(initialLng);
   const [radius, setRadius] = useState<number>(initialRadiusKm || 20);
@@ -79,9 +30,6 @@ export function ArtisanZoneEditor({
   const [searching, setSearching] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadMap().then(setMap).catch(() => setMap(null));
-  }, []);
 
   const handleGeocode = async () => {
     if (!address.trim()) {
