@@ -189,8 +189,9 @@ export function ArtisanZoneEditor({
         {/* Carte */}
         <div className="mt-5 overflow-hidden rounded-xl border border-border">
           {Map ? (
-            <div className="h-80">
+            <div key={mapKey} className="h-80">
               <MapView
+                key={mapKey}
                 Map={Map}
                 center={center}
                 lat={lat}
