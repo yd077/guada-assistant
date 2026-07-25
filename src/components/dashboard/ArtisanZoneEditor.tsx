@@ -47,6 +47,8 @@ function loadMap(): Promise<MapModule> {
   return mapModulePromise;
 }
 
+let mapInstanceCounter = 0;
+
 type Props = {
   artisanId: string;
   initialLat: number | null;
