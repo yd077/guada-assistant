@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Mail, Lock, User, Phone, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { signUpWithoutEmailConfirmation } from "@/lib/auth.functions";
+
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
@@ -107,32 +109,38 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    const redirectUrl = `${window.location.origin}/dashboard`;
-    const { error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: parsed.data.fullName,
-          phone: parsed.data.phone,
-          role: parsed.data.role,
-        },
-      },
-    });
-    setLoading(false);
-    if (error) {
+    // Confirmation email désactivée : création du compte déjà confirmé
+    let result: { ok: boolean; code?: string; message?: string };
+    try {
+      result = await signUpWithoutEmailConfirmation({ data: parsed.data });
+    } catch (err) {
+      setLoading(false);
+      setError(err instanceof Error ? err.message : "Inscription impossible.");
+      return;
+    }
+    if (!result.ok) {
+      setLoading(false);
       setError(
-        error.message === "User already registered"
+        result.code === "already_registered"
           ? "Un compte existe déjà avec cet email. Connectez-vous."
-          : error.message,
+          : (result.message ?? "Inscription impossible."),
       );
       return;
     }
-    setInfo(
-      "Compte créé. Si la confirmation email est activée, vérifiez votre boîte. Sinon vous êtes déjà connecté·e.",
-    );
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: parsed.data.email,
+      password: parsed.data.password,
+    });
+    setLoading(false);
+    if (signInError) {
+      setError(signInError.message);
+      return;
+    }
+    navigate({ to: search.redirect ?? "/dashboard" });
   };
+
+
 
   const handleGoogle = async () => {
     setError(null);
