@@ -109,48 +109,37 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    const { data: signUpData, error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      options: {
-        data: {
-          full_name: parsed.data.fullName,
-          phone: parsed.data.phone,
-          role: parsed.data.role,
-        },
-      },
-    });
-    if (error) {
+    // Confirmation email désactivée : création du compte déjà confirmé
+    let result: { ok: boolean; code?: string; message?: string };
+    try {
+      result = await signUpWithoutEmailConfirmation({ data: parsed.data });
+    } catch (err) {
+      setLoading(false);
+      setError(err instanceof Error ? err.message : "Inscription impossible.");
+      return;
+    }
+    if (!result.ok) {
       setLoading(false);
       setError(
-        error.message === "User already registered"
+        result.code === "already_registered"
           ? "Un compte existe déjà avec cet email. Connectez-vous."
-          : error.message,
+          : (result.message ?? "Inscription impossible."),
       );
       return;
     }
 
-    // Confirmation email désactivée : on connecte directement l'utilisateur
-    if (!signUpData.session) {
-      try {
-        await autoConfirmNewSignup({ data: { email: parsed.data.email } });
-      } catch {
-        // on tente la connexion malgré tout
-      }
-
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: parsed.data.email,
-        password: parsed.data.password,
-      });
-      if (signInError) {
-        setLoading(false);
-        setError(signInError.message);
-        return;
-      }
-    }
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: parsed.data.email,
+      password: parsed.data.password,
+    });
     setLoading(false);
+    if (signInError) {
+      setError(signInError.message);
+      return;
+    }
     navigate({ to: search.redirect ?? "/dashboard" });
   };
+
 
 
   const handleGoogle = async () => {
