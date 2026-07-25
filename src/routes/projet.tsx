@@ -389,14 +389,9 @@ function ProjectPage() {
           {step === 2 && (
             <div className="space-y-6 animate-fade-in-up">
               <h2 className="font-serif text-2xl">Détails du projet</h2>
-              <div className="grid gap-5 md:grid-cols-3">
+              <div className="grid gap-5 md:grid-cols-2">
                 <Input label="Surface (m²)" value={data.surface} onChange={update("surface")} />
-                <Input
-                  label="Budget approximatif"
-                  placeholder="ex. 15 000 €"
-                  value={data.budget}
-                  onChange={update("budget")}
-                />
+
                 <Input
                   label="Délai souhaité"
                   placeholder="ex. avant l'été"
