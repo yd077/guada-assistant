@@ -358,12 +358,11 @@ function ProjectPage() {
 
               <div>
                 <label className="mb-1.5 block text-sm font-medium">Niveau d'urgence</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {(
                     [
                       { v: "normal", label: "Standard", desc: "Devis sous 48h" },
                       { v: "urgent", label: "Urgent", desc: "Sous 24h" },
-                      { v: "sos", label: "SOS", desc: "Immédiat" },
                     ] as const
                   ).map((u) => (
                     <button
@@ -372,9 +371,7 @@ function ProjectPage() {
                       onClick={() => setData((d) => ({ ...d, urgency_level: u.v }))}
                       className={`rounded-xl border p-3 text-left text-sm transition ${
                         data.urgency_level === u.v
-                          ? u.v === "sos"
-                            ? "border-destructive bg-destructive/5 text-destructive"
-                            : "border-emerald bg-emerald/5"
+                          ? "border-emerald bg-emerald/5"
                           : "border-border hover:border-emerald/50"
                       }`}
                     >
@@ -384,6 +381,7 @@ function ProjectPage() {
                   ))}
                 </div>
               </div>
+
             </div>
           )}
 
