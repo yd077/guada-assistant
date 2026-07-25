@@ -72,7 +72,7 @@ export function ArtisanZoneEditor({
     onSaved?.();
   };
 
-  const center: [number, number] = lat != null && lng != null ? [lat, lng] : GUADELOUPE_CENTER;
+
 
   return (
     <Reveal>
