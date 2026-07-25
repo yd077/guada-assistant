@@ -107,12 +107,10 @@ function AuthPage() {
       return;
     }
     setLoading(true);
-    const redirectUrl = `${window.location.origin}/dashboard`;
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
       options: {
-        emailRedirectTo: redirectUrl,
         data: {
           full_name: parsed.data.fullName,
           phone: parsed.data.phone,
@@ -120,8 +118,8 @@ function AuthPage() {
         },
       },
     });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       setError(
         error.message === "User already registered"
           ? "Un compte existe déjà avec cet email. Connectez-vous."
@@ -129,10 +127,23 @@ function AuthPage() {
       );
       return;
     }
-    setInfo(
-      "Compte créé. Si la confirmation email est activée, vérifiez votre boîte. Sinon vous êtes déjà connecté·e.",
-    );
+
+    // Confirmation email désactivée : on connecte directement l'utilisateur
+    if (!signUpData.session) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: parsed.data.email,
+        password: parsed.data.password,
+      });
+      if (signInError) {
+        setLoading(false);
+        setError(signInError.message);
+        return;
+      }
+    }
+    setLoading(false);
+    navigate({ to: search.redirect ?? "/dashboard" });
   };
+
 
   const handleGoogle = async () => {
     setError(null);
