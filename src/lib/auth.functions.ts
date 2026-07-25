@@ -14,12 +14,14 @@ const signUpInput = z.object({
  * l'email déjà confirmé, afin que l'utilisateur soit connecté immédiatement
  * et redirigé vers l'étape suivante (dashboard).
  */
+const ADMIN_EMAILS = ["contact@devis-connect.fr"];
+
 export const signUpWithoutEmailConfirmation = createServerFn({ method: "POST" })
   .inputValidator((data) => signUpInput.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { error } = await supabaseAdmin.auth.admin.createUser({
+    const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
       email: data.email,
       password: data.password,
       email_confirm: true,
@@ -41,5 +43,14 @@ export const signUpWithoutEmailConfirmation = createServerFn({ method: "POST" })
       };
     }
 
+    // Attribution automatique du rôle admin pour les emails autorisés
+    const userId = created?.user?.id;
+    if (userId && ADMIN_EMAILS.includes(data.email.trim().toLowerCase())) {
+      await supabaseAdmin
+        .from("user_roles")
+        .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
+    }
+
     return { ok: true as const };
   });
+
