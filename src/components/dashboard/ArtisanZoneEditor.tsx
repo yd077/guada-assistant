@@ -139,25 +139,21 @@ export function ArtisanZoneEditor({
           </div>
         </div>
 
-        {/* Carte */}
+        {/* Carte Google */}
         <div className="mt-5 overflow-hidden rounded-xl border border-border">
-          {Map ? (
-            <div key={mapKey} className="h-80">
-              <MapView
-                key={mapKey}
-                Map={Map}
-                center={center}
-                lat={lat}
-                lng={lng}
-                radiusKm={radius}
-              />
-            </div>
-          ) : (
-            <div className="flex h-80 items-center justify-center bg-soft text-muted-foreground">
-              <Loader2 className="h-5 w-5 animate-spin" />
-            </div>
-          )}
+          <GoogleZoneMap
+            lat={lat}
+            lng={lng}
+            radiusKm={radius}
+            onPick={(la, ln) => {
+              setLat(la);
+              setLng(ln);
+            }}
+          />
         </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Astuce : cliquez sur la carte pour ajuster précisément votre point de départ.
+        </p>
 
         {lat != null && lng != null && (
           <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -180,51 +176,3 @@ export function ArtisanZoneEditor({
   );
 }
 
-/* Composant interne — recentre la carte quand le centre change */
-function MapView({
-  Map,
-  center,
-  lat,
-  lng,
-  radiusKm,
-}: {
-  Map: MapModule;
-  center: [number, number];
-  lat: number | null;
-  lng: number | null;
-  radiusKm: number;
-}) {
-  const { MapContainer, TileLayer, Marker, Circle } = Map;
-  return (
-    <MapContainer
-      center={center}
-      zoom={lat != null ? 11 : 10}
-      style={{ height: "100%", width: "100%" }}
-      scrollWheelZoom={false}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {lat != null && lng != null && (
-        <>
-          <Marker position={[lat, lng]} />
-          <Circle
-            center={[lat, lng]}
-            radius={radiusKm * 1000}
-            pathOptions={{ color: "#10b981", fillColor: "#10b981", fillOpacity: 0.15 }}
-          />
-          <Recenter Map={Map} center={[lat, lng]} />
-        </>
-      )}
-    </MapContainer>
-  );
-}
-
-function Recenter({ Map, center }: { Map: MapModule; center: [number, number] }) {
-  const map = Map.useMap();
-  useEffect(() => {
-    map.setView(center, 11);
-  }, [map, center[0], center[1]]);
-  return null;
-}
