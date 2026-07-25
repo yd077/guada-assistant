@@ -125,15 +125,6 @@ export function ArtisanDashboard({ userId }: { userId: string }) {
 
   return (
     <div className="space-y-12">
-      <Reveal>
-        <ArtisanOnboardingChecklist
-          hasProfile={hasProfile}
-          hasZone={hasZone}
-          hasDocs={hasDocs}
-          isVerified={isVerified}
-          hasTierChoice={hasPaidTier}
-        />
-      </Reveal>
       <ProfileEditor artisan={artisan} onSaved={refresh} />
       <ArtisanDocumentsPanel
         artisanId={artisan.id}
