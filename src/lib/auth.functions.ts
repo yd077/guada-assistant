@@ -1,34 +1,45 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+const signUpInput = z.object({
+  email: z.string().trim().email().max(255),
+  password: z.string().min(6).max(72),
+  fullName: z.string().trim().min(2).max(120),
+  phone: z.string().trim().min(6).max(30),
+  role: z.enum(["client", "artisan"]),
+});
+
 /**
- * Confirmation email désactivée : après une inscription, on marque l'email
- * comme confirmé afin que l'utilisateur accède directement à son dashboard.
- * Sécurité : ne confirme qu'un compte non confirmé créé il y a moins de 5 min.
+ * Confirmation email désactivée : le compte est créé côté serveur avec
+ * l'email déjà confirmé, afin que l'utilisateur soit connecté immédiatement
+ * et redirigé vers l'étape suivante (dashboard).
  */
-export const autoConfirmNewSignup = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ email: z.string().email() }).parse(data))
+export const signUpWithoutEmailConfirmation = createServerFn({ method: "POST" })
+  .inputValidator((data) => signUpInput.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: list, error } = await supabaseAdmin.auth.admin.listUsers({
-      page: 1,
-      perPage: 200,
+    const { error } = await supabaseAdmin.auth.admin.createUser({
+      email: data.email,
+      password: data.password,
+      email_confirm: true,
+      user_metadata: {
+        full_name: data.fullName,
+        phone: data.phone,
+        role: data.role,
+      },
     });
-    if (error) return { confirmed: false };
 
-    const target = list.users.find(
-      (u) => u.email?.toLowerCase() === data.email.toLowerCase(),
-    );
-    if (!target) return { confirmed: false };
-    if (target.email_confirmed_at) return { confirmed: true };
+    if (error) {
+      const already =
+        error.status === 422 ||
+        /already|exist|registered/i.test(error.message ?? "");
+      return {
+        ok: false as const,
+        code: already ? ("already_registered" as const) : ("error" as const),
+        message: error.message,
+      };
+    }
 
-    const createdAt = new Date(target.created_at).getTime();
-    if (Date.now() - createdAt > 5 * 60 * 1000) return { confirmed: false };
-
-    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
-      target.id,
-      { email_confirm: true },
-    );
-    return { confirmed: !updateError };
+    return { ok: true as const };
   });
