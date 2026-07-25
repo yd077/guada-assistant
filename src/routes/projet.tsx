@@ -81,11 +81,11 @@ function ProjectPage() {
     internal_ref: "",
     managed_units: "",
     desired_sla: "",
-    urgency_level: "normal" as "normal" | "urgent" | "sos",
+    urgency_level: "normal" as "normal" | "urgent",
     specialty: "",
     location: "",
     surface: "",
-    budget: "",
+
     timing: "",
     description: "",
     name: "",
