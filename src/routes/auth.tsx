@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Mail, Lock, User, Phone, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { autoConfirmNewSignup } from "@/lib/auth.functions";
+import { signUpWithoutEmailConfirmation } from "@/lib/auth.functions";
 
 
 const searchSchema = z.object({
