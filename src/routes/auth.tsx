@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Mail, Lock, User, Phone, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { autoConfirmNewSignup } from "@/lib/auth.functions";
+
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
@@ -130,6 +132,12 @@ function AuthPage() {
 
     // Confirmation email désactivée : on connecte directement l'utilisateur
     if (!signUpData.session) {
+      try {
+        await autoConfirmNewSignup({ data: { email: parsed.data.email } });
+      } catch {
+        // on tente la connexion malgré tout
+      }
+
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: parsed.data.email,
         password: parsed.data.password,
