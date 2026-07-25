@@ -67,6 +67,9 @@ export function ArtisanZoneEditor({
   onSaved,
 }: Props) {
   const [Map, setMap] = useState<MapModule | null>(null);
+  // Clé unique par montage : évite "Map container is already initialized"
+  // lorsque React remonte le composant (StrictMode / error boundary).
+  const [mapKey] = useState(() => `map-${Math.random().toString(36).slice(2)}`);
   const [lat, setLat] = useState<number | null>(initialLat);
   const [lng, setLng] = useState<number | null>(initialLng);
   const [radius, setRadius] = useState<number>(initialRadiusKm || 20);
