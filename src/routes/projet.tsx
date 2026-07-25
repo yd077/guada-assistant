@@ -81,11 +81,11 @@ function ProjectPage() {
     internal_ref: "",
     managed_units: "",
     desired_sla: "",
-    urgency_level: "normal" as "normal" | "urgent" | "sos",
+    urgency_level: "normal" as "normal" | "urgent",
     specialty: "",
     location: "",
     surface: "",
-    budget: "",
+
     timing: "",
     description: "",
     name: "",
@@ -141,7 +141,7 @@ function ProjectPage() {
       specialty: data.specialty,
       location: data.location,
       surface: data.surface || null,
-      budget: data.budget || null,
+      budget: null,
       deadline: data.timing || null,
       description: data.description,
       contact_name: data.name,
@@ -358,12 +358,11 @@ function ProjectPage() {
 
               <div>
                 <label className="mb-1.5 block text-sm font-medium">Niveau d'urgence</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {(
                     [
                       { v: "normal", label: "Standard", desc: "Devis sous 48h" },
                       { v: "urgent", label: "Urgent", desc: "Sous 24h" },
-                      { v: "sos", label: "SOS", desc: "Immédiat" },
                     ] as const
                   ).map((u) => (
                     <button
@@ -372,9 +371,7 @@ function ProjectPage() {
                       onClick={() => setData((d) => ({ ...d, urgency_level: u.v }))}
                       className={`rounded-xl border p-3 text-left text-sm transition ${
                         data.urgency_level === u.v
-                          ? u.v === "sos"
-                            ? "border-destructive bg-destructive/5 text-destructive"
-                            : "border-emerald bg-emerald/5"
+                          ? "border-emerald bg-emerald/5"
                           : "border-border hover:border-emerald/50"
                       }`}
                     >
@@ -384,6 +381,7 @@ function ProjectPage() {
                   ))}
                 </div>
               </div>
+
             </div>
           )}
 
@@ -391,14 +389,9 @@ function ProjectPage() {
           {step === 2 && (
             <div className="space-y-6 animate-fade-in-up">
               <h2 className="font-serif text-2xl">Détails du projet</h2>
-              <div className="grid gap-5 md:grid-cols-3">
+              <div className="grid gap-5 md:grid-cols-2">
                 <Input label="Surface (m²)" value={data.surface} onChange={update("surface")} />
-                <Input
-                  label="Budget approximatif"
-                  placeholder="ex. 15 000 €"
-                  value={data.budget}
-                  onChange={update("budget")}
-                />
+
                 <Input
                   label="Délai souhaité"
                   placeholder="ex. avant l'été"
