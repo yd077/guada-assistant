@@ -1,7 +1,7 @@
-// Géocodage via Nominatim (OpenStreetMap, gratuit, rate limit 1 req/s)
-// Utilisé côté client uniquement (UX d'autocomplete d'adresse)
+// Géocodage via Google Maps Platform (passerelle connecteur Lovable)
 
 import { COMMUNE_BY_NAME, type Commune } from "@/data/communes";
+import { geocodeQuery } from "@/services/geocoding.functions";
 
 export type GeocodeResult = {
   lat: number;
@@ -9,9 +9,7 @@ export type GeocodeResult = {
   displayName: string;
 };
 
-const NOMINATIM_BASE = "https://nominatim.openstreetmap.org/search";
-
-// Cache mémoire simple pour éviter de hammeriser l'API
+// Cache mémoire simple
 const cache = new Map<string, GeocodeResult | null>();
 
 /**
@@ -36,44 +34,19 @@ export async function geocodeAddress(query: string): Promise<GeocodeResult | nul
   }
 
   try {
-    const params = new URLSearchParams({
-      q: `${query}, Guadeloupe`,
-      format: "json",
-      limit: "1",
-      countrycodes: "gp",
-      "accept-language": "fr",
-    });
-    const res = await fetch(`${NOMINATIM_BASE}?${params}`, {
-      headers: {
-        // Nominatim demande un User-Agent identifiable
-        "Accept": "application/json",
-      },
-    });
+    const res = await geocodeQuery({ data: { query: `${query}, Guadeloupe` } });
     if (!res.ok) {
-      cache.set(key, null);
+      console.error("[geocode]", res.message);
       return null;
     }
-    const data = (await res.json()) as Array<{
-      lat: string;
-      lon: string;
-      display_name: string;
-    }>;
-    if (!data.length) {
-      cache.set(key, null);
-      return null;
-    }
-    const result: GeocodeResult = {
-      lat: parseFloat(data[0].lat),
-      lng: parseFloat(data[0].lon),
-      displayName: data[0].display_name,
-    };
-    cache.set(key, result);
-    return result;
+    cache.set(key, res.hit);
+    return res.hit;
   } catch (e) {
     console.error("[geocode] erreur:", e);
     return null;
   }
 }
+
 
 /**
  * Fallback : retourne directement la commune si elle est listée,

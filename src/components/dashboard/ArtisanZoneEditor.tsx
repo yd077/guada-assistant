@@ -1,53 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Reveal } from "@/components/site/Reveal";
 import { Loader2, MapPin, Save, Search } from "lucide-react";
 import { geocodeAddress } from "@/services/geocoding";
-
-// Leaflet est chargé dynamiquement (utilise window — pas SSR-safe)
-type MapModule = {
-  MapContainer: React.ComponentType<any>;
-  TileLayer: React.ComponentType<any>;
-  Marker: React.ComponentType<any>;
-  Circle: React.ComponentType<any>;
-  useMap: () => any;
-};
-
-let mapModulePromise: Promise<MapModule> | null = null;
-function loadMap(): Promise<MapModule> {
-  if (typeof window === "undefined") return Promise.reject(new Error("SSR"));
-  if (!mapModulePromise) {
-    mapModulePromise = (async () => {
-      const [rl, L] = await Promise.all([
-        import("react-leaflet"),
-        import("leaflet"),
-      ]);
-      // CSS Leaflet
-      await import("leaflet/dist/leaflet.css");
-      // Fix icônes par défaut (bug bundler bien connu)
-      // @ts-expect-error access private
-      delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-        shadowUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-      });
-      return {
-        MapContainer: rl.MapContainer,
-        TileLayer: rl.TileLayer,
-        Marker: rl.Marker,
-        Circle: rl.Circle,
-        useMap: rl.useMap,
-      };
-    })();
-  }
-  return mapModulePromise;
-}
-
-let mapInstanceCounter = 0;
+import { GoogleZoneMap } from "@/components/dashboard/GoogleZoneMap";
 
 type Props = {
   artisanId: string;
@@ -58,8 +15,6 @@ type Props = {
   onSaved?: () => void;
 };
 
-const GUADELOUPE_CENTER: [number, number] = [16.25, -61.55];
-
 export function ArtisanZoneEditor({
   artisanId,
   initialLat,
@@ -68,10 +23,6 @@ export function ArtisanZoneEditor({
   initialAddress,
   onSaved,
 }: Props) {
-  const [Map, setMap] = useState<MapModule | null>(null);
-  // Nouvelle clé à CHAQUE montage (compteur global) : force un nouveau nœud DOM
-  // et évite "Map container is already initialized" (React 18 StrictMode).
-  const [mapKey] = useState(() => `map-${++mapInstanceCounter}`);
   const [lat, setLat] = useState<number | null>(initialLat);
   const [lng, setLng] = useState<number | null>(initialLng);
   const [radius, setRadius] = useState<number>(initialRadiusKm || 20);
@@ -79,9 +30,6 @@ export function ArtisanZoneEditor({
   const [searching, setSearching] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadMap().then(setMap).catch(() => setMap(null));
-  }, []);
 
   const handleGeocode = async () => {
     if (!address.trim()) {
@@ -124,7 +72,7 @@ export function ArtisanZoneEditor({
     onSaved?.();
   };
 
-  const center: [number, number] = lat != null && lng != null ? [lat, lng] : GUADELOUPE_CENTER;
+
 
   return (
     <Reveal>
@@ -191,25 +139,21 @@ export function ArtisanZoneEditor({
           </div>
         </div>
 
-        {/* Carte */}
+        {/* Carte Google */}
         <div className="mt-5 overflow-hidden rounded-xl border border-border">
-          {Map ? (
-            <div key={mapKey} className="h-80">
-              <MapView
-                key={mapKey}
-                Map={Map}
-                center={center}
-                lat={lat}
-                lng={lng}
-                radiusKm={radius}
-              />
-            </div>
-          ) : (
-            <div className="flex h-80 items-center justify-center bg-soft text-muted-foreground">
-              <Loader2 className="h-5 w-5 animate-spin" />
-            </div>
-          )}
+          <GoogleZoneMap
+            lat={lat}
+            lng={lng}
+            radiusKm={radius}
+            onPick={(la, ln) => {
+              setLat(la);
+              setLng(ln);
+            }}
+          />
         </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Astuce : cliquez sur la carte pour ajuster précisément votre point de départ.
+        </p>
 
         {lat != null && lng != null && (
           <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -232,51 +176,3 @@ export function ArtisanZoneEditor({
   );
 }
 
-/* Composant interne — recentre la carte quand le centre change */
-function MapView({
-  Map,
-  center,
-  lat,
-  lng,
-  radiusKm,
-}: {
-  Map: MapModule;
-  center: [number, number];
-  lat: number | null;
-  lng: number | null;
-  radiusKm: number;
-}) {
-  const { MapContainer, TileLayer, Marker, Circle } = Map;
-  return (
-    <MapContainer
-      center={center}
-      zoom={lat != null ? 11 : 10}
-      style={{ height: "100%", width: "100%" }}
-      scrollWheelZoom={false}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {lat != null && lng != null && (
-        <>
-          <Marker position={[lat, lng]} />
-          <Circle
-            center={[lat, lng]}
-            radius={radiusKm * 1000}
-            pathOptions={{ color: "#10b981", fillColor: "#10b981", fillOpacity: 0.15 }}
-          />
-          <Recenter Map={Map} center={[lat, lng]} />
-        </>
-      )}
-    </MapContainer>
-  );
-}
-
-function Recenter({ Map, center }: { Map: MapModule; center: [number, number] }) {
-  const map = Map.useMap();
-  useEffect(() => {
-    map.setView(center, 11);
-  }, [map, center[0], center[1]]);
-  return null;
-}
