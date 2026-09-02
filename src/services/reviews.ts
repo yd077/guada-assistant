@@ -1,14 +1,15 @@
 import { supabase } from "@/integrations/supabase/client";
+import { callRpc } from "@/lib/supabaseRpc";
 
 export async function submitReview(input: {
   artisanId: string;
   rating: number;
   comment?: string;
 }): Promise<{ ok: boolean; error?: string; review_id?: string }> {
-  const { data, error } = await supabase.rpc("submit_review", {
+  const { data, error } = await callRpc("submit_review", {
     p_artisan_id: input.artisanId,
     p_rating: input.rating,
-    p_comment: input.comment ?? null,
+    ...(input.comment ? { p_comment: input.comment } : {}),
   });
   if (error) return { ok: false, error: error.message };
   return data as { ok: boolean; error?: string; review_id?: string };

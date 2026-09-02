@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendEmail, renderOtpEmail, renderNewLeadEmail } from "@/integrations/email.server";
+import { haversineKm } from "@/services/geocoding";
 
 /**
  * ⚠️ Vérifications email DÉSACTIVÉES temporairement (en attente du SMTP client).
@@ -104,9 +105,9 @@ export const notifyArtisansOfNewLead = createServerFn({ method: "POST" })
     const { data: artisans } = await supabaseAdmin
       .from("artisans")
       .select(
-        "id, email, first_name, last_name, base_lat, base_lng, radius_km, specialties, notify_new_leads",
+        "id, email, first_name, last_name, base_lat, base_lng, radius_km, specialty, notify_new_leads",
       )
-      .contains("specialties", [project.specialty])
+      .eq("specialty", project.specialty)
       .eq("notify_new_leads", true)
       .limit(50);
 
@@ -153,13 +154,3 @@ export const notifyArtisansOfNewLead = createServerFn({ method: "POST" })
     return { ok: true, sent };
   });
 
-function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371;
-  const toRad = (d: number) => (d * Math.PI) / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLng = toRad(lng2 - lng1);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
-}

@@ -3,10 +3,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Plus, Trash2, RefreshCcw } from "lucide-react";
 
+type ClientType = "particulier" | "entreprise" | "agence" | "syndic";
+
 type Rule = {
   id: string;
   specialty: string | null;
-  client_type: string | null;
+  client_type: ClientType | null;
   urgency_level: "normal" | "urgent" | "sos" | null;
   min_budget_eur: number;
   max_budget_eur: number | null;
@@ -95,7 +97,10 @@ export function AdminPricingRulesPanel() {
           <select
             value={draft.client_type ?? ""}
             onChange={(e) =>
-              setDraft({ ...draft, client_type: e.target.value || null })
+              setDraft({
+                ...draft,
+                client_type: (e.target.value || null) as ClientType | null,
+              })
             }
             className="rounded-lg border border-input bg-background px-2 py-2 text-sm"
           >

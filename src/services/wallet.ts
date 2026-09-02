@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { callRpc } from "@/lib/supabaseRpc";
 import { haversineKm } from "@/services/geocoding";
 
 export type WalletState = {
@@ -149,7 +150,7 @@ export async function unlockLead(projectId: string): Promise<{
   balance?: number;
   spent?: number;
 }> {
-  const { data, error } = await supabase.rpc("unlock_lead", { p_project_id: projectId });
+  const { data, error } = await callRpc("unlock_lead", { p_project_id: projectId });
   if (error) {
     console.error("[unlockLead]", error);
     return { ok: false, error: error.message };
@@ -193,7 +194,7 @@ export async function adminAdjustWallet(
   note: string,
   type: CreditTxType = "admin_adjust",
 ): Promise<{ ok: boolean; balance?: number; error?: string }> {
-  const { data, error } = await supabase.rpc("admin_adjust_wallet", {
+  const { data, error } = await callRpc("admin_adjust_wallet", {
     p_artisan_id: artisanId,
     p_amount: amount,
     p_type: type,
@@ -208,9 +209,9 @@ export async function adminRefundUnlock(
   unlockId: string,
   note?: string,
 ): Promise<{ ok: boolean; refunded?: number; error?: string }> {
-  const { data, error } = await supabase.rpc("admin_refund_unlock", {
+  const { data, error } = await callRpc("admin_refund_unlock", {
     p_unlock_id: unlockId,
-    p_note: note ?? null,
+    ...(note ? { p_note: note } : {}),
   });
   if (error) return { ok: false, error: error.message };
   return data as { ok: boolean; refunded?: number };

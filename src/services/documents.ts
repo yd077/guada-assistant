@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { TablesUpdate } from "@/integrations/supabase/types";
 
 export type DocKind = "kbis" | "insurance";
 
@@ -20,11 +21,11 @@ export async function uploadArtisanDoc(
 
   if (upErr) return { ok: false, error: upErr.message };
 
-  const update: Record<string, unknown> = {
+  const update: TablesUpdate<"artisans"> = {
     verification_status: "pending",
+    ...(kind === "kbis" ? { kbis_url: path } : {}),
+    ...(kind === "insurance" ? { insurance_url: path } : {}),
   };
-  if (kind === "kbis") update.kbis_url = path;
-  if (kind === "insurance") update.insurance_url = path;
 
   const { error: dbErr } = await supabase
     .from("artisans")

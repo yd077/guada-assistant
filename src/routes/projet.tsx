@@ -168,16 +168,24 @@ function ProjectPage() {
       error = r.error;
     }
 
-    // Fallback si colonnes urgency/managed/sla absentes
-    if (
-      error &&
-      /urgency_level|managed_units|desired_sla/.test(error.message)
-    ) {
-      const noUrgency: Record<string, unknown> = { ...basePayload };
-      delete noUrgency.urgency_level;
-      delete noUrgency.managed_units;
-      delete noUrgency.desired_sla;
-      const r = await supabase.from("projects").insert(noUrgency);
+    // Fallback si les anciennes colonnes optionnelles ne sont pas encore présentes.
+    if (error && /urgency_level|managed_units|desired_sla/.test(error.message)) {
+      const r = await supabase.from("projects").insert({
+        client_id: basePayload.client_id,
+        client_type: basePayload.client_type,
+        company_name: basePayload.company_name,
+        internal_ref: basePayload.internal_ref,
+        specialty: basePayload.specialty,
+        location: basePayload.location,
+        surface: basePayload.surface,
+        budget: basePayload.budget,
+        deadline: basePayload.deadline,
+        description: basePayload.description,
+        contact_name: basePayload.contact_name,
+        contact_email: basePayload.contact_email,
+        contact_phone: basePayload.contact_phone,
+        email_verified: basePayload.email_verified,
+      });
       error = r.error;
     }
 
