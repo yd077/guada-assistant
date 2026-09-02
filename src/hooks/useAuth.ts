@@ -35,15 +35,32 @@ export function useAuth() {
   }, []);
 
   async function fetchRole(userId: string) {
+    const priority: Record<AppRole, number> = { client: 1, artisan: 2, admin: 3 };
+
+    // 1. Lecture directe (RLS : l'utilisateur voit ses propres rôles)
     const { data } = await supabase
       .from("user_roles")
       .select("role")
-      .eq("user_id", userId)
-      // enum app_role = client < artisan < admin → desc = rôle le plus élevé
-      .order("role", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    setRole((data?.role as AppRole) ?? null);
+      .eq("user_id", userId);
+
+    const roles = (data ?? [])
+      .map((r) => r.role as AppRole)
+      .filter((r) => !!r && r in priority)
+      .sort((a, b) => priority[b] - priority[a]);
+
+    if (roles.length > 0) {
+      setRole(roles[0]);
+      return;
+    }
+
+    // 2. Repli serveur si les policies bloquent la lecture
+    try {
+      const { getMyRole } = await import("@/lib/roles.functions");
+      const res = await getMyRole();
+      setRole((res?.role as AppRole) ?? null);
+    } catch {
+      setRole(null);
+    }
   }
 
   const signOut = async () => {
