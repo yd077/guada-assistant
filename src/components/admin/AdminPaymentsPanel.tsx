@@ -48,6 +48,7 @@ export function AdminPaymentsPanel() {
       await updatePaymentSettings({
         mode: settings.mode,
         enabled: settings.enabled,
+        allow_unverified_purchase: settings.allow_unverified_purchase ?? true,
         test_publishable_key: settings.test_publishable_key,
         test_secret_key: settings.test_secret_key,
         test_webhook_secret: settings.test_webhook_secret,
@@ -91,6 +92,42 @@ export function AdminPaymentsPanel() {
             />
             Activé
           </label>
+        </div>
+      </div>
+
+      {/* Mode */}
+      {/* Achat avant validation de fiche */}
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-xl">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Achat avant validation
+            </h3>
+            <p className="mt-2 text-sm">
+              Permettre aux artisans d'acheter leurs packs de crédits{" "}
+              <strong>avant que leur fiche soit validée</strong>.
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Désactivé : seuls les artisans au statut « vérifié » peuvent payer.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={settings.allow_unverified_purchase ?? true}
+            onClick={() =>
+              update("allow_unverified_purchase", !(settings.allow_unverified_purchase ?? true))
+            }
+            className={`relative h-7 w-14 flex-none rounded-full transition ${
+              (settings.allow_unverified_purchase ?? true) ? "bg-emerald" : "bg-muted"
+            }`}
+          >
+            <span
+              className={`absolute top-1 h-5 w-5 rounded-full bg-background shadow transition-all ${
+                (settings.allow_unverified_purchase ?? true) ? "left-8" : "left-1"
+              }`}
+            />
+          </button>
         </div>
       </div>
 

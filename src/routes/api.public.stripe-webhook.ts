@@ -109,27 +109,42 @@ async function handleEvent(event: { type: string; data: { object: Record<string,
       const periodEnd = obj.current_period_end as number | undefined;
       const metadata = (obj.metadata ?? {}) as Record<string, string>;
       const artisanId = metadata.artisan_id;
+      const currentPeriodEnd = periodEnd
+        ? new Date(periodEnd * 1000).toISOString()
+        : null;
+      const isCanceled =
+        status === "canceled" || event.type === "customer.subscription.deleted";
 
-      const updates: Record<string, unknown> = {
+      const baseUpdates = {
         cancel_at_period_end: cancelAtEnd,
-        current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+        current_period_end: currentPeriodEnd,
       };
-
-      // Si annulé, on rétrograde au tier free à la fin de période
-      if (status === "canceled" || event.type === "customer.subscription.deleted") {
-        updates.tier = "free";
-        updates.stripe_subscription_id = null;
-      }
 
       if (artisanId) {
         await supabaseAdmin
           .from("artisan_subscriptions")
-          .update(updates)
+          .update(
+            isCanceled
+              ? {
+                  ...baseUpdates,
+                  tier: "free",
+                  stripe_subscription_id: null,
+                }
+              : baseUpdates,
+          )
           .eq("artisan_id", artisanId);
       } else {
         await supabaseAdmin
           .from("artisan_subscriptions")
-          .update(updates)
+          .update(
+            isCanceled
+              ? {
+                  ...baseUpdates,
+                  tier: "free",
+                  stripe_subscription_id: null,
+                }
+              : baseUpdates,
+          )
           .eq("stripe_subscription_id", subId);
       }
       break;

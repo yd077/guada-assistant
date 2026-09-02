@@ -85,13 +85,15 @@ export async function fetchAllDisputes(): Promise<AdminDisputeRow[]> {
   return (data ?? []) as unknown as AdminDisputeRow[];
 }
 
+import { callRpc } from "@/lib/supabaseRpc";
+
 export async function adminApproveDispute(
   disputeId: string,
   note?: string,
 ): Promise<{ ok: boolean; refunded?: number; error?: string }> {
-  const { data, error } = await supabase.rpc("admin_approve_dispute", {
+  const { data, error } = await callRpc("admin_approve_dispute", {
     p_dispute_id: disputeId,
-    p_note: note ?? null,
+    ...(note ? { p_note: note } : {}),
   });
   if (error) return { ok: false, error: error.message };
   return data as { ok: boolean; refunded?: number };
@@ -101,9 +103,9 @@ export async function adminRejectDispute(
   disputeId: string,
   note?: string,
 ): Promise<{ ok: boolean; error?: string }> {
-  const { data, error } = await supabase.rpc("admin_reject_dispute", {
+  const { data, error } = await callRpc("admin_reject_dispute", {
     p_dispute_id: disputeId,
-    p_note: note ?? null,
+    ...(note ? { p_note: note } : {}),
   });
   if (error) return { ok: false, error: error.message };
   return data as { ok: boolean };

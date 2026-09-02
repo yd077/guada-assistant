@@ -11,6 +11,8 @@ export type PaymentSettings = {
   live_secret_key: string | null;
   live_webhook_secret: string | null;
   enabled: boolean;
+  /** Autorise l'achat de packs par les artisans non encore validés */
+  allow_unverified_purchase: boolean;
   updated_at: string;
 };
 

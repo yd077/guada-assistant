@@ -34,10 +34,26 @@ export const createPackCheckoutSession = createServerFn({ method: "POST" })
     // 1. L'artisan correspondant à l'utilisateur
     const { data: artisan } = await supabaseAdmin
       .from("artisans")
-      .select("id, email, first_name, last_name")
+      .select("id, email, first_name, last_name, status")
       .eq("user_id", userId)
       .maybeSingle();
     if (!artisan) throw new Error("Aucune fiche artisan associée à ce compte.");
+
+    // 1bis. Option admin : achat autorisé avant validation de la fiche ?
+    const { data: settings } = await supabaseAdmin
+      .from("payment_settings")
+      .select("allow_unverified_purchase")
+      .eq("provider", "stripe")
+      .maybeSingle();
+    const allowUnverified =
+      (settings as { allow_unverified_purchase?: boolean | null } | null)
+        ?.allow_unverified_purchase ?? true;
+    if (!allowUnverified && artisan.status !== "verified") {
+      throw new Error(
+        "Votre fiche doit être validée par l'équipe avant de pouvoir acheter des crédits.",
+      );
+    }
+
 
     // 2. Le pack
     const { data: pack } = await supabaseAdmin

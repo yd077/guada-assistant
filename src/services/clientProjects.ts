@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { callRpc } from "@/lib/supabaseRpc";
 
 export type ClientProject = {
   id: string;
@@ -70,7 +71,7 @@ export async function fetchClientProjectsWithUnlocks(
 export async function clientMarkContacted(
   unlockId: string,
 ): Promise<{ ok: boolean; error?: string }> {
-  const { data, error } = await supabase.rpc("client_mark_contacted", {
+  const { data, error } = await callRpc("client_mark_contacted", {
     p_unlock_id: unlockId,
   });
   if (error) return { ok: false, error: error.message };
