@@ -47,7 +47,7 @@ export function OsmZoneMap({ lat, lng, radiusKm, onPick }: Props) {
   // Zoom qui fait tenir le diamètre de la zone dans la largeur
   let zoom = 9;
   if (lat != null) {
-    const metersPerPx = (radiusKm * 2200) / Math.max(size.w, 200);
+    const metersPerPx = (radiusKm * 2200) / Math.max(Math.min(size.w, size.h), 160);
     const z = Math.log2(
       (156543.03392 * Math.cos((center.lat * Math.PI) / 180)) / metersPerPx,
     );
