@@ -43,14 +43,23 @@ export const signUpWithoutEmailConfirmation = createServerFn({ method: "POST" })
       };
     }
 
-    // Attribution automatique du rôle admin pour les emails autorisés
     const userId = created?.user?.id;
+
+    // Rôle choisi à l'inscription (le trigger par défaut ne pose que "client")
+    if (userId && data.role === "artisan") {
+      await supabaseAdmin
+        .from("user_roles")
+        .upsert({ user_id: userId, role: "artisan" }, { onConflict: "user_id,role" });
+    }
+
+    // Attribution automatique du rôle admin pour les emails autorisés
     if (userId && ADMIN_EMAILS.includes(data.email.trim().toLowerCase())) {
       await supabaseAdmin
         .from("user_roles")
         .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
     }
 
-    return { ok: true as const };
+    return { ok: true as const, role: data.role };
   });
+
 

@@ -1,12 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { Header } from "@/components/site/Header";
-import { Footer } from "@/components/site/Footer";
-import { Reveal } from "@/components/site/Reveal";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { ClientDashboard } from "@/components/dashboard/ClientDashboard";
-import { ArtisanDashboard } from "@/components/dashboard/ArtisanDashboard";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -14,66 +9,40 @@ export const Route = createFileRoute("/dashboard")({
       { title: "Mon espace — Devis Connect" },
       {
         name: "description",
-        content: "Gérez vos projets, vos demandes de devis et votre profil.",
+        content: "Accédez à votre espace personnel Devis Connect.",
       },
     ],
   }),
   component: DashboardPage,
 });
 
+/** Aiguillage : redirige vers l'espace correspondant au rôle. */
 function DashboardPage() {
-  const { user, role, loading, isAuthenticated } = useAuth();
+  const { role, loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [roleTimedOut, setRoleTimedOut] = useState(false);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    const t = setTimeout(() => setRoleTimedOut(true), 2000);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (loading) return;
+    if (!isAuthenticated) {
       navigate({ to: "/auth", search: { redirect: "/dashboard" } });
+      return;
     }
-  }, [loading, isAuthenticated, navigate]);
-
-  if (loading || !user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-emerald" />
-      </div>
-    );
-  }
-
-  const firstName =
-    (user.user_metadata?.full_name as string | undefined)?.split(" ")[0] ?? "";
+    if (role === null && !roleTimedOut) return; // rôle en cours de résolution
+    navigate({
+      to: role === "artisan" ? "/espace-artisan" : "/espace-client",
+      replace: true,
+    });
+  }, [loading, isAuthenticated, role, roleTimedOut, navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="mx-auto max-w-6xl px-6 py-32">
-        <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald">
-                Mon espace
-              </span>
-              <h1 className="mt-2 font-serif text-4xl md:text-5xl">
-                Bonjour{firstName && `, ${firstName}`} 👋
-              </h1>
-            </div>
-            {role && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald/10 px-3 py-1.5 text-xs font-medium text-emerald">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                {role === "artisan" ? "Espace Artisan" : role === "admin" ? "Admin" : "Client"}
-              </span>
-            )}
-          </div>
-        </Reveal>
-
-        <div className="mt-12">
-          {role === "artisan" ? (
-            <ArtisanDashboard userId={user.id} />
-          ) : (
-            <ClientDashboard userId={user.id} />
-          )}
-        </div>
-      </main>
-      <Footer />
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-6 w-6 animate-spin text-emerald" />
     </div>
   );
 }

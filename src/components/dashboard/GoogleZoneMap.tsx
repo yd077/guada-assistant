@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { loadGoogleMaps } from "@/lib/googleMaps";
+import { loadGoogleMaps, onGoogleMapsAuthFailure } from "@/lib/googleMaps";
+import { OsmZoneMap } from "@/components/dashboard/OsmZoneMap";
 
 type Props = {
   lat: number | null;
@@ -21,9 +22,11 @@ export function GoogleZoneMap({ lat, lng, radiusKm, onPick }: Props) {
 
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
-
   useEffect(() => {
     let cancelled = false;
+    const offAuth = onGoogleMapsAuthFailure(() => {
+      if (!cancelled) setError("clé Google Maps refusée pour ce domaine");
+    });
 
     loadGoogleMaps()
       .then((maps) => {
@@ -34,13 +37,20 @@ export function GoogleZoneMap({ lat, lng, radiusKm, onPick }: Props) {
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: false,
-          scrollwheel: false,
+          gestureHandling: "greedy",
         });
         map.addListener("click", (e: any) => {
           if (e.latLng) onPickRef.current?.(e.latLng.lat(), e.latLng.lng());
         });
         mapRef.current = map;
         setReady(true);
+        // Le conteneur peut être mesuré à 0 lors du premier rendu.
+        setTimeout(() => {
+          if (cancelled || !mapRef.current) return;
+          const center = mapRef.current.getCenter();
+          window.google.maps.event.trigger(mapRef.current, "resize");
+          if (center) mapRef.current.setCenter(center);
+        }, 250);
       })
       .catch((e: Error) => {
         if (!cancelled) setError(e.message);
@@ -48,12 +58,14 @@ export function GoogleZoneMap({ lat, lng, radiusKm, onPick }: Props) {
 
     return () => {
       cancelled = true;
+      offAuth();
       markerRef.current?.setMap(null);
       circleRef.current?.setMap(null);
       markerRef.current = null;
       circleRef.current = null;
       mapRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Marqueur + cercle de rayon
@@ -73,7 +85,10 @@ export function GoogleZoneMap({ lat, lng, radiusKm, onPick }: Props) {
     const position = { lat, lng };
 
     if (!markerRef.current) {
-      markerRef.current = new maps.Marker({ position, map });
+      markerRef.current = new maps.Marker({ position, map, draggable: true });
+      markerRef.current.addListener("dragend", (e: any) => {
+        if (e.latLng) onPickRef.current?.(e.latLng.lat(), e.latLng.lng());
+      });
     } else {
       markerRef.current.setPosition(position);
       markerRef.current.setMap(map);
@@ -96,20 +111,22 @@ export function GoogleZoneMap({ lat, lng, radiusKm, onPick }: Props) {
       circleRef.current.setMap(map);
     }
 
-    map.setCenter(position);
-    map.fitBounds(circleRef.current.getBounds());
+    const bounds = circleRef.current.getBounds();
+    if (bounds) map.fitBounds(bounds);
+    else map.setCenter(position);
   }, [ready, lat, lng, radiusKm]);
 
   if (error) {
+    // Repli sans clé : carte OpenStreetMap (cliquable, avec rayon)
     return (
-      <div className="flex h-80 flex-col items-center justify-center gap-2 bg-soft px-6 text-center text-sm text-muted-foreground">
-        <span>Carte indisponible : {error}</span>
+      <div className="relative">
+        <OsmZoneMap lat={lat} lng={lng} radiusKm={radiusKm} onPick={onPick} />
       </div>
     );
   }
 
   return (
-    <div className="relative h-80">
+    <div className="relative h-72 sm:h-80">
       <div ref={containerRef} className="h-full w-full" />
       {!ready && (
         <div className="absolute inset-0 flex items-center justify-center bg-soft">

@@ -20,6 +20,8 @@ import { Route as RechercheRouteImport } from './routes/recherche'
 import { Route as ProjetRouteImport } from './routes/projet'
 import { Route as MetiersRouteImport } from './routes/metiers'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as EspaceClientRouteImport } from './routes/espace-client'
+import { Route as EspaceArtisanRouteImport } from './routes/espace-artisan'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactProRouteImport } from './routes/contact-pro'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -94,6 +96,16 @@ const MetiersRoute = MetiersRouteImport.update({
 const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
   id: '/mentions-legales',
   path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspaceClientRoute = EspaceClientRouteImport.update({
+  id: '/espace-client',
+  path: '/espace-client',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspaceArtisanRoute = EspaceArtisanRouteImport.update({
+  id: '/espace-artisan',
+  path: '/espace-artisan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -209,6 +221,8 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/contact-pro': typeof ContactProRoute
   '/dashboard': typeof DashboardRoute
+  '/espace-artisan': typeof EspaceArtisanRoute
+  '/espace-client': typeof EspaceClientRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/metiers': typeof MetiersRouteWithChildren
   '/projet': typeof ProjetRoute
@@ -242,6 +256,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/contact-pro': typeof ContactProRoute
   '/dashboard': typeof DashboardRoute
+  '/espace-artisan': typeof EspaceArtisanRoute
+  '/espace-client': typeof EspaceClientRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/metiers': typeof MetiersRouteWithChildren
   '/projet': typeof ProjetRoute
@@ -276,6 +292,8 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/contact-pro': typeof ContactProRoute
   '/dashboard': typeof DashboardRoute
+  '/espace-artisan': typeof EspaceArtisanRoute
+  '/espace-client': typeof EspaceClientRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/metiers': typeof MetiersRouteWithChildren
   '/projet': typeof ProjetRoute
@@ -311,6 +329,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/contact-pro'
     | '/dashboard'
+    | '/espace-artisan'
+    | '/espace-client'
     | '/mentions-legales'
     | '/metiers'
     | '/projet'
@@ -344,6 +364,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/contact-pro'
     | '/dashboard'
+    | '/espace-artisan'
+    | '/espace-client'
     | '/mentions-legales'
     | '/metiers'
     | '/projet'
@@ -377,6 +399,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/contact-pro'
     | '/dashboard'
+    | '/espace-artisan'
+    | '/espace-client'
     | '/mentions-legales'
     | '/metiers'
     | '/projet'
@@ -411,6 +435,8 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   ContactProRoute: typeof ContactProRoute
   DashboardRoute: typeof DashboardRoute
+  EspaceArtisanRoute: typeof EspaceArtisanRoute
+  EspaceClientRoute: typeof EspaceClientRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   MetiersRoute: typeof MetiersRouteWithChildren
   ProjetRoute: typeof ProjetRoute
@@ -506,6 +532,20 @@ declare module '@tanstack/react-router' {
       path: '/mentions-legales'
       fullPath: '/mentions-legales'
       preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/espace-client': {
+      id: '/espace-client'
+      path: '/espace-client'
+      fullPath: '/espace-client'
+      preLoaderRoute: typeof EspaceClientRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/espace-artisan': {
+      id: '/espace-artisan'
+      path: '/espace-artisan'
+      fullPath: '/espace-artisan'
+      preLoaderRoute: typeof EspaceArtisanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -708,6 +748,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   ContactProRoute: ContactProRoute,
   DashboardRoute: DashboardRoute,
+  EspaceArtisanRoute: EspaceArtisanRoute,
+  EspaceClientRoute: EspaceClientRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
   MetiersRoute: MetiersRouteWithChildren,
   ProjetRoute: ProjetRoute,
