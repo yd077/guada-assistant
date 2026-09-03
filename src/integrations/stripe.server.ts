@@ -85,6 +85,7 @@ export async function createCreditPackCheckout(opts: {
 }): Promise<StripeSession> {
   const body: Record<string, string> = {
     mode: "payment",
+    "payment_method_types[0]": "card",
     "line_items[0][price_data][currency]": "eur",
     "line_items[0][price_data][product_data][name]": `Pack ${opts.packName} — ${opts.packCredits} crédits`,
     "line_items[0][price_data][unit_amount]": Math.round(opts.amountEur * 100).toString(),
