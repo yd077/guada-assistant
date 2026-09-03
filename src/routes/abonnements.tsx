@@ -113,6 +113,7 @@ function SubscriptionsPage() {
     try {
       const r = await checkoutFn({ data: { tier } });
       if (r.url) window.location.href = r.url;
+      else toast.error(r.error ?? "Le paiement n'est pas encore activé.");
     } catch (e) {
       toast.error(
         (e as Error).message ??

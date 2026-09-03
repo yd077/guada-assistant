@@ -37,7 +37,7 @@ export const createPackCheckoutSession = createServerFn({ method: "POST" })
       .select("id, email, first_name, last_name, status")
       .eq("user_id", userId)
       .maybeSingle();
-    if (!artisan) throw new Error("Aucune fiche artisan associée à ce compte.");
+    if (!artisan) return { url: null, error: "Aucune fiche artisan associée à ce compte." };
 
     // 1bis. Option admin : achat autorisé avant validation de la fiche ?
     const { data: settings } = await supabaseAdmin
@@ -49,9 +49,11 @@ export const createPackCheckoutSession = createServerFn({ method: "POST" })
       (settings as { allow_unverified_purchase?: boolean | null } | null)
         ?.allow_unverified_purchase ?? true;
     if (!allowUnverified && artisan.status !== "verified") {
-      throw new Error(
-        "Votre fiche doit être validée par l'équipe avant de pouvoir acheter des crédits.",
-      );
+      return {
+        url: null,
+        error:
+          "Votre fiche doit être validée par l'équipe avant de pouvoir acheter des crédits.",
+      };
     }
 
 
@@ -62,14 +64,16 @@ export const createPackCheckoutSession = createServerFn({ method: "POST" })
       .eq("id", data.packId)
       .eq("active", true)
       .maybeSingle();
-    if (!pack) throw new Error("Pack introuvable.");
+    if (!pack) return { url: null, error: "Pack introuvable." };
 
     // 3. Stripe configuré ?
     const keys = await getStripeKeys();
     if (!keys) {
-      throw new Error(
-        "Le paiement en ligne n'est pas encore activé. Contactez l'administrateur.",
-      );
+      return {
+        url: null,
+        error:
+          "Le paiement en ligne n'est pas encore activé. Contactez l'administrateur.",
+      };
     }
 
     const origin = originFromRequest();
@@ -116,20 +120,22 @@ export const createSubscriptionCheckoutSession = createServerFn({ method: "POST"
       .select("id, email")
       .eq("user_id", userId)
       .maybeSingle();
-    if (!artisan) throw new Error("Aucune fiche artisan associée à ce compte.");
+    if (!artisan) return { url: null, error: "Aucune fiche artisan associée à ce compte." };
 
     const { data: plan } = await supabaseAdmin
       .from("subscription_plans")
       .select("*")
       .eq("tier", data.tier)
       .maybeSingle();
-    if (!plan) throw new Error("Plan introuvable.");
+    if (!plan) return { url: null, error: "Plan introuvable." };
 
     const keys = await getStripeKeys();
     if (!keys) {
-      throw new Error(
-        "Le paiement en ligne n'est pas encore activé. Contactez l'administrateur.",
-      );
+      return {
+        url: null,
+        error:
+          "Le paiement en ligne n'est pas encore activé. Contactez l'administrateur.",
+      };
     }
 
     const origin = originFromRequest();
