@@ -6,8 +6,22 @@ type StripeKeys = {
   mode: "test" | "live";
 };
 
-/** Récupère les clés Stripe depuis payment_settings (admin). */
+/** Clés issues du coffre de secrets (fallback prioritaire si présent). */
+function envStripeKeys(): StripeKeys | null {
+  const secretKey = process.env["STRIPE_SECRET_KEY"];
+  if (!secretKey) return null;
+  return {
+    secretKey,
+    webhookSecret: process.env["STRIPE_WEBHOOK_SECRET"] ?? null,
+    mode: secretKey.startsWith("sk_live_") ? "live" : "test",
+  };
+}
+
+/** Récupère les clés Stripe : coffre de secrets, sinon payment_settings (admin). */
 export async function getStripeKeys(): Promise<StripeKeys | null> {
+  const fromEnv = envStripeKeys();
+  if (fromEnv) return fromEnv;
+
   const { data, error } = await supabaseAdmin
     .from("payment_settings")
     .select("*")
@@ -20,6 +34,7 @@ export async function getStripeKeys(): Promise<StripeKeys | null> {
   if (!secretKey) return null;
   return { secretKey, webhookSecret, mode };
 }
+
 
 /** Helper minimaliste pour appeler l'API Stripe (sans la lib lourde). */
 async function stripeFetch<T>(
