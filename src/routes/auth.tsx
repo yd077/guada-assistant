@@ -52,7 +52,7 @@ const signUpSchema = z.object({
 function AuthPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, role, loading: authLoading } = useAuth();
   const [tab, setTab] = useState<"signin" | "signup">(search.mode ?? "signin");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,9 +61,9 @@ function AuthPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      navigate({ to: search.redirect ?? "/dashboard" });
+      navigate({ to: search.redirect ?? (role === "artisan" ? "/espace-artisan" : "/dashboard") });
     }
-  }, [authLoading, isAuthenticated, navigate, search.redirect]);
+  }, [authLoading, isAuthenticated, role, navigate, search.redirect]);
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -137,7 +137,11 @@ function AuthPage() {
       setError(signInError.message);
       return;
     }
-    navigate({ to: search.redirect ?? "/dashboard" });
+    navigate({
+      to:
+        search.redirect ??
+        (parsed.data.role === "artisan" ? "/espace-artisan" : "/espace-client"),
+    });
   };
 
 
