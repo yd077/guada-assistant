@@ -32,6 +32,11 @@ export function RechargeWalletModal({ open, onClose }: Props) {
     try {
       const r = await checkoutFn({ data: { packId: pack.id } });
       if (r.url) window.location.href = r.url;
+      else
+        toast.error(
+          r.error ??
+            "Le paiement en ligne n'est pas encore activé. Contactez l'administrateur.",
+        );
     } catch (e) {
       toast.error(
         (e as Error).message ??
