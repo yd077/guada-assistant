@@ -85,6 +85,7 @@ export async function createCreditPackCheckout(opts: {
 }): Promise<StripeSession> {
   const body: Record<string, string> = {
     mode: "payment",
+    "payment_method_types[0]": "card",
     "line_items[0][price_data][currency]": "eur",
     "line_items[0][price_data][product_data][name]": `Pack ${opts.packName} — ${opts.packCredits} crédits`,
     "line_items[0][price_data][unit_amount]": Math.round(opts.amountEur * 100).toString(),
@@ -113,6 +114,7 @@ export async function createSubscriptionCheckout(opts: {
 }): Promise<StripeSession> {
   const body: Record<string, string> = {
     mode: "subscription",
+    "payment_method_types[0]": "card",
     "line_items[0][price_data][currency]": "eur",
     "line_items[0][price_data][unit_amount]": Math.round(opts.monthlyPriceEur * 100).toString(),
     "line_items[0][price_data][recurring][interval]": "month",
