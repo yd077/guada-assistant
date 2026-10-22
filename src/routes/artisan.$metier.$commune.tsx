@@ -108,7 +108,7 @@ export const Route = createFileRoute("/artisan/$metier/$commune")({
       <Header />
       <main className="mx-auto max-w-3xl px-6 py-32 text-center">
         <h1 className="font-serif text-4xl">Erreur de chargement</h1>
-        <p className="mt-4 text-muted-foreground">{error.message}</p>
+        <p className="mt-4 text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
       </main>
       <Footer />
     </div>
