@@ -42,7 +42,7 @@ export const Route = createFileRoute("/contact-artisan/$id")({
   ),
   errorComponent: ({ error }) => (
     <div className="flex min-h-screen items-center justify-center p-6">
-      <p>{error.message}</p>
+      <p>{error instanceof Error ? error.message : String(error)}</p>
     </div>
   ),
   component: ContactArtisanPage,

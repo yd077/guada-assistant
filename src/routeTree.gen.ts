@@ -9,148 +9,43 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TarifsRouteImport } from './routes/tarifs'
-import { Route as SuccesPaiementRouteImport } from './routes/succes-paiement'
-import { Route as SuccesRouteImport } from './routes/succes'
-import { Route as SosRouteImport } from './routes/sos'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RechercheRouteImport } from './routes/recherche'
-import { Route as ProjetRouteImport } from './routes/projet'
-import { Route as MetiersRouteImport } from './routes/metiers'
-import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
-import { Route as EspaceClientRouteImport } from './routes/espace-client'
-import { Route as EspaceArtisanRouteImport } from './routes/espace-artisan'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ContactProRouteImport } from './routes/contact-pro'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
-import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
-import { Route as CguRouteImport } from './routes/cgu'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AbonnementsRouteImport } from './routes/abonnements'
-import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as VerifierEmailTokenRouteImport } from './routes/verifier-email.$token'
-import { Route as SosMetierRouteImport } from './routes/sos.$metier'
-import { Route as MetiersMetierRouteImport } from './routes/metiers.$metier'
-import { Route as ContactArtisanIdRouteImport } from './routes/contact-artisan.$id'
-import { Route as ArtisanMetierRouteImport } from './routes/artisan.$metier'
+import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as AbonnementsRouteImport } from './routes/abonnements'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CguRouteImport } from './routes/cgu'
+import { Route as CommentCaMarcheRouteImport } from './routes/comment-ca-marche'
+import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ContactProRouteImport } from './routes/contact-pro'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as EspaceArtisanRouteImport } from './routes/espace-artisan'
+import { Route as EspaceClientRouteImport } from './routes/espace-client'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as MetiersRouteImport } from './routes/metiers'
+import { Route as ProjetRouteImport } from './routes/projet'
+import { Route as RechercheRouteImport } from './routes/recherche'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SosRouteImport } from './routes/sos'
+import { Route as SuccesRouteImport } from './routes/succes'
+import { Route as SuccesPaiementRouteImport } from './routes/succes-paiement'
+import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as ArtisanIdRouteImport } from './routes/artisan.$id'
-import { Route as SosMetierCommuneRouteImport } from './routes/sos.$metier.$commune'
-import { Route as ArtisanMetierCommuneRouteImport } from './routes/artisan.$metier.$commune'
+import { Route as ArtisanMetierRouteImport } from './routes/artisan.$metier'
+import { Route as ContactArtisanIdRouteImport } from './routes/contact-artisan.$id'
+import { Route as MetiersMetierRouteImport } from './routes/metiers.$metier'
+import { Route as SosMetierRouteImport } from './routes/sos.$metier'
+import { Route as VerifierEmailTokenRouteImport } from './routes/verifier-email.$token'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api.public.stripe-webhook'
+import { Route as ArtisanMetierCommuneRouteImport } from './routes/artisan.$metier.$commune'
+import { Route as SosMetierCommuneRouteImport } from './routes/sos.$metier.$commune'
 
-const TarifsRoute = TarifsRouteImport.update({
-  id: '/tarifs',
-  path: '/tarifs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SuccesPaiementRoute = SuccesPaiementRouteImport.update({
-  id: '/succes-paiement',
-  path: '/succes-paiement',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SuccesRoute = SuccesRouteImport.update({
-  id: '/succes',
-  path: '/succes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SosRoute = SosRouteImport.update({
-  id: '/sos',
-  path: '/sos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
-  id: '/robots.txt',
-  path: '/robots.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RechercheRoute = RechercheRouteImport.update({
-  id: '/recherche',
-  path: '/recherche',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjetRoute = ProjetRouteImport.update({
-  id: '/projet',
-  path: '/projet',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MetiersRoute = MetiersRouteImport.update({
-  id: '/metiers',
-  path: '/metiers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
-  id: '/mentions-legales',
-  path: '/mentions-legales',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EspaceClientRoute = EspaceClientRouteImport.update({
-  id: '/espace-client',
-  path: '/espace-client',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EspaceArtisanRoute = EspaceArtisanRouteImport.update({
-  id: '/espace-artisan',
-  path: '/espace-artisan',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactProRoute = ContactProRouteImport.update({
-  id: '/contact-pro',
-  path: '/contact-pro',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
-  id: '/confidentialite',
-  path: '/confidentialite',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CommentCaMarcheRoute = CommentCaMarcheRouteImport.update({
-  id: '/comment-ca-marche',
-  path: '/comment-ca-marche',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CguRoute = CguRouteImport.update({
-  id: '/cgu',
-  path: '/cgu',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AbonnementsRoute = AbonnementsRouteImport.update({
-  id: '/abonnements',
-  path: '/abonnements',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AProposRoute = AProposRouteImport.update({
@@ -158,34 +53,114 @@ const AProposRoute = AProposRouteImport.update({
   path: '/a-propos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AbonnementsRoute = AbonnementsRouteImport.update({
+  id: '/abonnements',
+  path: '/abonnements',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VerifierEmailTokenRoute = VerifierEmailTokenRouteImport.update({
-  id: '/verifier-email/$token',
-  path: '/verifier-email/$token',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SosMetierRoute = SosMetierRouteImport.update({
-  id: '/$metier',
-  path: '/$metier',
-  getParentRoute: () => SosRoute,
-} as any)
-const MetiersMetierRoute = MetiersMetierRouteImport.update({
-  id: '/$metier',
-  path: '/$metier',
-  getParentRoute: () => MetiersRoute,
-} as any)
-const ContactArtisanIdRoute = ContactArtisanIdRouteImport.update({
-  id: '/contact-artisan/$id',
-  path: '/contact-artisan/$id',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArtisanMetierRoute = ArtisanMetierRouteImport.update({
-  id: '/artisan/$metier',
-  path: '/artisan/$metier',
+const CguRoute = CguRouteImport.update({
+  id: '/cgu',
+  path: '/cgu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommentCaMarcheRoute = CommentCaMarcheRouteImport.update({
+  id: '/comment-ca-marche',
+  path: '/comment-ca-marche',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
+  id: '/confidentialite',
+  path: '/confidentialite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactProRoute = ContactProRouteImport.update({
+  id: '/contact-pro',
+  path: '/contact-pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspaceArtisanRoute = EspaceArtisanRouteImport.update({
+  id: '/espace-artisan',
+  path: '/espace-artisan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspaceClientRoute = EspaceClientRouteImport.update({
+  id: '/espace-client',
+  path: '/espace-client',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetiersRoute = MetiersRouteImport.update({
+  id: '/metiers',
+  path: '/metiers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjetRoute = ProjetRouteImport.update({
+  id: '/projet',
+  path: '/projet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RechercheRoute = RechercheRouteImport.update({
+  id: '/recherche',
+  path: '/recherche',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SosRoute = SosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccesRoute = SuccesRouteImport.update({
+  id: '/succes',
+  path: '/succes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccesPaiementRoute = SuccesPaiementRouteImport.update({
+  id: '/succes-paiement',
+  path: '/succes-paiement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TarifsRoute = TarifsRouteImport.update({
+  id: '/tarifs',
+  path: '/tarifs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ArtisanIdRoute = ArtisanIdRouteImport.update({
@@ -193,20 +168,45 @@ const ArtisanIdRoute = ArtisanIdRouteImport.update({
   path: '/artisan/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SosMetierCommuneRoute = SosMetierCommuneRouteImport.update({
-  id: '/$commune',
-  path: '/$commune',
-  getParentRoute: () => SosMetierRoute,
+const ArtisanMetierRoute = ArtisanMetierRouteImport.update({
+  id: '/artisan/$metier',
+  path: '/artisan/$metier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactArtisanIdRoute = ContactArtisanIdRouteImport.update({
+  id: '/contact-artisan/$id',
+  path: '/contact-artisan/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetiersMetierRoute = MetiersMetierRouteImport.update({
+  id: '/$metier',
+  path: '/$metier',
+  getParentRoute: () => MetiersRoute,
+} as any)
+const SosMetierRoute = SosMetierRouteImport.update({
+  id: '/$metier',
+  path: '/$metier',
+  getParentRoute: () => SosRoute,
+} as any)
+const VerifierEmailTokenRoute = VerifierEmailTokenRouteImport.update({
+  id: '/verifier-email/$token',
+  path: '/verifier-email/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ArtisanMetierCommuneRoute = ArtisanMetierCommuneRouteImport.update({
   id: '/$commune',
   path: '/$commune',
   getParentRoute: () => ArtisanMetierRoute,
 } as any)
-const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
-  id: '/api/public/stripe-webhook',
-  path: '/api/public/stripe-webhook',
-  getParentRoute: () => rootRouteImport,
+const SosMetierCommuneRoute = SosMetierCommuneRouteImport.update({
+  id: '/$commune',
+  path: '/$commune',
+  getParentRoute: () => SosMetierRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -457,158 +457,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tarifs': {
-      id: '/tarifs'
-      path: '/tarifs'
-      fullPath: '/tarifs'
-      preLoaderRoute: typeof TarifsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/succes-paiement': {
-      id: '/succes-paiement'
-      path: '/succes-paiement'
-      fullPath: '/succes-paiement'
-      preLoaderRoute: typeof SuccesPaiementRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/succes': {
-      id: '/succes'
-      path: '/succes'
-      fullPath: '/succes'
-      preLoaderRoute: typeof SuccesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sos': {
-      id: '/sos'
-      path: '/sos'
-      fullPath: '/sos'
-      preLoaderRoute: typeof SosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/robots.txt': {
-      id: '/robots.txt'
-      path: '/robots.txt'
-      fullPath: '/robots.txt'
-      preLoaderRoute: typeof RobotsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recherche': {
-      id: '/recherche'
-      path: '/recherche'
-      fullPath: '/recherche'
-      preLoaderRoute: typeof RechercheRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projet': {
-      id: '/projet'
-      path: '/projet'
-      fullPath: '/projet'
-      preLoaderRoute: typeof ProjetRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/metiers': {
-      id: '/metiers'
-      path: '/metiers'
-      fullPath: '/metiers'
-      preLoaderRoute: typeof MetiersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mentions-legales': {
-      id: '/mentions-legales'
-      path: '/mentions-legales'
-      fullPath: '/mentions-legales'
-      preLoaderRoute: typeof MentionsLegalesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/espace-client': {
-      id: '/espace-client'
-      path: '/espace-client'
-      fullPath: '/espace-client'
-      preLoaderRoute: typeof EspaceClientRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/espace-artisan': {
-      id: '/espace-artisan'
-      path: '/espace-artisan'
-      fullPath: '/espace-artisan'
-      preLoaderRoute: typeof EspaceArtisanRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact-pro': {
-      id: '/contact-pro'
-      path: '/contact-pro'
-      fullPath: '/contact-pro'
-      preLoaderRoute: typeof ContactProRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/confidentialite': {
-      id: '/confidentialite'
-      path: '/confidentialite'
-      fullPath: '/confidentialite'
-      preLoaderRoute: typeof ConfidentialiteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/comment-ca-marche': {
-      id: '/comment-ca-marche'
-      path: '/comment-ca-marche'
-      fullPath: '/comment-ca-marche'
-      preLoaderRoute: typeof CommentCaMarcheRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cgu': {
-      id: '/cgu'
-      path: '/cgu'
-      fullPath: '/cgu'
-      preLoaderRoute: typeof CguRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/abonnements': {
-      id: '/abonnements'
-      path: '/abonnements'
-      fullPath: '/abonnements'
-      preLoaderRoute: typeof AbonnementsRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a-propos': {
@@ -618,46 +471,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AProposRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/abonnements': {
+      id: '/abonnements'
+      path: '/abonnements'
+      fullPath: '/abonnements'
+      preLoaderRoute: typeof AbonnementsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/verifier-email/$token': {
-      id: '/verifier-email/$token'
-      path: '/verifier-email/$token'
-      fullPath: '/verifier-email/$token'
-      preLoaderRoute: typeof VerifierEmailTokenRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sos/$metier': {
-      id: '/sos/$metier'
-      path: '/$metier'
-      fullPath: '/sos/$metier'
-      preLoaderRoute: typeof SosMetierRouteImport
-      parentRoute: typeof SosRoute
-    }
-    '/metiers/$metier': {
-      id: '/metiers/$metier'
-      path: '/$metier'
-      fullPath: '/metiers/$metier'
-      preLoaderRoute: typeof MetiersMetierRouteImport
-      parentRoute: typeof MetiersRoute
-    }
-    '/contact-artisan/$id': {
-      id: '/contact-artisan/$id'
-      path: '/contact-artisan/$id'
-      fullPath: '/contact-artisan/$id'
-      preLoaderRoute: typeof ContactArtisanIdRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/artisan/$metier': {
-      id: '/artisan/$metier'
-      path: '/artisan/$metier'
-      fullPath: '/artisan/$metier'
-      preLoaderRoute: typeof ArtisanMetierRouteImport
+    '/cgu': {
+      id: '/cgu'
+      path: '/cgu'
+      fullPath: '/cgu'
+      preLoaderRoute: typeof CguRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comment-ca-marche': {
+      id: '/comment-ca-marche'
+      path: '/comment-ca-marche'
+      fullPath: '/comment-ca-marche'
+      preLoaderRoute: typeof CommentCaMarcheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confidentialite': {
+      id: '/confidentialite'
+      path: '/confidentialite'
+      fullPath: '/confidentialite'
+      preLoaderRoute: typeof ConfidentialiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-pro': {
+      id: '/contact-pro'
+      path: '/contact-pro'
+      fullPath: '/contact-pro'
+      preLoaderRoute: typeof ContactProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/espace-artisan': {
+      id: '/espace-artisan'
+      path: '/espace-artisan'
+      fullPath: '/espace-artisan'
+      preLoaderRoute: typeof EspaceArtisanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/espace-client': {
+      id: '/espace-client'
+      path: '/espace-client'
+      fullPath: '/espace-client'
+      preLoaderRoute: typeof EspaceClientRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metiers': {
+      id: '/metiers'
+      path: '/metiers'
+      fullPath: '/metiers'
+      preLoaderRoute: typeof MetiersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projet': {
+      id: '/projet'
+      path: '/projet'
+      fullPath: '/projet'
+      preLoaderRoute: typeof ProjetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recherche': {
+      id: '/recherche'
+      path: '/recherche'
+      fullPath: '/recherche'
+      preLoaderRoute: typeof RechercheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sos': {
+      id: '/sos'
+      path: '/sos'
+      fullPath: '/sos'
+      preLoaderRoute: typeof SosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/succes': {
+      id: '/succes'
+      path: '/succes'
+      fullPath: '/succes'
+      preLoaderRoute: typeof SuccesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/succes-paiement': {
+      id: '/succes-paiement'
+      path: '/succes-paiement'
+      fullPath: '/succes-paiement'
+      preLoaderRoute: typeof SuccesPaiementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tarifs': {
+      id: '/tarifs'
+      path: '/tarifs'
+      fullPath: '/tarifs'
+      preLoaderRoute: typeof TarifsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/artisan/$id': {
@@ -667,12 +632,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtisanIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sos/$metier/$commune': {
-      id: '/sos/$metier/$commune'
-      path: '/$commune'
-      fullPath: '/sos/$metier/$commune'
-      preLoaderRoute: typeof SosMetierCommuneRouteImport
-      parentRoute: typeof SosMetierRoute
+    '/artisan/$metier': {
+      id: '/artisan/$metier'
+      path: '/artisan/$metier'
+      fullPath: '/artisan/$metier'
+      preLoaderRoute: typeof ArtisanMetierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-artisan/$id': {
+      id: '/contact-artisan/$id'
+      path: '/contact-artisan/$id'
+      fullPath: '/contact-artisan/$id'
+      preLoaderRoute: typeof ContactArtisanIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metiers/$metier': {
+      id: '/metiers/$metier'
+      path: '/$metier'
+      fullPath: '/metiers/$metier'
+      preLoaderRoute: typeof MetiersMetierRouteImport
+      parentRoute: typeof MetiersRoute
+    }
+    '/sos/$metier': {
+      id: '/sos/$metier'
+      path: '/$metier'
+      fullPath: '/sos/$metier'
+      preLoaderRoute: typeof SosMetierRouteImport
+      parentRoute: typeof SosRoute
+    }
+    '/verifier-email/$token': {
+      id: '/verifier-email/$token'
+      path: '/verifier-email/$token'
+      fullPath: '/verifier-email/$token'
+      preLoaderRoute: typeof VerifierEmailTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/artisan/$metier/$commune': {
       id: '/artisan/$metier/$commune'
@@ -681,12 +681,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArtisanMetierCommuneRouteImport
       parentRoute: typeof ArtisanMetierRoute
     }
-    '/api/public/stripe-webhook': {
-      id: '/api/public/stripe-webhook'
-      path: '/api/public/stripe-webhook'
-      fullPath: '/api/public/stripe-webhook'
-      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
-      parentRoute: typeof rootRouteImport
+    '/sos/$metier/$commune': {
+      id: '/sos/$metier/$commune'
+      path: '/$commune'
+      fullPath: '/sos/$metier/$commune'
+      preLoaderRoute: typeof SosMetierCommuneRouteImport
+      parentRoute: typeof SosMetierRoute
     }
   }
 }

@@ -74,7 +74,7 @@ export const Route = createFileRoute("/artisan/$id")({
   ),
   errorComponent: ({ error }) => (
     <div className="flex min-h-screen items-center justify-center bg-background p-6">
-      <p className="text-muted-foreground">Erreur : {error.message}</p>
+      <p className="text-muted-foreground">Erreur : {error instanceof Error ? error.message : String(error)}</p>
     </div>
   ),
   component: ArtisanPage,
