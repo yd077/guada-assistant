@@ -100,8 +100,6 @@ export async function listArtisans(filters: ArtisanFilters = {}): Promise<Artisa
       .order("rating", { ascending: false });
     if (filters.specialty) q2 = q2.eq("specialty", filters.specialty);
     if (filters.location) q2 = q2.eq("location", filters.location);
-    if (filters.minRating && filters.minRating > 0)
-      q2 = q2.gte("rating", filters.minRating);
     const r = await q2;
     data = r.data;
     error = r.error;
@@ -123,8 +121,7 @@ function applyMockFilters(filters: ArtisanFilters): Artisan[] {
   return ARTISANS.filter(
     (a) =>
       (!filters.specialty || a.specialty === filters.specialty) &&
-      (!filters.location || a.location === filters.location) &&
-      a.rating >= (filters.minRating ?? 0),
+      (!filters.location || a.location === filters.location),
   );
 }
 
