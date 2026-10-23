@@ -9,7 +9,7 @@ import { SPECIALTIES_LIST } from "@/data/specialties";
 import { COMMUNES_LIST, COMMUNE_BY_NAME } from "@/data/communes";
 import { listArtisans } from "@/services/artisans";
 import { haversineKm } from "@/services/geocoding";
-import { Search, SlidersHorizontal, Star, Loader2, MapPin } from "lucide-react";
+import { Search, SlidersHorizontal, Loader2, MapPin } from "lucide-react";
 import { z } from "zod";
 
 const searchSchema = z.object({
@@ -22,15 +22,15 @@ export const Route = createFileRoute("/recherche")({
   head: () => ({
     meta: [
       { title: "Trouver un artisan en Guadeloupe — Devis Connect" },
-      {
+    {
         name: "description",
         content:
-          "Parcourez notre annuaire d'artisans BTP vérifiés en Guadeloupe. Filtrez par spécialité, commune, distance et notation.",
+          "Parcourez notre annuaire d'artisans BTP vérifiés en Guadeloupe. Filtrez par spécialité, commune et distance.",
       },
       { property: "og:title", content: "Trouver un artisan — Devis Connect" },
       {
         property: "og:description",
-        content: "Annuaire des artisans BTP de Guadeloupe, vérifiés et notés.",
+        content: "Annuaire des artisans BTP de Guadeloupe, vérifiés et assurés.",
       },
     ],
   }),
@@ -41,7 +41,6 @@ function SearchPage() {
   const initial = Route.useSearch();
   const [specialty, setSpecialty] = useState(initial.specialty ?? "");
   const [location, setLocation] = useState(initial.location ?? "");
-  const [minRating, setMinRating] = useState(0);
   const [maxDistance, setMaxDistance] = useState(0); // 0 = pas de filtre distance
   const [results, setResults] = useState<Artisan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +52,6 @@ function SearchPage() {
       specialty: specialty || undefined,
       // si on filtre par distance depuis une commune, on relâche le filtre commune stricte
       location: maxDistance > 0 ? undefined : location || undefined,
-      minRating: minRating || undefined,
     })
       .then((data) => {
         if (!cancelled) setResults(data);
@@ -64,7 +62,7 @@ function SearchPage() {
     return () => {
       cancelled = true;
     };
-  }, [specialty, location, minRating, maxDistance]);
+  }, [specialty, location, maxDistance]);
 
   // Filtrage par distance côté client (Haversine)
   const filtered = useMemo(() => {
