@@ -177,29 +177,11 @@ function SearchPage() {
                   )}
                 </div>
 
-                <div>
-                  <label className="mb-1.5 flex items-center justify-between text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                    Note minimale
-                    <span className="flex items-center gap-1 text-foreground">
-                      <Star className="h-3 w-3 fill-accent text-accent" /> {minRating.toFixed(1)}
-                    </span>
-                  </label>
-                  <input
-                    type="range"
-                    min={0}
-                    max={5}
-                    step={0.5}
-                    value={minRating}
-                    onChange={(e) => setMinRating(parseFloat(e.target.value))}
-                    className="w-full accent-emerald"
-                  />
-                </div>
 
                 <button
                   onClick={() => {
                     setSpecialty("");
                     setLocation("");
-                    setMinRating(0);
                     setMaxDistance(0);
                   }}
                   className="w-full rounded-lg border border-border py-2 text-sm text-muted-foreground hover:bg-muted"
