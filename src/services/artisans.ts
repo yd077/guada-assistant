@@ -4,7 +4,6 @@ import { ARTISANS, type Artisan, getArtisanById as getMockArtisanById } from "@/
 export type ArtisanFilters = {
   specialty?: string;
   location?: string;
-  minRating?: number;
 };
 
 type DbArtisan = {
@@ -89,8 +88,6 @@ export async function listArtisans(filters: ArtisanFilters = {}): Promise<Artisa
 
   if (filters.specialty) query = query.eq("specialty", filters.specialty);
   if (filters.location) query = query.eq("location", filters.location);
-  if (filters.minRating && filters.minRating > 0)
-    query = query.gte("rating", filters.minRating);
 
   let { data, error } = await query;
 
